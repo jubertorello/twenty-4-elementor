@@ -247,7 +247,7 @@ const Projects = () => {
     { 
       title: 'TIME Africa', 
       category: 'Editorial', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774551593/Twenty4_Long_Black-cropped_u1gkti.svg',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/475271473_17893917237117098_3840431804277799553_n_gewozi.jpg',
       tag: 'Tiempo',
       description: 'G20 Leaders Summit in Johannesburg'
     },
@@ -296,17 +296,13 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white overflow-hidden">
+    <section id="projects" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white overflow-hidden w-full">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-20 gap-8">
           <h2 className="text-4xl md:text-7xl font-serif max-w-3xl leading-[1.05]">
-            El estándar empresarial para <br />
-            sitios web de <span className="italic">WordPress.</span>
+            Selected Work
           </h2>
-          <button className="px-8 py-4 bg-white text-black rounded-lg text-sm font-bold hover:bg-brand-sand transition-all hover:scale-105">
-            Reservar demo
-          </button>
         </div>
 
         {/* Expanding Gallery */}
@@ -332,7 +328,7 @@ const Projects = () => {
               {/* Content Overlay */}
               <div className="absolute inset-0 p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
-                  <span className="bg-black/50 backdrop-blur-md px-3 py-1 rounded-md text-[10px] uppercase tracking-widest font-bold">
+                  <span className="bg-brand-green/80 backdrop-blur-md px-3 py-1 rounded-md text-[10px] uppercase tracking-widest font-bold text-brand-sand">
                     {project.tag}
                   </span>
                 </div>
@@ -370,7 +366,7 @@ const Projects = () => {
                 {service.icon}
               </div>
               <h3 className="text-2xl font-serif leading-tight">{service.title}</h3>
-              <p className="text-brand-sand/50 text-sm leading-relaxed">
+              <p className="text-white text-sm leading-relaxed">
                 {service.description}
               </p>
             </motion.div>
@@ -602,13 +598,20 @@ export default function LandingPage() {
     <main className="relative min-h-screen bg-gradient-to-b from-brand-green to-brand-sand">
       <Navbar />
       <Hero />
-      <div className="relative bg-white rounded-3xl shadow-2xl z-30 mx-4 md:mx-6 lg:mx-8 mb-8 overflow-hidden">
-        <About />
+      
+      <div className="relative z-30 space-y-0 pb-8">
+        <div className="mx-4 md:mx-6 lg:mx-8 bg-white rounded-3xl shadow-2xl overflow-hidden mb-8">
+          <About />
+        </div>
+        
         <Projects />
-        <Talent />
-        <Team />
-        <Contact />
-        <Footer />
+        
+        <div className="mx-4 md:mx-6 lg:mx-8 bg-white rounded-3xl shadow-2xl overflow-hidden mt-8">
+          <Talent />
+          <Team />
+          <Contact />
+          <Footer />
+        </div>
       </div>
       
       {/* Custom Cursor */}
