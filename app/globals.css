@@ -10,7 +10,7 @@
 }
 
 @layer base {
-  body {
+  body, input, select, textarea, button {
     @apply font-sans;
   }
   

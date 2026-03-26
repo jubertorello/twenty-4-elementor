@@ -39,8 +39,17 @@ const Navbar = () => {
         }`}
       >
         {/* Logo */}
-        <div className={`text-xl md:text-2xl font-serif font-bold tracking-tighter transition-colors duration-500 ${isScrolled ? 'text-brand-green' : 'text-white'}`}>
-          TWENTY4<span className="font-light italic">STUDIOS</span>
+        <div className="relative h-8 w-40 md:h-10 md:w-48 transition-opacity duration-500">
+          <Image
+            src={isScrolled 
+              ? "https://res.cloudinary.com/djqtkbyez/image/upload/v1774551593/Twenty4_Long_Black-cropped_u1gkti.svg" 
+              : "https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
+            }
+            alt="Twenty4 Studios Logo"
+            fill
+            className="object-contain"
+            referrerPolicy="no-referrer"
+          />
         </div>
 
         {/* Desktop Menu */}
@@ -152,9 +161,6 @@ const Hero = () => {
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-7xl"
           >
-            <span className="text-brand-sand uppercase tracking-[0.4em] text-[10px] md:text-xs mb-8 block font-bold opacity-70">
-              Twenty4 Studios / Premium Agency
-            </span>
             <h1 className="text-white text-5xl md:text-8xl lg:text-[8.5rem] font-serif leading-[0.85] mb-10 text-balance tracking-tighter">
               Sports Content <br />
               <span className="italic font-light">& Brand Partnerships</span>
@@ -469,8 +475,14 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
           <div className="md:col-span-2">
-            <div className="text-3xl font-serif font-bold tracking-tighter mb-6">
-              TWENTY4<span className="font-light italic">STUDIOS</span>
+            <div className="relative h-10 w-48 mb-6">
+              <Image
+                src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
+                alt="Twenty4 Studios Logo"
+                fill
+                className="object-contain object-left"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <p className="text-brand-sand/40 max-w-xs text-sm leading-relaxed">
               Elevating the narrative of modern sports through premium editorial branding and fashion-tech innovation.
