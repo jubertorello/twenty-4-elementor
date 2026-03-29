@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence, Variants } from 'motion/react';
 import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, Zap, ShieldCheck, Users } from 'lucide-react';
 import Image from 'next/image';
 
@@ -20,9 +20,9 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'About', href: '#about' },
+    { name: 'Studio', href: '#about' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Talent', href: '#talent' },
+    { name: 'Talents', href: '#talents' },
     { name: 'Team', href: '#team' },
   ];
 
@@ -31,7 +31,7 @@ const Navbar = () => {
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-3xl flex items-center justify-between px-6 md:px-10 py-3 md:py-4 border shadow-sm ${
           isScrolled 
             ? 'bg-white/90 backdrop-blur-md border-brand-green/10 shadow-xl' 
@@ -134,41 +134,89 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 150]);
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.5, 1, 0.5]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  const line1 = "Sports Content".split(" ");
+  const line2 = "& Brand Partnerships".split(" ");
+
+  const container: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const wordVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 10,
+      filter: "blur(8px)",
+      color: "rgba(255, 255, 255, 0)"
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      color: "rgba(255, 255, 255, 1)",
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    },
+  };
 
   return (
-    <section className="relative h-[100vh] w-full p-3">
+    <section ref={sectionRef} className="relative h-[100vh] w-full p-3">
       <div className="relative h-full w-full overflow-hidden rounded-3xl shadow-2xl bg-black">
-        {/* Background Video */}
-        <motion.div style={{ y: y1 }} className="absolute inset-0 z-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-70"
-          >
-            <source src="https://res.cloudinary.com/djqtkbyez/video/upload/v1773939713/AQPCIeYYjm6mufKklZburDD_JGfhW50-ZZlITu1c9R2sfca0oBhFQnv-VdHtUB6NcKynYNeRQPb8xlrf-Q9mbA6X_arypeo.mp4" type="video/mp4" />
-          </video>
+        {/* Background Video Embed */}
+        <motion.div 
+          style={{ scale, opacity }} 
+          className="absolute inset-0 z-0 overflow-hidden"
+        >
+          <iframe
+            src="https://talentfinder.cloud/embed/xwprl4mwl98f?autoplay=yes&loop=yes&kiosk=yes&fill=yes"
+            className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover opacity-70 pointer-events-none"
+            allow="autoplay; fullscreen"
+            style={{ border: 'none' }}
+          />
           <div className="absolute inset-0 bg-black/30 z-10" />
         </motion.div>
 
         <div className="relative z-20 h-full flex items-center justify-center text-center px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-7xl"
-          >
-            <h1 className="text-white text-5xl md:text-8xl lg:text-[8.5rem] font-serif leading-[0.85] mb-10 text-balance tracking-tighter">
-              Sports Content <br />
-              <span>& Brand Partnerships</span>
-            </h1>
-            <p className="text-brand-sand/80 text-lg md:text-2xl font-light max-w-3xl mx-auto text-balance leading-relaxed italic">
-              Connecting the world of elite sports with high-end editorial branding.
-            </p>
-          </motion.div>
+          <div className="max-w-7xl">
+            <motion.h1 
+              variants={container}
+              initial="hidden"
+              animate="visible"
+              className="text-white text-4xl md:text-6xl font-bold lg:text-[8.5rem] font-serif leading-[0.85] mb-10 text-balance tracking-tighter"
+            >
+              <div className="flex flex-wrap justify-center gap-x-[0.2em]">
+                {line1.map((word, i) => (
+                  <motion.span key={i} variants={wordVariants} className="inline-block">
+                    {word}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="flex flex-wrap justify-center gap-x-[0.2em]">
+                {line2.map((word, i) => (
+                  <motion.span key={i} variants={wordVariants} className="inline-block">
+                    {word}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.h1>
+          </div>
         </div>
 
         {/* Scroll Indicator */}
@@ -186,128 +234,306 @@ const Hero = () => {
   );
 };
 
-const About = () => {
-  return (
-    <section id="about" className="py-24 md:py-40 px-6 md:px-12 bg-brand-sand">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="text-brand-green/40 uppercase tracking-widest text-xs mb-4 block font-bold">
-            01 / Who we are
-          </span>
-          <h2 className="text-4xl md:text-6xl font-serif text-brand-green leading-tight mb-8">
-            An editorial approach to <span className="italic">athletic excellence.</span>
-          </h2>
-          <div className="space-y-6 text-brand-green/70 text-lg leading-relaxed max-w-lg">
-            <p>
-              Twenty4 Studios is more than a branding agency. We are a creative collective dedicated to elevating the narrative of modern athletes.
-            </p>
-            <p>
-              By blending high-fashion aesthetics with cutting-edge technology, we create digital experiences that resonate with a global audience.
-            </p>
-          </div>
-          <motion.div 
-            className="mt-12"
-            whileHover={{ x: 10 }}
-          >
-            <a href="#" className="flex items-center gap-4 text-brand-green font-bold uppercase tracking-widest text-xs">
-              Our Philosophy <ArrowRight size={16} />
-            </a>
-          </motion.div>
-        </motion.div>
+const BrandShowcase = () => {
+  const topRow = [
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1774774203/588626340_17937020454117098_1616832114950864925_n_poa6a8.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939249/531600444_17921122038117098_5360922844406571590_n_xyddjc.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939096/479487334_17895797886117098_1135703105300039762_n_m9g8ha.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/475271473_17893917237117098_3840431804277799553_n_gewozi.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/655970916_17956930692117098_2415210670614176645_n_zedqh4.jpg',
+  ];
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-2xl"
+  const bottomRow = [
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1774774204/625562433_17945187636117098_3562246760192146692_n_bmfydx.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654026590_17956035957117098_5856671028597925931_n_unocse.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/625013552_17943968889117098_1308860520742695209_n_z7m4kq.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1774774175/655511938_17956930713117098_1078108901050426995_n_b6yzqw.jpg',
+    'https://res.cloudinary.com/djqtkbyez/image/upload/v1774774174/655199745_17956930731117098_1449537988951363301_n_e4xbis.jpg',
+  ];
+
+  const text = "Where athletes become icons";
+  const words = text.split(" ");
+
+  const container: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const wordVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 20,
+      filter: "blur(8px)",
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    },
+  };
+
+  const sectionVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const rowVariants: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 1, 
+        ease: [0.22, 1, 0.36, 1],
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const imageVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
+  return (
+    <motion.section 
+      id="about" 
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={sectionVariants}
+      className="relative py-24 md:py-40 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 md:gap-12"
+    >
+      {/* Top Row */}
+      <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 md:gap-8 px-4 w-full">
+        {topRow.map((src, i) => (
+          <motion.div
+            key={`top-${i}`}
+            variants={imageVariants}
+            className={`relative flex-shrink-0 w-44 h-32 md:w-64 md:h-44 lg:w-80 lg:h-56 rounded-2xl overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
+              i % 2 === 0 ? 'translate-y-4 md:translate-y-8' : '-translate-y-4 md:-translate-y-8'
+            } ${
+              i === 0 || i === 4 ? 'hidden xl:block' : ''
+            }`}
+          >
+            <Image
+              src={src}
+              alt="Showcase"
+              fill
+              className="object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Central Content */}
+      <div className="relative z-20 text-center px-6 max-w-7xl mx-auto">
+        <motion.h2 
+          variants={container}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          className="text-2xl md:text-4xl lg:text-6xl font-serif font-bold text-black leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
         >
-          <Image 
-            src="https://picsum.photos/seed/studio-vibe/800/1000"
-            alt="Studio Vibe"
-            fill
-            className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-            referrerPolicy="no-referrer"
-          />
-        </motion.div>
+          {words.map((word, i) => (
+            <motion.span key={i} variants={wordVariants} className="inline-block">
+              {word}
+            </motion.span>
+          ))}
+        </motion.h2>
+      </div>
+
+      {/* Bottom Row */}
+      <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 md:gap-8 px-4 w-full">
+        {bottomRow.map((src, i) => (
+          <motion.div
+            key={`bottom-${i}`}
+            variants={imageVariants}
+            className={`relative flex-shrink-0 w-44 h-32 md:w-64 md:h-44 lg:w-80 lg:h-56 rounded-2xl overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
+              i % 2 === 0 ? '-translate-y-4 md:-translate-y-8' : 'translate-y-4 md:translate-y-8'
+            } ${
+              i === 0 || i === 4 ? 'hidden xl:block' : ''
+            }`}
+          >
+            <Image
+              src={src}
+              alt="Showcase"
+              fill
+              className="object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+    </motion.section>
+  );
+};
+
+const Projects = () => {
+  const projects = [
+    {
+      title: 'Editorial Campaign',
+      category: 'Branding',
+      img: 'https://picsum.photos/seed/p1/800/1000',
+      year: '2024'
+    },
+    {
+      title: 'Digital Experience',
+      category: 'Web Design',
+      img: 'https://picsum.photos/seed/p2/800/1000',
+      year: '2023'
+    },
+    {
+      title: 'Content Series',
+      category: 'Production',
+      img: 'https://picsum.photos/seed/p3/800/1000',
+      year: '2024'
+    }
+  ];
+
+  return (
+    <section id="projects" className="py-24 md:py-40 px-6 md:px-12 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-20">
+          <span className="text-brand-green/40 uppercase tracking-widest text-xs mb-4 block font-bold">
+            02 / SELECTED PROJECTS
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif text-brand-green">
+            Crafting <span className="italic">digital legacies.</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {projects.map((project, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="group cursor-pointer"
+            >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl mb-6">
+                <Image
+                  src={project.img}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-brand-green/40 mb-1">{project.category}</p>
+                  <h3 className="text-2xl font-serif text-brand-green">{project.title}</h3>
+                </div>
+                <span className="text-xs font-bold text-brand-green/30">{project.year}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-const Projects = () => {
+const Talents = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
 
-  const projects = [
+  const talents = [
     { 
-      title: 'TIME Africa', 
-      category: 'Editorial', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/475271473_17893917237117098_3840431804277799553_n_gewozi.jpg',
-      tag: 'Tiempo',
-      description: 'G20 Leaders Summit in Johannesburg'
+      name: 'Juan Lebrón', 
+      tag: 'Padel', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774783981/656067117_18464630485103231_6128771137241890857_n_rfok3q.jpg',
+      description: 'Representing the peak of modern tennis with a focus on precision and power.'
     },
     { 
-      title: 'Rolling Stone', 
-      category: 'Branding', 
-      img: 'https://picsum.photos/seed/rs/800/1200',
-      tag: 'Lifestyle'
+      name: 'Coki Nieto', 
+      tag: 'Padel', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938919/509099364_17913543999117098_66790166839734862_n_zqfkgr.jpg',
+      description: 'A dynamic force on the court, redefining the role of the modern point guard.'
     },
     { 
-      title: 'Disney+', 
-      category: 'Digital', 
-      img: 'https://picsum.photos/seed/disney/800/1200',
-      tag: 'Entertainment'
+      name: 'Jon Sanz', 
+      tag: 'Padel', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/514705923_17915526867117098_2707657693738721723_n_wi9n8z.jpg',
+      description: 'Breaking records and barriers in world-class sprinting competitions.'
     },
     { 
-      title: 'National Geographic', 
-      category: 'Editorial', 
-      img: 'https://picsum.photos/seed/natgeo/800/1200',
-      tag: 'Society'
+      name: 'Claudia Fernandez', 
+      tag: 'Padel', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774783833/582862944_17933448663117098_1238044410887099727_n_dc4g1w.jpg',
+      description: 'Olympic gold medalist with a passion for aquatic excellence.'
     },
     { 
-      title: 'Billboard', 
-      category: 'Campaign', 
-      img: 'https://picsum.photos/seed/billboard/800/1200',
-      tag: 'Music'
+      name: 'Sofia Araujo', 
+      tag: 'Padel', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774784855/657222434_18574609390034562_3547455622250560859_n_enefcy.jpg',
+      description: 'Artistic gymnast known for her grace and technical mastery.'
     },
+    { 
+      name: 'Jairo Bautista', 
+      tag: 'Futbol', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/625013552_17943968889117098_1308860520742695209_n_z7m4kq.jpg',
+      description: 'Rising star in Formula racing with exceptional track vision and speed.'
+    }
   ];
 
   const services = [
     {
       icon: <Zap className="w-8 h-8 text-white" />,
-      title: 'Rendimiento constante',
-      description: 'El 99,99 % de tiempo de actividad y la infraestructura adaptativa garantizan una entrega rápida y fiable a cualquier escala.'
+      title: 'Producción Audiovisual',
+      description: 'Creación de contenido de alta calidad, desde reels hasta documentales, capturando la esencia de cada talento.'
     },
     {
       icon: <ShieldCheck className="w-8 h-8 text-white" />,
-      title: 'Seguridad en la que puedes confiar',
-      description: 'Manténte protegido con supervisión de amenazas, análisis de vulnerabilidades y auditorías de rendimiento continuas.'
+      title: 'Estrategia de Contenido',
+      description: 'Planificación y ejecución de calendarios editoriales para maximizar el impacto en redes sociales.'
     },
     {
       icon: <Users className="w-8 h-8 text-white" />,
-      title: 'Asesoramiento dirigido por expertos',
-      description: 'Obtén acceso las 24 horas del día, los 7 días de la semana, a expertos certificados para obtener asistencia proactiva y orientación estratégica.'
+      title: 'Gestión de Marca Personal',
+      description: 'Desarrollo de la identidad visual y narrativa para conectar con audiencias globales.'
     }
   ];
 
   return (
-    <section id="projects" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white overflow-hidden w-full">
+    <section id="talents" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white overflow-hidden w-full">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start mb-20 gap-8">
-          <h2 className="text-4xl md:text-7xl font-serif max-w-3xl leading-[1.05]">
-            Selected Work
+        <div className="flex flex-col items-start mb-20 gap-4">
+          <span className="text-white uppercase tracking-widest text-xs block font-bold">
+            03 / TALENTS
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif max-w-3xl leading-[1.05]">
+            Nuestros Talentos
           </h2>
         </div>
 
         {/* Expanding Gallery */}
-        <div className="flex flex-col md:flex-row gap-4 h-[600px] mb-32">
-          {projects.map((project, i) => (
+        <div className="flex flex-col md:flex-row gap-4 h-[500px] mb-32">
+          {talents.map((talent, i) => (
             <motion.div
               key={i}
               onMouseEnter={() => setHoveredIndex(i)}
@@ -317,8 +543,8 @@ const Projects = () => {
               }}
             >
               <Image 
-                src={project.img}
-                alt={project.title}
+                src={talent.img}
+                alt={talent.name}
                 fill
                 className="object-cover transition-transform duration-700"
                 referrerPolicy="no-referrer"
@@ -329,7 +555,7 @@ const Projects = () => {
               <div className="absolute inset-0 p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
                   <span className="bg-brand-green/80 backdrop-blur-md px-3 py-1 rounded-md text-[10px] uppercase tracking-widest font-bold text-brand-sand">
-                    {project.tag}
+                    {talent.tag}
                   </span>
                 </div>
                 
@@ -341,8 +567,8 @@ const Projects = () => {
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.4 }}
                     >
-                      <h3 className="text-3xl font-serif mb-2">{project.title}</h3>
-                      <p className="text-brand-sand/60 text-sm max-w-xs">{project.description || project.category}</p>
+                      <h3 className="text-3xl font-serif mb-2">{talent.name}</h3>
+                      <p className="text-brand-sand/60 text-sm max-w-xs">{talent.description}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -377,66 +603,11 @@ const Projects = () => {
   );
 };
 
-const Talent = () => {
-  const talents = [
-    { name: 'Elena Rossi', sport: 'Tennis', img: 'https://picsum.photos/seed/t1/600/800' },
-    { name: 'Marcus Chen', sport: 'Basketball', img: 'https://picsum.photos/seed/t2/600/800' },
-    { name: 'Sarah Jenkins', sport: 'Athletics', img: 'https://picsum.photos/seed/t3/600/800' },
-  ];
 
-  return (
-    <section id="talent" className="py-24 md:py-40 px-6 md:px-12 bg-brand-green text-brand-sand overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-24">
-          <span className="text-brand-sand/40 uppercase tracking-widest text-xs mb-4 block font-bold">
-            03 / Our Talent
-          </span>
-          <h2 className="text-5xl md:text-8xl font-serif italic mb-6">The Elite Collective</h2>
-          <p className="text-brand-sand/60 max-w-xl mx-auto text-lg font-light">
-            We represent a new generation of athletes who understand the power of personal branding.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {talents.map((talent, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className="group"
-            >
-              <div className="relative aspect-[3/4] mb-8 overflow-hidden rounded-3xl">
-                <Image 
-                  src={talent.img}
-                  alt={talent.name}
-                  fill
-                  className="object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-brand-green/20 mix-blend-multiply" />
-              </div>
-              <h3 className="text-3xl font-serif mb-2">{talent.name}</h3>
-              <p className="text-brand-sand/40 uppercase tracking-[0.2em] text-[10px] font-bold">{talent.sport}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
 
 const Team = () => {
-  const team = [
-    { name: 'Julian V.', role: 'Creative Director', img: 'https://picsum.photos/seed/tm1/400/500' },
-    { name: 'Sofia M.', role: 'Brand Strategist', img: 'https://picsum.photos/seed/tm2/400/500' },
-    { name: 'Alex K.', role: 'Tech Lead', img: 'https://picsum.photos/seed/tm3/400/500' },
-    { name: 'Elena P.', role: 'Talent Manager', img: 'https://picsum.photos/seed/tm4/400/500' },
-  ];
-
   return (
-    <section id="team" className="py-24 md:py-40 px-6 md:px-12 bg-brand-sand">
+    <section id="team" className="py-24 md:py-40 px-6 md:px-12 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20">
           <span className="text-brand-green/40 uppercase tracking-widest text-xs mb-4 block font-bold">
@@ -447,31 +618,44 @@ const Team = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-          {team.map((member, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="text-center"
-            >
-              <div className="relative aspect-square mb-6 overflow-hidden rounded-3xl grayscale hover:grayscale-0 transition-all duration-500 border border-brand-green/10 p-2">
-                <div className="relative w-full h-full overflow-hidden rounded-3xl">
-                  <Image 
-                    src={member.img}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-              </div>
-              <h4 className="text-xl font-serif text-brand-green">{member.name}</h4>
-              <p className="text-brand-green/50 text-[10px] uppercase tracking-widest font-bold mt-1">{member.role}</p>
-            </motion.div>
-          ))}
+        <div className="bg-brand-sand/10 rounded-[40px] p-8 md:p-20 flex flex-col lg:flex-row items-center gap-16 md:gap-24">
+          {/* Left: Team Photo with Tilt */}
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="relative w-full lg:w-1/2"
+          >
+            <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden transform -rotate-3 hover:rotate-0 transition-transform duration-700 shadow-2xl">
+              <Image 
+                src="https://picsum.photos/seed/team-photo/1200/900"
+                alt="Twenty4 Studios Team"
+                fill
+                className="object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </motion.div>
+
+          {/* Right: Quote and Info */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="w-full lg:w-1/2 space-y-10"
+          >
+            <blockquote className="text-3xl md:text-5xl font-serif text-brand-green leading-[1.1] tracking-tight">
+              &ldquo;Nuestra visión es elevar el potencial de cada atleta a través de una narrativa visual única y una estrategia de marca impecable.&rdquo;
+            </blockquote>
+            
+            <div className="space-y-2">
+              <h4 className="text-xl font-bold text-brand-green">Julian V. CEO, Twenty4 Studios</h4>
+              <p className="text-brand-green/50 text-sm font-medium tracking-wide">
+                Liderando la intersección entre deporte y branding editorial.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -480,21 +664,21 @@ const Team = () => {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-24 md:py-40 px-6 md:px-12 bg-white">
+    <section id="contact" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
         <div>
-          <span className="text-brand-green/40 uppercase tracking-widest text-xs mb-4 block font-bold">
+          <span className="text-white/40 uppercase tracking-widest text-xs mb-4 block font-bold">
             05 / Get in touch
           </span>
-          <h2 className="text-5xl md:text-7xl font-serif text-brand-green leading-tight mb-8">
+          <h2 className="text-5xl md:text-7xl font-serif text-white leading-tight mb-8">
             Let&apos;s build your <span className="italic">legacy together.</span>
           </h2>
-          <p className="text-brand-green/60 text-lg mb-12 max-w-md">
+          <p className="text-brand-sand/60 text-lg mb-12 max-w-md">
             Whether you&apos;re a brand looking for impact or an athlete aiming for the next level, we&apos;re here to help.
           </p>
           <div className="space-y-4">
-            <p className="text-brand-green font-serif text-2xl">hello@twenty4studios.com</p>
-            <p className="text-brand-green/60 uppercase tracking-widest text-xs font-bold">+44 (0) 20 7946 0000</p>
+            <p className="text-white font-serif text-2xl">hello@twenty4studios.com</p>
+            <p className="text-brand-sand/60 uppercase tracking-widest text-xs font-bold">+44 (0) 20 7946 0000</p>
           </div>
         </div>
 
@@ -502,36 +686,36 @@ const Contact = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-brand-sand p-8 md:p-12 rounded-3xl"
+          className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl"
         >
           <form className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-brand-green/40">Name</label>
-                <input type="text" className="w-full bg-transparent border-b border-brand-green/20 py-2 focus:border-brand-green outline-none transition-colors" />
+                <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Name</label>
+                <input type="text" className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-brand-green/40">Email</label>
-                <input type="email" className="w-full bg-transparent border-b border-brand-green/20 py-2 focus:border-brand-green outline-none transition-colors" />
+                <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Email</label>
+                <input type="email" className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-brand-green/40">Subject</label>
-              <select className="w-full bg-transparent border-b border-brand-green/20 py-2 focus:border-brand-green outline-none transition-colors appearance-none">
-                <option>New Project</option>
-                <option>Talent Inquiry</option>
-                <option>Partnership</option>
-                <option>Other</option>
+              <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Subject</label>
+              <select className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
+                <option className="bg-black">New Project</option>
+                <option className="bg-black">Talent Inquiry</option>
+                <option className="bg-black">Partnership</option>
+                <option className="bg-black">Other</option>
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-brand-green/40">Message</label>
-              <textarea rows={4} className="w-full bg-transparent border-b border-brand-green/20 py-2 focus:border-brand-green outline-none transition-colors resize-none"></textarea>
+              <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Message</label>
+              <textarea rows={4} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none"></textarea>
             </div>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-brand-green text-brand-sand py-4 rounded-3xl uppercase tracking-widest text-xs font-bold"
+              className="w-full bg-white text-brand-green py-4 rounded-3xl uppercase tracking-widest text-xs font-bold"
             >
               Send Message
             </motion.button>
@@ -564,9 +748,9 @@ const Footer = () => {
           <div>
             <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-white">Navigation</h5>
             <ul className="space-y-4 text-sm text-brand-sand/60">
-              <li><a href="#about" className="hover:text-white transition-colors">About</a></li>
+              <li><a href="#about" className="hover:text-white transition-colors">Studio</a></li>
               <li><a href="#projects" className="hover:text-white transition-colors">Projects</a></li>
-              <li><a href="#talent" className="hover:text-white transition-colors">Talent</a></li>
+              <li><a href="#talents" className="hover:text-white transition-colors">Talents</a></li>
               <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
             </ul>
           </div>
@@ -594,24 +778,29 @@ const Footer = () => {
 // --- Main Page ---
 
 export default function LandingPage() {
+  useEffect(() => {
+    // Force scroll to top on initial load
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+      // Clear hash from URL to prevent browser from scrolling to a section
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }, []);
+
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-brand-green to-brand-sand">
+    <main className="relative min-h-screen bg-brand-gradient bg-fixed">
       <Navbar />
       <Hero />
       
-      <div className="relative z-30 space-y-0 pb-8">
-        <div className="mx-4 md:mx-6 lg:mx-8 bg-white rounded-3xl shadow-2xl overflow-hidden mb-8">
-          <About />
-        </div>
-        
+      <div className="relative z-30">
+        <BrandShowcase />
         <Projects />
-        
-        <div className="mx-4 md:mx-6 lg:mx-8 bg-white rounded-3xl shadow-2xl overflow-hidden mt-8">
-          <Talent />
-          <Team />
-          <Contact />
-          <Footer />
-        </div>
+        <Talents />
+        <Team />
+        <Contact />
+        <Footer />
       </div>
       
       {/* Custom Cursor */}
