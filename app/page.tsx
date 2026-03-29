@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, Variants } from 'motion/react';
-import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 // --- Components ---
@@ -27,19 +27,19 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-4 md:py-6 pointer-events-none">
+    <div className="fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4 lg:py-6 pointer-events-none">
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-6 md:px-10 py-3 md:py-4 border shadow-sm ${
+        className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-6 lg:px-10 py-3 lg:py-4 border shadow-sm ${
           isScrolled 
             ? 'bg-white/90 backdrop-blur-md border-brand-green/10 shadow-xl' 
             : 'bg-white/10 backdrop-blur-sm border-white/20'
         }`}
       >
         {/* Logo */}
-        <a href="#hero" className="relative h-8 w-40 md:h-10 md:w-48 transition-opacity duration-500 hover:opacity-80">
+        <a href="#hero" className="relative h-8 w-40 lg:h-10 lg:w-48 transition-opacity duration-500 hover:opacity-80">
           <Image
             src={isScrolled 
               ? "https://res.cloudinary.com/djqtkbyez/image/upload/v1774551593/Twenty4_Long_Black-cropped_u1gkti.svg" 
@@ -53,13 +53,13 @@ const Navbar = () => {
         </a>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-8 items-center">
+        <div className="hidden lg:flex space-x-8 items-center">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               className={`text-[11px] uppercase tracking-[0.2em] font-bold transition-colors duration-500 hover:opacity-50 ${
-                isScrolled ? 'text-brand-green' : 'text-white'
+                isScrolled ? 'text-black' : 'text-white'
               }`}
             >
               {link.name}
@@ -69,12 +69,12 @@ const Navbar = () => {
 
         {/* CTA Button */}
         <div className="flex items-center gap-4">
-          <button className={`hidden lg:block text-[11px] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-brand-green/60' : 'text-white/60'}`}>
+          <button className={`hidden lg:block text-[11px] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-black/60' : 'text-white/60'}`}>
             ES | EN
           </button>
           <a 
             href="#contact"
-            className={`hidden md:inline-flex px-6 py-2.5 rounded-lg text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${
+            className={`hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${
               isScrolled 
                 ? 'bg-brand-green text-brand-sand hover:bg-brand-green/90' 
                 : 'bg-white text-brand-green hover:bg-brand-sand'
@@ -85,7 +85,7 @@ const Navbar = () => {
           
           {/* Mobile Toggle */}
           <button 
-            className={`md:hidden transition-colors duration-500 ${isScrolled ? 'text-brand-green' : 'text-white'}`}
+            className={`lg:hidden transition-colors duration-500 ${isScrolled ? 'text-brand-green' : 'text-white'}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -99,7 +99,7 @@ const Navbar = () => {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="absolute top-full left-0 w-full mt-4 bg-white rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 md:hidden border border-brand-green/10"
+              className="absolute top-full left-0 w-full mt-4 bg-white rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-brand-green/10"
             >
               {navLinks.map((link) => (
                 <a
@@ -201,7 +201,7 @@ const Hero = () => {
               variants={container}
               initial="hidden"
               animate="visible"
-              className="text-white text-4xl md:text-6xl font-bold lg:text-[8.5rem] font-serif leading-[0.85] mb-10 text-balance tracking-tighter"
+              className="text-white text-4xl md:text-7xl lg:text-[8.5rem] font-serif leading-[0.85] mb-10 text-balance tracking-tighter"
             >
               <div className="flex flex-wrap justify-center gap-x-[0.2em]">
                 {line1.map((word, i) => (
@@ -228,7 +228,7 @@ const Hero = () => {
           transition={{ delay: 1.5 }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 text-brand-sand/30 flex flex-col items-center gap-3"
         >
-          <span className="text-[9px] uppercase tracking-[0.3em] font-bold">Discover More</span>
+          <span className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] font-bold">Discover More</span>
           <div className="w-[1px] h-16 bg-gradient-to-b from-brand-sand/30 to-transparent" />
         </motion.div>
       </motion.div>
@@ -264,7 +264,7 @@ const BrandShowcase = () => {
     'https://res.cloudinary.com/djqtkbyez/image/upload/v1774774174/655199745_17956930731117098_1449537988951363301_n_e4xbis.jpg',
   ];
 
-  const text = "Where athletes become icons";
+  const text = "Where Athletes Become Icons";
   const words = text.split(" ");
 
   const container: Variants = {
@@ -328,23 +328,23 @@ const BrandShowcase = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-24 md:py-40 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 md:gap-12">
+    <section ref={sectionRef} className="relative py-24 lg:py-40 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 lg:gap-12">
       <motion.div 
         style={{ scale, opacity, y }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
-        className="w-full flex flex-col gap-6 md:gap-12"
+        className="w-full flex flex-col gap-6 lg:gap-12"
       >
         {/* Top Row */}
-        <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 md:gap-8 px-4 w-full">
+        <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 lg:gap-8 px-4 w-full">
           {topRow.map((src, i) => (
             <motion.div
               key={`top-${i}`}
               variants={imageVariants}
-              className={`relative flex-shrink-0 w-44 h-32 md:w-64 md:h-44 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
-                i % 2 === 0 ? 'translate-y-4 md:translate-y-8' : '-translate-y-4 md:-translate-y-8'
+              className={`relative flex-shrink-0 w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
+                i % 2 === 0 ? 'translate-y-4 lg:translate-y-8' : '-translate-y-4 lg:-translate-y-8'
               } ${
                 i === 0 || i === 4 ? 'hidden xl:block' : ''
               }`}
@@ -378,13 +378,13 @@ const BrandShowcase = () => {
         </div>
 
         {/* Bottom Row */}
-        <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 md:gap-8 px-4 w-full">
+        <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 lg:gap-8 px-4 w-full">
           {bottomRow.map((src, i) => (
             <motion.div
               key={`bottom-${i}`}
               variants={imageVariants}
-              className={`relative flex-shrink-0 w-44 h-32 md:w-64 md:h-44 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
-                i % 2 === 0 ? '-translate-y-4 md:-translate-y-8' : 'translate-y-4 md:translate-y-8'
+              className={`relative flex-shrink-0 w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
+                i % 2 === 0 ? '-translate-y-4 lg:-translate-y-8' : 'translate-y-4 lg:translate-y-8'
               } ${
                 i === 0 || i === 4 ? 'hidden xl:block' : ''
               }`}
@@ -407,63 +407,161 @@ const BrandShowcase = () => {
 const Projects = () => {
   const projects = [
     {
-      title: 'Editorial Campaign',
-      category: 'Branding',
-      img: 'https://picsum.photos/seed/p1/800/1000',
-      year: '2024'
+      title: 'BARO',
+      category: 'Netflix Documentation',
+      description: 'The story of a man who changed German rap forever. A deep dive into the life and legacy of an icon.',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654026590_17956035957117098_5856671028597925931_n_unocse.jpg',
+      year: '2024',
+      videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1102574741/rendition/2160p/file.mp4?loc=external&log_user=0&signature=cbfdb8d1762b90739e851c2faca190fb0dea5c608d86e3e24e0261f36fa7332e',
+      isVideoEmbed: false
     },
     {
-      title: 'Digital Experience',
-      category: 'Web Design',
-      img: 'https://picsum.photos/seed/p2/800/1000',
-      year: '2023'
+      title: 'YouTube Festival',
+      category: 'Event Production',
+      description: 'Together with Google, we explored how generative AI is reshaping brand storytelling at the YouTube Festival 2024.',
+      img: 'https://cdn.prod.website-files.com/663bd02863d469bafe16e50f/68f8a54c3e22b701ec6d3784_ishot-763-p-1600.webp',
+      year: '2024',
+      videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1109107424/rendition/1080p/file.mp4?loc=external&log_user=0&signature=d14d2b21294c474b4a376647b638c254d4f99ea2a56e8e1b747746d512808c6d',
+      isVideoEmbed: false
     },
     {
-      title: 'Content Series',
-      category: 'Production',
-      img: 'https://picsum.photos/seed/p3/800/1000',
-      year: '2024'
+      title: 'OpenAI in Germany',
+      category: 'Tech Showcase',
+      description: 'OpenAI\'s arrival in Germany became a space for artistic exploration with two immersive pieces produced by TWENTY4.',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774795013/525533485_17919021303117098_6405116482587988328_n_pz9zch.jpg',
+      year: '2023',
+      videoUrl: 'https://talentfinder.cloud/embed/7hma475c3nrk?autoplay=yes&loop=yes&kiosk=yes&fill=yes',
+      isVideoEmbed: true
+    },
+    {
+      title: 'Sundance 2024',
+      category: 'Film Festival',
+      description: 'The rise, the trends, and what\'s next for indie cinema. A cinematic journey through the world\'s premier film festival.',
+      img: 'https://cdn.prod.website-files.com/663bd02863d469bafe16e50f/68b827c5adcbf0cc7436c02d_ishot-086-p-1600.webp',
+      year: '2024',
+      videoUrl: 'https://talentfinder.cloud/embed/d8ay25a4mwdd?autoplay=yes&loop=yes&kiosk=yes&fill=yes',
+      isVideoEmbed: true
+    },
+    {
+      title: 'Vattenfall Solar',
+      category: 'Documentary',
+      description: 'How can an energy company credibly position itself as a pioneer of a fossil-free future? Telling real stories.',
+      img: 'https://cdn.prod.website-files.com/663bd02863d469bafe16e50f/68c18e9789b154041e243bd9_ishot-231%20(1).webp',
+      year: '2023',
+      videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1102574741/rendition/2160p/file.mp4?loc=external&log_user=0&signature=cbfdb8d1762b90739e851c2faca190fb0dea5c608d86e3e24e0261f36fa7332e',
+      isVideoEmbed: false
     }
   ];
 
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   return (
-    <section id="projects" className="py-24 md:py-40 px-6 md:px-12 bg-white">
+    <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-sand overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
-          <span className="text-brand-green/40 uppercase tracking-widest text-xs mb-4 block font-bold">
-            02 / SELECTED PROJECTS
-          </span>
-          <h2 className="text-4xl md:text-6xl font-serif text-brand-green">
-            Crafting <span className="italic">digital legacies.</span>
-          </h2>
+        <div className="mb-32 lg:mb-48 text-center flex flex-col items-center">
+          <motion.span 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-brand-green/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+          >
+            02 / PROJECTS
+          </motion.span>
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-brand-green leading-[0.8] tracking-tighter uppercase"
+          >
+            Selected <br />
+            <span className="italic font-light">WORK</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-8 text-brand-green/60 max-w-md text-sm md:text-base"
+          >
+            From &quot;look at this&quot; to &quot;have you heard about?&quot; <br />
+            We&apos;re proud to show you some of our work.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="space-y-32 lg:space-y-64">
           {projects.map((project, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group cursor-pointer"
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className={`flex flex-col ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.125rem] mb-6">
-                <Image
-                  src={project.img}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-brand-green/40 mb-1">{project.category}</p>
-                  <h3 className="text-2xl font-serif text-brand-green">{project.title}</h3>
+              {/* Image Container */}
+              <div 
+                className="w-full lg:w-3/5"
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <div className="relative aspect-[4/5] lg:aspect-[16/10] overflow-hidden rounded-[1.125rem] group bg-black">
+                  <Image
+                    src={project.img}
+                    alt={project.title}
+                    fill
+                    className={`object-cover transition-all duration-700 ${hoveredIndex === i ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}
+                    referrerPolicy="no-referrer"
+                  />
+                  
+                  {/* Video Overlay */}
+                  <div className={`absolute inset-0 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    {hoveredIndex === i && (
+                      project.isVideoEmbed ? (
+                        <iframe
+                          src={project.videoUrl}
+                          className="w-full h-full object-cover"
+                          allow="autoplay; fullscreen"
+                          style={{ border: 'none' }}
+                        />
+                      ) : (
+                        <video
+                          src={project.videoUrl}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className="w-full h-full object-cover"
+                        />
+                      )
+                    )}
+                  </div>
+
+                  <div className={`absolute inset-0 bg-black/10 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-0' : 'opacity-100'}`} />
                 </div>
-                <span className="text-xs font-bold text-brand-green/30">{project.year}</span>
+              </div>
+
+              {/* Text Content */}
+              <div className="w-full lg:w-2/5 space-y-6 lg:space-y-8">
+                <div className="space-y-2">
+                  <p className="text-xs md:text-sm uppercase tracking-widest font-bold text-brand-green/40">
+                    {project.category}
+                  </p>
+                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-brand-green leading-tight">
+                    {project.title}
+                  </h3>
+                </div>
+                
+                <p className="text-brand-green/70 text-lg md:text-xl leading-relaxed max-w-md">
+                  {project.description}
+                </p>
+
+                <div className="pt-4">
+                  <button className="group flex items-center gap-4 text-brand-green font-bold uppercase tracking-widest text-xs md:text-sm">
+                    <span>View Case Study</span>
+                    <div className="w-10 h-[1px] bg-brand-green/30 group-hover:w-16 transition-all duration-500" />
+                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -533,66 +631,120 @@ const Talents = () => {
     }
   ];
 
+  const sectionVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
   return (
-    <section id="talents" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white overflow-hidden w-full">
-      <div className="max-w-7xl mx-auto">
+    <section id="talents" className="py-24 lg:py-40 px-6 lg:px-12 bg-black text-white overflow-hidden w-full">
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+        className="max-w-7xl mx-auto"
+      >
         {/* Header */}
         <div className="flex flex-col items-start mb-20 gap-4">
-          <span className="text-white uppercase tracking-widest text-xs block font-bold">
+          <motion.span variants={itemVariants} className="text-white uppercase tracking-widest text-xs md:text-sm block font-bold">
             03 / TALENTS
-          </span>
-          <h2 className="text-4xl md:text-6xl font-bold font-serif max-w-3xl leading-[1.05]">
-            Built for impact
-          </h2>
+          </motion.span>
+          <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif max-w-3xl leading-[1.05]">
+            Built For Impact
+          </motion.h2>
         </div>
 
         {/* Expanding Gallery */}
-        <div className="flex flex-col md:flex-row gap-4 h-[500px] mb-32">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-4 h-auto lg:h-[650px] mb-32">
           {talents.map((talent, i) => (
             <motion.div
               key={i}
+              variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(i)}
-              className="relative overflow-hidden rounded-[1.125rem] cursor-pointer transition-all duration-700 ease-[0.22, 1, 0.36, 1]"
-              animate={{
-                flex: hoveredIndex === i ? 4 : 1,
-              }}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={`relative overflow-hidden rounded-[2rem] cursor-pointer transition-all duration-700 ease-[0.22, 1, 0.36, 1] w-full h-[500px] lg:h-full group ${
+                hoveredIndex === i ? 'lg:flex-[4]' : 'lg:flex-1'
+              }`}
             >
               <Image 
                 src={talent.img}
                 alt={talent.name}
                 fill
-                className="object-cover transition-transform duration-700"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-40'}`} />
+              <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-60 lg:opacity-40'}`} />
               
               {/* Content Overlay */}
-              <div className="absolute inset-0 p-6 flex flex-col justify-between">
+              <div className="absolute inset-0 p-8 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
-                  <span className="bg-brand-green/80 backdrop-blur-md px-3 py-1 rounded-md text-[10px] uppercase tracking-widest font-bold text-brand-sand">
-                    {talent.tag}
-                  </span>
                 </div>
                 
-                <AnimatePresence>
-                  {hoveredIndex === i && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.4 }}
+                <div className={`space-y-4 transition-all duration-500 ${hoveredIndex === i ? 'opacity-100 translate-y-0' : 'lg:opacity-0 lg:translate-y-10'}`}>
+                  <div className="overflow-hidden">
+                    <motion.h3 
+                      className="text-3xl md:text-4xl lg:text-5xl font-serif text-white uppercase leading-tight"
                     >
-                      <h3 className="text-3xl font-serif font-bold mb-2">{talent.name}</h3>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      {talent.name}
+                    </motion.h3>
+                  </div>
+                  
+                  {/* Mobile & Desktop Info */}
+                  <a 
+                    href="https://www.instagram.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-brand-sand/80 hover:text-white transition-colors w-fit group/link"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] uppercase tracking-[0.2em] font-bold">VIEW ON INSTAGRAM</span>
+                    </div>
+                    <div className="w-8 h-[1px] bg-brand-sand/30 group-hover/link:w-12 transition-all duration-500" />
+                    <ChevronRight className="w-4 h-4" />
+                  </a>
+
+                  {/* Desktop Hover Info (Optional additional details) */}
+                  <AnimatePresence>
+                    {hoveredIndex === i && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="hidden lg:block"
+                      >
+                        <p className="text-brand-sand/40 text-[10px] uppercase tracking-widest font-bold">
+                          Professional Athlete
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-24">
           {services.map((service, i) => (
             <motion.div
               key={i}
@@ -605,14 +757,14 @@ const Talents = () => {
               <div className="text-white font-serif text-5xl font-bold">
                 {service.number}
               </div>
-              <h3 className="text-2xl font-serif leading-tight font-bold">{service.title}</h3>
-              <p className="text-white text-sm leading-relaxed">
+              <h3 className="text-2xl md:text-3xl font-serif leading-tight font-bold">{service.title}</h3>
+              <p className="text-white text-sm md:text-base leading-relaxed">
                 {service.description}
               </p>
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
@@ -621,18 +773,18 @@ const Talents = () => {
 
 const Team = () => {
   return (
-    <section id="team" className="py-24 md:py-40 px-6 md:px-12 bg-white">
+    <section id="team" className="py-24 lg:py-40 px-6 lg:px-12 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20">
-          <span className="text-brand-green/40 uppercase tracking-widest text-xs mb-4 block font-bold">
+          <span className="text-brand-green/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
             04 / The Team
           </span>
-          <h2 className="text-4xl md:text-6xl font-serif text-brand-green">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-brand-green">
             Driven by <span className="italic">passion.</span>
           </h2>
         </div>
 
-        <div className="bg-brand-sand/10 rounded-[1.125rem] p-8 md:p-20 flex flex-col lg:flex-row items-center gap-16 md:gap-24">
+        <div className="bg-brand-sand/10 rounded-[1.125rem] p-8 lg:p-20 flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           {/* Left: Team Photo with Tilt */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
@@ -659,13 +811,13 @@ const Team = () => {
             transition={{ delay: 0.2 }}
             className="w-full lg:w-1/2 space-y-10"
           >
-            <blockquote className="text-3xl md:text-5xl font-serif text-brand-green leading-[1.1] tracking-tight">
+            <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-brand-green leading-[1.1] tracking-tight">
               &ldquo;Nuestra visión es elevar el potencial de cada atleta a través de una narrativa visual única y una estrategia de marca impecable.&rdquo;
             </blockquote>
             
             <div className="space-y-2">
-              <h4 className="text-xl font-bold text-brand-green">Julian V. CEO, Twenty4 Studios</h4>
-              <p className="text-brand-green/50 text-sm font-medium tracking-wide">
+              <h4 className="text-xl md:text-2xl font-bold text-brand-green">Julian V. CEO, Twenty4 Studios</h4>
+              <p className="text-brand-green/50 text-sm md:text-base font-medium tracking-wide">
                 Liderando la intersección entre deporte y branding editorial.
               </p>
             </div>
@@ -678,21 +830,21 @@ const Team = () => {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-24 md:py-40 px-6 md:px-12 bg-black text-white">
+    <section id="contact" className="py-24 lg:py-40 px-6 lg:px-12 bg-black text-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
         <div>
-          <span className="text-white/40 uppercase tracking-widest text-xs mb-4 block font-bold">
+          <span className="text-white/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
             05 / Get in touch
           </span>
-          <h2 className="text-5xl md:text-7xl font-serif text-white leading-tight mb-8">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif text-white leading-tight mb-8">
             Let&apos;s build your <span className="italic">legacy together.</span>
           </h2>
           <p className="text-brand-sand/60 text-lg mb-12 max-w-md">
             Whether you&apos;re a brand looking for impact or an athlete aiming for the next level, we&apos;re here to help.
           </p>
           <div className="space-y-4">
-            <p className="text-white font-serif text-2xl">hello@twenty4studios.com</p>
-            <p className="text-brand-sand/60 uppercase tracking-widest text-xs font-bold">+44 (0) 20 7946 0000</p>
+            <p className="text-white font-serif text-2xl md:text-3xl">hello@twenty4studios.com</p>
+            <p className="text-brand-sand/60 uppercase tracking-widest text-xs md:text-sm font-bold">+44 (0) 20 7946 0000</p>
           </div>
         </div>
 
@@ -700,21 +852,21 @@ const Contact = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-[1.125rem]"
+          className="bg-white/5 backdrop-blur-md border border-white/10 p-8 lg:p-12 rounded-[1.125rem]"
         >
           <form className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Name</label>
+                <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Name</label>
                 <input type="text" className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Email</label>
+                <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Email</label>
                 <input type="email" className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Subject</label>
+              <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Subject</label>
               <select className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
                 <option className="bg-black">New Project</option>
                 <option className="bg-black">Talent Inquiry</option>
@@ -723,7 +875,7 @@ const Contact = () => {
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">Message</label>
+              <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Message</label>
               <textarea rows={4} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none"></textarea>
             </div>
             <motion.button
@@ -742,10 +894,10 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-brand-sand py-20 px-6 md:px-12">
+    <footer className="bg-black text-brand-sand py-20 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-20">
+          <div className="lg:col-span-2">
             <div className="relative h-10 w-48 mb-6">
               <Image
                 src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
@@ -755,7 +907,7 @@ const Footer = () => {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <p className="text-brand-sand/40 max-w-xs text-sm leading-relaxed">
+            <p className="text-white max-w-xs text-sm md:text-base leading-relaxed">
               Elevating the narrative of modern sports through premium editorial branding and fashion-tech innovation.
             </p>
           </div>
@@ -777,7 +929,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="pt-10 border-t border-brand-sand/10 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-sand/30">
+        <div className="pt-10 border-t border-brand-sand/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-sand/30">
           <p>© 2026 Twenty4 Studios. All rights reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
@@ -852,7 +1004,7 @@ const CustomCursor = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-8 h-8 border border-brand-green rounded-3xl pointer-events-none z-[9999] hidden md:block"
+      className="fixed top-0 left-0 w-8 h-8 border border-brand-green rounded-3xl pointer-events-none z-[9999] hidden lg:block"
       animate={{
         x: position.x - 16,
         y: position.y - 16,
