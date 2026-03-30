@@ -117,8 +117,8 @@
   --color-brand-sand: #e2dbd0;
   --color-brand-gray: #a6a6a6;
   
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Helvetica Neue", ui-serif, Georgia, serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @layer base {

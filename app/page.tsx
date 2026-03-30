@@ -20,10 +20,9 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Studio', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Talents', href: '#talents' },
-    { name: 'Team', href: '#team' },
+    { name: 'About Us', href: '#team' },
   ];
 
   return (
@@ -201,7 +200,7 @@ const Hero = () => {
               variants={container}
               initial="hidden"
               animate="visible"
-              className="text-white text-4xl md:text-7xl lg:text-[8.5rem] font-serif leading-[0.85] mb-10 text-balance tracking-tighter"
+              className="text-white text-4xl md:text-7xl lg:text-[6rem] font-serif font-black leading-[0.85] mb-10 text-balance tracking-tighter"
             >
               <div className="flex flex-wrap justify-center gap-x-[0.2em]">
                 {line1.map((word, i) => (
@@ -367,7 +366,7 @@ const BrandShowcase = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
-            className="text-2xl md:text-4xl lg:text-6xl font-serif font-bold text-black leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
+            className="text-2xl md:text-4xl lg:text-[3.125rem] font-serif font-black text-black leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
           >
             {words.map((word, i) => (
               <motion.span key={i} variants={wordVariants} className="inline-block">
@@ -456,14 +455,14 @@ const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-sand overflow-hidden">
+    <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-32 lg:mb-48 text-center flex flex-col items-center">
           <motion.span 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-brand-green/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+            className="text-brand-sand/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
             02 / PROJECTS
           </motion.span>
@@ -471,17 +470,16 @@ const Projects = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-brand-green leading-[0.8] tracking-tighter uppercase"
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-sand leading-[0.8] tracking-tighter"
           >
-            Selected <br />
-            <span className="italic font-light">WORK</span>
+            Selected Work
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="mt-8 text-brand-green/60 max-w-md text-sm md:text-base"
+            className="mt-8 text-brand-sand/60 max-w-md text-sm md:text-base"
           >
             From &quot;look at this&quot; to &quot;have you heard about?&quot; <br />
             We&apos;re proud to show you some of our work.
@@ -543,22 +541,22 @@ const Projects = () => {
               {/* Text Content */}
               <div className="w-full lg:w-2/5 space-y-6 lg:space-y-8">
                 <div className="space-y-2">
-                  <p className="text-xs md:text-sm uppercase tracking-widest font-bold text-brand-green/40">
+                  <p className="text-xs md:text-sm uppercase tracking-widest font-bold text-brand-sand/40">
                     {project.category}
                   </p>
-                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-brand-green leading-tight">
+                  <h3 className="text-4xl md:text-5xl lg:text-[3.125rem] font-serif font-black text-brand-sand leading-tight">
                     {project.title}
                   </h3>
                 </div>
                 
-                <p className="text-brand-green/70 text-lg md:text-xl leading-relaxed max-w-md">
+                <p className="text-brand-sand/70 text-lg md:text-xl leading-relaxed max-w-md">
                   {project.description}
                 </p>
 
                 <div className="pt-4">
-                  <button className="group flex items-center gap-4 text-brand-green font-bold uppercase tracking-widest text-xs md:text-sm">
+                  <button className="group flex items-center gap-4 text-brand-sand font-bold uppercase tracking-widest text-xs md:text-sm">
                     <span>View Case Study</span>
-                    <div className="w-10 h-[1px] bg-brand-green/30 group-hover:w-16 transition-all duration-500" />
+                    <div className="w-10 h-[1px] bg-brand-sand/30 group-hover:w-16 transition-all duration-500" />
                     <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </button>
                 </div>
@@ -667,7 +665,7 @@ const Talents = () => {
           <motion.span variants={itemVariants} className="text-white uppercase tracking-widest text-xs md:text-sm block font-bold">
             03 / TALENTS
           </motion.span>
-          <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif max-w-3xl leading-[1.05]">
+          <motion.h2 variants={itemVariants} className="text-4xl md:text-6xl lg:text-[4.5rem] font-black font-serif max-w-3xl leading-[1.05]">
             Built For Impact
           </motion.h2>
         </div>
@@ -757,7 +755,7 @@ const Talents = () => {
               <div className="text-white font-serif text-5xl font-bold">
                 {service.number}
               </div>
-              <h3 className="text-2xl md:text-3xl font-serif leading-tight font-bold">{service.title}</h3>
+              <h3 className="text-2xl md:text-3xl font-serif leading-tight font-black">{service.title}</h3>
               <p className="text-white text-sm md:text-base leading-relaxed">
                 {service.description}
               </p>
@@ -771,21 +769,21 @@ const Talents = () => {
 
 
 
-const Team = () => {
+const AboutUs = () => {
   return (
     <section id="team" className="py-24 lg:py-40 px-6 lg:px-12 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20">
           <span className="text-brand-green/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
-            04 / The Team
+            04 / About Us
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-brand-green">
+          <h2 className="text-4xl md:text-5xl lg:text-[4.5rem] font-serif font-black text-brand-green">
             Driven by <span className="italic">passion.</span>
           </h2>
         </div>
 
         <div className="bg-brand-sand/10 rounded-[1.125rem] p-8 lg:p-20 flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-          {/* Left: Team Photo with Tilt */}
+          {/* Left: About Us Photo with Tilt */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -795,7 +793,7 @@ const Team = () => {
             <div className="relative aspect-[4/3] rounded-[1.125rem] overflow-hidden transform -rotate-3 hover:rotate-0 transition-transform duration-700 shadow-2xl">
               <Image 
                 src="https://picsum.photos/seed/team-photo/1200/900"
-                alt="Twenty4 Studios Team"
+                alt="Twenty4 Studios"
                 fill
                 className="object-cover"
                 referrerPolicy="no-referrer"
@@ -811,7 +809,7 @@ const Team = () => {
             transition={{ delay: 0.2 }}
             className="w-full lg:w-1/2 space-y-10"
           >
-            <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-brand-green leading-[1.1] tracking-tight">
+            <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif font-black text-brand-green leading-[1.1] tracking-tight">
               &ldquo;Nuestra visión es elevar el potencial de cada atleta a través de una narrativa visual única y una estrategia de marca impecable.&rdquo;
             </blockquote>
             
@@ -836,7 +834,7 @@ const Contact = () => {
           <span className="text-white/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
             05 / Get in touch
           </span>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif text-white leading-tight mb-8">
+          <h2 className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-tight mb-8">
             Let&apos;s build your <span className="italic">legacy together.</span>
           </h2>
           <p className="text-brand-sand/60 text-lg mb-12 max-w-md">
@@ -964,7 +962,7 @@ export default function LandingPage() {
         <BrandShowcase />
         <Projects />
         <Talents />
-        <Team />
+        <AboutUs />
         <Contact />
         <Footer />
       </div>

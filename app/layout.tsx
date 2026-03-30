@@ -1,12 +1,5 @@
 import type {Metadata} from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: 'TWENTY4 STUDIOS | Connecting Brands & Athletes',
@@ -15,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
+    <html lang="en">
       <body suppressHydrationWarning className="bg-[#e2dbd0] text-[#22330D] antialiased">
         {children}
       </body>
