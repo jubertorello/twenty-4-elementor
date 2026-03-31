@@ -57,7 +57,7 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className={`text-[11px] uppercase tracking-[0.2em] font-bold transition-colors duration-500 hover:opacity-50 ${
+              className={`text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 hover:opacity-50 ${
                 isScrolled ? 'text-black' : 'text-white'
               }`}
             >
@@ -68,12 +68,12 @@ const Navbar = () => {
 
         {/* CTA Button */}
         <div className="flex items-center gap-4">
-          <button className={`hidden lg:block text-[11px] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-black/60' : 'text-white/60'}`}>
+          <button className={`hidden lg:block text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-black/60' : 'text-white/60'}`}>
             ES | EN
           </button>
           <a 
             href="#contact"
-            className={`hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${
+            className={`hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${
               isScrolled 
                 ? 'bg-brand-green text-brand-sand hover:bg-brand-green/90' 
                 : 'bg-white text-brand-green hover:bg-brand-sand'
@@ -105,7 +105,7 @@ const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-serif italic text-brand-green border-b border-brand-green/5 pb-2"
+                  className="text-[1rem] font-serif italic text-brand-green border-b border-brand-green/5 pb-2"
                 >
                   {link.name}
                 </a>
@@ -114,14 +114,14 @@ const Navbar = () => {
                 <a 
                   href="#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="bg-brand-green text-brand-sand px-8 py-4 rounded-lg text-center text-[12px] uppercase tracking-[0.2em] font-bold shadow-lg"
+                  className="bg-brand-green text-brand-sand px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg"
                 >
                   Contactar
                 </a>
                 <div className="flex gap-4 items-center justify-center">
-                  <button className="text-[11px] uppercase tracking-[0.2em] font-bold text-brand-green">ES</button>
+                  <button className="text-[1rem] uppercase tracking-[0.2em] font-bold text-brand-green">ES</button>
                   <span className="text-brand-green/20">|</span>
-                  <button className="text-[11px] uppercase tracking-[0.2em] font-bold text-brand-green/40">EN</button>
+                  <button className="text-[1rem] uppercase tracking-[0.2em] font-bold text-brand-green/40">EN</button>
                 </div>
               </div>
             </motion.div>
@@ -366,7 +366,7 @@ const BrandShowcase = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
-            className="text-2xl md:text-4xl lg:text-[3.125rem] font-serif font-black text-black leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
+            className="text-2xl md:text-4xl lg:text-[3.125rem] font-serif font-bold text-white leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
           >
             {words.map((word, i) => (
               <motion.span key={i} variants={wordVariants} className="inline-block">
@@ -457,12 +457,12 @@ const Projects = () => {
   return (
     <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-32 lg:mb-48 text-center flex flex-col items-center">
+        <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
           <motion.span 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-brand-sand/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+            className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
             02 / PROJECTS
           </motion.span>
@@ -470,20 +470,10 @@ const Projects = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-sand leading-[0.8] tracking-tighter"
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter"
           >
             Selected Work
           </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="mt-8 text-brand-sand/60 max-w-md text-sm md:text-base"
-          >
-            From &quot;look at this&quot; to &quot;have you heard about?&quot; <br />
-            We&apos;re proud to show you some of our work.
-          </motion.p>
         </div>
 
         <div className="space-y-32 lg:space-y-64">
@@ -541,22 +531,22 @@ const Projects = () => {
               {/* Text Content */}
               <div className="w-full lg:w-2/5 space-y-6 lg:space-y-8">
                 <div className="space-y-2">
-                  <p className="text-xs md:text-sm uppercase tracking-widest font-bold text-brand-sand/40">
+                  <p className="text-xs md:text-sm uppercase tracking-widest font-bold text-white/40">
                     {project.category}
                   </p>
-                  <h3 className="text-4xl md:text-5xl lg:text-[3.125rem] font-serif font-black text-brand-sand leading-tight">
+                  <h3 className="text-4xl md:text-5xl lg:text-[3.125rem] font-serif font-black text-white leading-tight">
                     {project.title}
                   </h3>
                 </div>
                 
-                <p className="text-brand-sand/70 text-lg md:text-xl leading-relaxed max-w-md">
+                <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-md">
                   {project.description}
                 </p>
 
                 <div className="pt-4">
-                  <button className="group flex items-center gap-4 text-brand-sand font-bold uppercase tracking-widest text-xs md:text-sm">
+                  <button className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm">
                     <span>View Case Study</span>
-                    <div className="w-10 h-[1px] bg-brand-sand/30 group-hover:w-16 transition-all duration-500" />
+                    <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
                     <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </button>
                 </div>
@@ -652,7 +642,7 @@ const Talents = () => {
   };
 
   return (
-    <section id="talents" className="py-24 lg:py-40 px-6 lg:px-12 bg-black text-white overflow-hidden w-full">
+    <section id="talents" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white overflow-hidden w-full">
       <motion.div 
         initial="hidden"
         whileInView="visible"
@@ -678,7 +668,7 @@ const Talents = () => {
               variants={itemVariants}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className={`relative overflow-hidden rounded-[2rem] cursor-pointer transition-all duration-700 ease-[0.22, 1, 0.36, 1] w-full h-[500px] lg:h-full group ${
+              className={`relative overflow-hidden rounded-[0.5rem] cursor-pointer transition-all duration-700 ease-[0.22, 1, 0.36, 1] w-full h-[500px] lg:h-full group ${
                 hoveredIndex === i ? 'lg:flex-[4]' : 'lg:flex-1'
               }`}
             >
@@ -689,7 +679,7 @@ const Talents = () => {
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-60 lg:opacity-40'}`} />
+              <div className={`absolute inset-0 bg-gradient-to-t from-brand-green/90 via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-60 lg:opacity-40'}`} />
               
               {/* Content Overlay */}
               <div className="absolute inset-0 p-8 flex flex-col justify-between">
@@ -710,12 +700,12 @@ const Talents = () => {
                     href="https://www.instagram.com" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-brand-sand/80 hover:text-white transition-colors w-fit group/link"
+                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors w-fit group/link"
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] uppercase tracking-[0.2em] font-bold">VIEW ON INSTAGRAM</span>
                     </div>
-                    <div className="w-8 h-[1px] bg-brand-sand/30 group-hover/link:w-12 transition-all duration-500" />
+                    <div className="w-8 h-[1px] bg-white/30 group-hover/link:w-12 transition-all duration-500" />
                     <ChevronRight className="w-4 h-4" />
                   </a>
 
@@ -729,7 +719,7 @@ const Talents = () => {
                         transition={{ duration: 0.4 }}
                         className="hidden lg:block"
                       >
-                        <p className="text-brand-sand/40 text-[10px] uppercase tracking-widest font-bold">
+                        <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
                           Professional Athlete
                         </p>
                       </motion.div>
@@ -770,56 +760,201 @@ const Talents = () => {
 
 
 const AboutUs = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  const features = [
+    {
+      title: "Branding & Strategy",
+      description: "Elevamos la identidad de cada atleta a través de una narrativa visual única y una estrategia de marca impecable.",
+      image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg"
+    },
+    {
+      title: "Content Creation",
+      description: "Producción de contenido premium que captura la esencia del deporte y la moda con una estética editorial.",
+      image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg"
+    },
+    {
+      title: "Digital Presence",
+      description: "Maximizamos el impacto digital con estrategias innovadoras y una gestión de redes sociales de alto nivel.",
+      image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg"
+    }
+  ];
+
   return (
-    <section id="team" className="py-24 lg:py-40 px-6 lg:px-12 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
-          <span className="text-brand-green/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
-            04 / About Us
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-[4.5rem] font-serif font-black text-brand-green">
-            Driven by <span className="italic">passion.</span>
-          </h2>
+    <section id="team" className="relative py-24 lg:py-40 px-6 lg:px-12 overflow-hidden min-h-[800px]">
+      {/* Background with Blur */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0"
+          >
+            <Image 
+              src={features[activeIndex].image}
+              alt="Background"
+              fill
+              className="object-cover blur-2xl scale-110"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-brand-green/80" />
+      </div>
+
+      <div className="max-w-7xl mx-auto w-full relative z-10">
+        {/* Header Section - Now separated and styled like Projects */}
+        <div className="mb-20 lg:mb-32 text-left flex flex-col items-start">
+          <motion.span 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+          >
+            04 / ABOUT US
+          </motion.span>
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter"
+          >
+            DRIVEN BY PASSION
+          </motion.h2>
         </div>
 
-        <div className="bg-brand-sand/10 rounded-[1.125rem] p-8 lg:p-20 flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-          {/* Left: About Us Photo with Tilt */}
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative w-full lg:w-1/2"
+        {/* Centered Statement */}
+        <div className="mb-32 text-center max-w-5xl mx-auto">
+          <motion.p
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.04,
+                  delayChildren: 0.2,
+                },
+              },
+            }}
+            className="text-white/70 text-lg md:text-xl leading-relaxed text-white tracking-tight italic font-serif flex flex-wrap justify-center gap-x-[0.3em]"
           >
-            <div className="relative aspect-[4/3] rounded-[1.125rem] overflow-hidden transform -rotate-3 hover:rotate-0 transition-transform duration-700 shadow-2xl">
-              <Image 
-                src="https://picsum.photos/seed/team-photo/1200/900"
-                alt="Twenty4 Studios"
+            {"Nuestra visión es elevar el potencial de cada talento a través de una narrativa visual única y una estrategia de marca impecable. Born in 2019 to help athletes and brands find authentic, genuine ways to enhance their narratives and express who they are.".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                variants={{
+                  hidden: { 
+                    opacity: 0, 
+                    y: 8,
+                    filter: "blur(12px)",
+                    scale: 0.98
+                  },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    filter: "blur(0px)",
+                    scale: 1,
+                    transition: {
+                      duration: 0.8,
+                      ease: [0.22, 1, 0.36, 1]
+                    }
+                  },
+                }}
+                className="inline-block"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          {/* Left: Interactive List */}
+          <div className="space-y-12">
+            <div className="flex flex-col gap-8">
+              {features.map((feature, i) => (
+                <button
+                  key={i}
+                  onMouseEnter={() => setActiveIndex(i)}
+                  className="text-left group"
+                >
+                  <h3 className={`text-4xl md:text-5xl lg:text-[3.125rem] font-serif font-black transition-all duration-500 ${
+                    activeIndex === i ? 'text-white' : 'text-white/20 hover:text-white/40'
+                  }`}>
+                    {feature.title}
+                  </h3>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Featured Card */}
+          <div className="relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="relative aspect-[4/3] lg:aspect-[1.2/1] rounded-[2rem] overflow-hidden shadow-2xl group"
+              >
+                <Image 
+                  src={features[activeIndex].image}
+                  alt={features[activeIndex].title}
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                  referrerPolicy="no-referrer"
+                />
+                
+                {/* UI-like Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                
+                <div className="absolute bottom-8 left-8 right-8">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-2"
+                  >
+                    <h4 className="text-2xl font-serif font-bold text-white">
+                      {features[activeIndex].title}
+                    </h4>
+                    <p className="text-white/70 text-sm max-w-sm leading-relaxed">
+                      {features[activeIndex].description}
+                    </p>
+                  </motion.div>
+                </div>
+
+                {/* Decorative UI elements */}
+                <div className="absolute top-6 right-6 flex gap-2">
+                  <div className="w-2 h-2 rounded-full bg-white/20" />
+                  <div className="w-2 h-2 rounded-full bg-white/20" />
+                  <div className="w-2 h-2 rounded-full bg-white/40" />
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Floating elements to mimic the UI feel of the reference image */}
+            <motion.div 
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-10 -right-10 w-32 h-32 bg-brand-sand/10 backdrop-blur-xl border border-white/10 rounded-2xl hidden lg:block overflow-hidden shadow-xl"
+            >
+              <Image
+                src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774958575/Twenty4_Short_Green_and_Summit_r0veq9.jpg"
+                alt="Twenty4 Studio Logo"
                 fill
                 className="object-cover"
                 referrerPolicy="no-referrer"
               />
-            </div>
-          </motion.div>
-
-          {/* Right: Quote and Info */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="w-full lg:w-1/2 space-y-10"
-          >
-            <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif font-black text-brand-green leading-[1.1] tracking-tight">
-              &ldquo;Nuestra visión es elevar el potencial de cada atleta a través de una narrativa visual única y una estrategia de marca impecable.&rdquo;
-            </blockquote>
-            
-            <div className="space-y-2">
-              <h4 className="text-xl md:text-2xl font-bold text-brand-green">Julian V. CEO, Twenty4 Studios</h4>
-              <p className="text-brand-green/50 text-sm md:text-base font-medium tracking-wide">
-                Liderando la intersección entre deporte y branding editorial.
-              </p>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
@@ -954,7 +1089,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-brand-gradient bg-fixed">
+    <main className="relative min-h-screen bg-brand-green bg-fixed">
       <Navbar />
       <Hero />
       
