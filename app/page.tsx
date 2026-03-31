@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence, Variants } from 'motion/react';
+import { motion, useScroll, useTransform, AnimatePresence, Variants, useInView } from 'motion/react';
 import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ hide }: { hide?: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -26,7 +26,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4 lg:py-6 pointer-events-none">
+    <div className={`fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4 lg:py-6 pointer-events-none transition-all duration-700 ${hide ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'}`}>
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -270,6 +270,7 @@ const BrandShowcase = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
+        delayChildren: 0.3,
       },
     },
   };
@@ -277,18 +278,18 @@ const BrandShowcase = () => {
   const wordVariants: Variants = {
     hidden: { 
       opacity: 0, 
-      y: 12,
-      filter: "blur(16px)",
-      scale: 0.95
+      y: 10,
+      filter: "blur(8px)",
+      color: "rgba(255, 255, 255, 0)"
     },
     visible: { 
       opacity: 1, 
       y: 0,
       filter: "blur(0px)",
-      scale: 1,
+      color: "rgba(255, 255, 255, 1)",
       transition: {
-        duration: 1,
-        ease: [0.22, 1, 0.36, 1]
+        duration: 0.6,
+        ease: "easeOut"
       }
     },
   };
@@ -480,6 +481,38 @@ const Projects = () => {
   ];
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const title = "Selected Work";
+  const words = title.split(" ");
+
+  const titleContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const wordVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 10,
+      filter: "blur(8px)",
+      color: "rgba(255, 255, 255, 0)"
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      color: "rgba(255, 255, 255, 1)",
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    },
+  };
 
   return (
     <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-black overflow-hidden">
@@ -494,12 +527,17 @@ const Projects = () => {
             02 / PROJECTS
           </motion.span>
           <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter"
+            variants={titleContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter flex flex-wrap gap-x-[0.3em]"
           >
-            Selected Work
+            {words.map((word, i) => (
+              <motion.span key={i} variants={wordVariants} className="inline-block">
+                {word}
+              </motion.span>
+            ))}
           </motion.h2>
         </div>
 
@@ -646,6 +684,39 @@ const Talents = () => {
     }
   ];
 
+  const title = "Built For Impact";
+  const words = title.split(" ");
+
+  const titleContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const wordVariantsTitle: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 10,
+      filter: "blur(8px)",
+      color: "rgba(255, 255, 255, 0)"
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      color: "rgba(255, 255, 255, 1)",
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    },
+  };
+
   const sectionVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -682,8 +753,15 @@ const Talents = () => {
           <motion.span variants={itemVariants} className="text-white uppercase tracking-widest text-xs md:text-sm block font-bold">
             03 / TALENTS
           </motion.span>
-          <motion.h2 variants={itemVariants} className="text-4xl md:text-6xl lg:text-[4.5rem] font-black font-serif max-w-3xl leading-[1.05]">
-            Built For Impact
+          <motion.h2 
+            variants={titleContainer}
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-black font-serif max-w-3xl leading-[1.05] flex flex-wrap gap-x-[0.3em]"
+          >
+            {words.map((word, i) => (
+              <motion.span key={i} variants={wordVariantsTitle} className="inline-block">
+                {word}
+              </motion.span>
+            ))}
           </motion.h2>
         </div>
 
@@ -807,6 +885,39 @@ const AboutUs = () => {
     }
   ];
 
+  const title = "Driven By Passion";
+  const wordsTitle = title.split(" ");
+
+  const titleContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const wordVariantsTitle: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 10,
+      filter: "blur(8px)",
+      color: "rgba(255, 255, 255, 0)"
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      color: "rgba(255, 255, 255, 1)",
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    },
+  };
+
   return (
     <section id="team" className="relative py-24 lg:py-40 px-6 lg:px-12 overflow-hidden min-h-[800px]">
       {/* Background with Blur */}
@@ -844,12 +955,17 @@ const AboutUs = () => {
             04 / ABOUT US
           </motion.span>
           <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter"
+            variants={titleContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter flex flex-wrap gap-x-[0.3em]"
           >
-            DRIVEN BY PASSION
+            {wordsTitle.map((word, i) => (
+              <motion.span key={i} variants={wordVariantsTitle} className="inline-block">
+                {word}
+              </motion.span>
+            ))}
           </motion.h2>
         </div>
 
@@ -989,21 +1105,67 @@ const AboutUs = () => {
 };
 
 const Contact = () => {
+  const title = "Get In Touch.";
+  const words = title.split(" ");
+
+  const titleContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const wordVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 10,
+      filter: "blur(8px)",
+      color: "rgba(255, 255, 255, 0)"
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      color: "rgba(255, 255, 255, 1)",
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    },
+  };
+
   return (
     <section id="contact" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
         <div>
-          <span className="text-white/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
-            05 / Get in touch
+          <span className="text-brand-sand/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
+            05 / Contact 
           </span>
-          <h2 className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-tight mb-8">
-            Let&apos;s build your <span className="italic">legacy together.</span>
-          </h2>
+          <motion.h2 
+            variants={titleContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-sand leading-tight mb-8 flex flex-wrap gap-x-[0.3em]"
+          >
+            {words.map((word, i) => (
+              <motion.span 
+                key={i} 
+                variants={wordVariants} 
+              >
+                {word}
+              </motion.span>
+            ))}
+          </motion.h2>
           <p className="text-brand-sand/60 text-lg mb-12 max-w-md">
-            Whether you&apos;re a brand looking for impact or an athlete aiming for the next level, we&apos;re here to help.
+            Reach out, drop a line, or just say hey — we’re here to connect, create, and turn bold ideas into reality
           </p>
           <div className="space-y-4">
-            <p className="text-white font-serif text-2xl md:text-3xl">hello@twenty4studios.com</p>
+            <p className="text-brand-sand font-serif text-2xl md:text-3xl">hello@twenty4studios.com</p>
             <p className="text-brand-sand/60 uppercase tracking-widest text-xs md:text-sm font-bold">+44 (0) 20 7946 0000</p>
           </div>
         </div>
@@ -1052,49 +1214,59 @@ const Contact = () => {
   );
 };
 
-const Footer = () => {
+const Footer = ({ footerRef }: { footerRef: React.RefObject<HTMLDivElement | null> }) => {
   return (
-    <footer className="bg-brand-green text-brand-sand py-20 px-6 lg:px-12">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-20">
-          <div className="lg:col-span-2">
-            <div className="relative h-10 w-48 mb-6">
-              <Image
-                src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
-                alt="Twenty4 Studios Logo"
-                fill
-                className="object-contain object-left"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <p className="text-white max-w-xs text-sm md:text-base leading-relaxed">
+    <footer ref={footerRef} className="bg-brand-green p-3 min-h-[600px] flex flex-col">
+      <div className="bg-brand-sand rounded-[1.125rem] flex-grow flex flex-col p-8 lg:p-16 relative overflow-hidden">
+        {/* Large Logo Background/Top */}
+        <div className="w-full -mx-8 lg:-mx-16 mb-4 lg:mb-8">
+          <div className="relative h-[20vh] md:h-[30vh] lg:h-[40vh] xl:h-[50vh] w-[calc(100%+4rem)] lg:w-[calc(100%+8rem)]">
+            <Image
+              src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774858243/Twenty4_Long_Green-cropped_enulok.svg"
+              alt="Twenty4 Studios Logo"
+              fill
+              className="object-contain object-center"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-auto">
+          <div className="space-y-8">
+            <p className="text-brand-green text-xl md:text-2xl font-serif max-w-md leading-relaxed">
               Elevating the narrative of modern sports through premium editorial branding and fashion-tech innovation.
             </p>
+            <div className="flex space-x-6 text-brand-green">
+              <a href="#" className="hover:opacity-50 transition-opacity"><Instagram size={24} /></a>
+              <a href="#" className="hover:opacity-50 transition-opacity"><Twitter size={24} /></a>
+              <a href="#" className="hover:opacity-50 transition-opacity"><Linkedin size={24} /></a>
+            </div>
           </div>
-          <div>
-            <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-white">Navigation</h5>
-            <ul className="space-y-4 text-sm text-brand-sand/60">
-              <li><a href="#about" className="hover:text-white transition-colors">Studio</a></li>
-              <li><a href="#projects" className="hover:text-white transition-colors">Projects</a></li>
-              <li><a href="#talents" className="hover:text-white transition-colors">Talents</a></li>
-              <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-white">Social</h5>
-            <div className="flex space-x-6">
-              <a href="#" className="hover:text-white transition-colors"><Instagram size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors"><Twitter size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors"><Linkedin size={20} /></a>
+
+          <div className="grid grid-cols-2 gap-8 lg:justify-items-end">
+            <div>
+              <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Navigation</h5>
+              <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
+                <li><a href="#hero" className="hover:opacity-50 transition-opacity">Studio</a></li>
+                <li><a href="#projects" className="hover:opacity-50 transition-opacity">Projects</a></li>
+                <li><a href="#talents" className="hover:opacity-50 transition-opacity">Talents</a></li>
+                <li><a href="#contact" className="hover:opacity-50 transition-opacity">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Legal</h5>
+              <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
+                <li><a href="#" className="hover:opacity-50 transition-opacity">Privacy Policy</a></li>
+                <li><a href="#" className="hover:opacity-50 transition-opacity">Terms of Service</a></li>
+                <li><a href="#" className="hover:opacity-50 transition-opacity">Cookies</a></li>
+              </ul>
             </div>
           </div>
         </div>
-        <div className="pt-10 border-t border-brand-sand/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-sand/30">
+
+        <div className="mt-20 pt-10 border-t border-brand-green/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-green/30">
           <p>© 2026 Twenty4 Studios. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-          </div>
+          <p>Built for Icons.</p>
         </div>
       </div>
     </footer>
@@ -1104,6 +1276,9 @@ const Footer = () => {
 // --- Main Page ---
 
 export default function LandingPage() {
+  const footerRef = useRef<HTMLDivElement>(null);
+  const isFooterInView = useInView(footerRef, { amount: 0.1 });
+
   useEffect(() => {
     // Force scroll to top on initial load
     if (typeof window !== 'undefined') {
@@ -1117,7 +1292,7 @@ export default function LandingPage() {
 
   return (
     <main className="relative min-h-screen bg-black bg-fixed">
-      <Navbar />
+      <Navbar hide={isFooterInView} />
       <Hero />
       
       <div className="relative z-30">
@@ -1126,7 +1301,7 @@ export default function LandingPage() {
         <Talents />
         <AboutUs />
         <Contact />
-        <Footer />
+        <Footer footerRef={footerRef} />
       </div>
       
       {/* Custom Cursor */}
