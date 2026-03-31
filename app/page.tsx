@@ -178,10 +178,10 @@ const Hero = () => {
   };
 
   return (
-    <section id="hero" ref={sectionRef} className="relative h-[100vh] w-full p-3">
+    <section id="hero" ref={sectionRef} className="relative h-[100vh] w-full p-3 bg-brand-green">
       <motion.div 
         style={{ scale, opacity, y }}
-        className="relative h-full w-full overflow-hidden rounded-[1.125rem] shadow-2xl bg-black"
+        className="relative h-full w-full overflow-hidden rounded-[1.125rem] shadow-2xl bg-brand-green"
       >
         {/* Background Video Embed */}
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -191,7 +191,6 @@ const Hero = () => {
             allow="autoplay; fullscreen"
             style={{ border: 'none' }}
           />
-          <div className="absolute inset-0 bg-black/30 z-10" />
         </div>
 
         <div className="relative z-20 h-full flex items-center justify-center text-center px-6">
@@ -242,8 +241,7 @@ const BrandShowcase = () => {
     offset: ["start end", "end start"]
   });
 
-  // Section 2 Logic (Inverse): Scale down on enter, scale up on exit
-  const scale = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [1.5, 1, 1, 1.5]);
+  // Section 2 Logic: Opacity and Y translation
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const y = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [-100, 0, 0, 100]);
 
@@ -279,16 +277,18 @@ const BrandShowcase = () => {
   const wordVariants: Variants = {
     hidden: { 
       opacity: 0, 
-      y: 20,
-      filter: "blur(8px)",
+      y: 12,
+      filter: "blur(16px)",
+      scale: 0.95
     },
     visible: { 
       opacity: 1, 
       y: 0,
       filter: "blur(0px)",
+      scale: 1,
       transition: {
-        duration: 0.8,
-        ease: "easeOut"
+        duration: 1,
+        ease: [0.22, 1, 0.36, 1]
       }
     },
   };
@@ -317,10 +317,9 @@ const BrandShowcase = () => {
   };
 
   const imageVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
-      scale: 1, 
       y: 0,
       transition: { duration: 0.8, ease: "easeOut" }
     }
@@ -329,35 +328,49 @@ const BrandShowcase = () => {
   return (
     <section ref={sectionRef} className="relative py-24 lg:py-40 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 lg:gap-12">
       <motion.div 
-        style={{ scale, opacity, y }}
+        style={{ opacity, y }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
         className="w-full flex flex-col gap-6 lg:gap-12"
       >
-        {/* Top Row */}
-        <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 lg:gap-8 px-4 w-full">
-          {topRow.map((src, i) => (
-            <motion.div
-              key={`top-${i}`}
-              variants={imageVariants}
-              className={`relative flex-shrink-0 w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
-                i % 2 === 0 ? 'translate-y-4 lg:translate-y-8' : '-translate-y-4 lg:-translate-y-8'
-              } ${
-                i === 0 || i === 4 ? 'hidden xl:block' : ''
-              }`}
-            >
-              <Image
-                src={src}
-                alt="Showcase"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Top Row - Infinite Scroll Right to Left */}
+        <div className="w-full overflow-hidden py-8 lg:py-12">
+          <motion.div 
+            variants={rowVariants}
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ 
+              x: {
+                duration: 40, 
+                repeat: Infinity, 
+                ease: "linear" 
+              },
+              default: { duration: 1 }
+            }}
+            className="flex gap-4 lg:gap-8 px-4 w-max"
+          >
+            {[...topRow, ...topRow].map((src, i) => (
+              <div 
+                key={`top-${i}`} 
+                className={`flex-shrink-0 ${i % 2 === 0 ? 'translate-y-4 lg:translate-y-8' : '-translate-y-4 lg:-translate-y-8'}`}
+              >
+                <motion.div
+                  variants={imageVariants}
+                  className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500"
+                >
+                  <Image
+                    src={src}
+                    alt="Showcase"
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </motion.div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
 
         {/* Central Content */}
         <div className="relative z-20 text-center px-6 max-w-7xl mx-auto">
@@ -376,28 +389,42 @@ const BrandShowcase = () => {
           </motion.h2>
         </div>
 
-        {/* Bottom Row */}
-        <motion.div variants={rowVariants} className="flex justify-center items-center gap-4 lg:gap-8 px-4 w-full">
-          {bottomRow.map((src, i) => (
-            <motion.div
-              key={`bottom-${i}`}
-              variants={imageVariants}
-              className={`relative flex-shrink-0 w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500 ${
-                i % 2 === 0 ? '-translate-y-4 lg:-translate-y-8' : 'translate-y-4 lg:translate-y-8'
-              } ${
-                i === 0 || i === 4 ? 'hidden xl:block' : ''
-              }`}
-            >
-              <Image
-                src={src}
-                alt="Showcase"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Bottom Row - Infinite Scroll Left to Right */}
+        <div className="w-full overflow-hidden py-8 lg:py-12">
+          <motion.div 
+            variants={rowVariants}
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{ 
+              x: {
+                duration: 40, 
+                repeat: Infinity, 
+                ease: "linear" 
+              },
+              default: { duration: 1 }
+            }}
+            className="flex gap-4 lg:gap-8 px-4 w-max"
+          >
+            {[...bottomRow, ...bottomRow].map((src, i) => (
+              <div 
+                key={`bottom-${i}`} 
+                className={`flex-shrink-0 ${i % 2 === 0 ? '-translate-y-4 lg:-translate-y-8' : 'translate-y-4 lg:translate-y-8'}`}
+              >
+                <motion.div
+                  variants={imageVariants}
+                  className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500"
+                >
+                  <Image
+                    src={src}
+                    alt="Showcase"
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </motion.div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </motion.div>
     </section>
   );
@@ -455,7 +482,7 @@ const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green overflow-hidden">
+    <section id="projects" className="py-24 lg:py-40 px-6 lg:px-12 bg-black overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
           <motion.span 
@@ -642,7 +669,7 @@ const Talents = () => {
   };
 
   return (
-    <section id="talents" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white overflow-hidden w-full">
+    <section id="talents" className="py-24 lg:py-40 px-6 lg:px-12 bg-black text-white overflow-hidden w-full">
       <motion.div 
         initial="hidden"
         whileInView="visible"
@@ -679,7 +706,7 @@ const Talents = () => {
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className={`absolute inset-0 bg-gradient-to-t from-brand-green/90 via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-60 lg:opacity-40'}`} />
+              <div className={`absolute inset-0 bg-gradient-to-t from-black via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-60 lg:opacity-40'}`} />
               
               {/* Content Overlay */}
               <div className="absolute inset-0 p-8 flex flex-col justify-between">
@@ -802,7 +829,7 @@ const AboutUs = () => {
             />
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 bg-brand-green/80" />
+        <div className="absolute inset-0 bg-black/80" />
       </div>
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
@@ -963,7 +990,7 @@ const AboutUs = () => {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-24 lg:py-40 px-6 lg:px-12 bg-black text-white">
+    <section id="contact" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
         <div>
           <span className="text-white/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
@@ -1027,7 +1054,7 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-brand-sand py-20 px-6 lg:px-12">
+    <footer className="bg-brand-green text-brand-sand py-20 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-20">
           <div className="lg:col-span-2">
@@ -1089,7 +1116,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-brand-green bg-fixed">
+    <main className="relative min-h-screen bg-black bg-fixed">
       <Navbar />
       <Hero />
       
