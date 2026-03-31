@@ -7,9 +7,49 @@ import Image from 'next/image';
 
 // --- Components ---
 
+const LoadingScreen = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+      className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
+    >
+      <div className="relative w-64 h-24 md:w-96 md:h-32">
+        <motion.div
+          initial={{ scale: 0.1, opacity: 0, filter: "blur(20px)" }}
+          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+          transition={{ 
+            duration: 2, 
+            ease: [0.22, 1, 0.36, 1], // Custom cubic-bezier for smooth zoom
+          }}
+          className="relative w-full h-full"
+        >
+          <Image
+            src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773912109/Twenty4_Short_White_qhrgmr.svg"
+            alt="Twenty4 Studios Logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </motion.div>
+      </div>
+      
+      {/* Subtle background glow */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 0.2, scale: 1.5 }}
+        transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+        className="absolute w-[500px] h-[500px] bg-brand-green/20 rounded-full blur-[120px] pointer-events-none"
+      />
+    </motion.div>
+  );
+};
+
 const Navbar = ({ hide }: { hide?: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [language, setLanguage] = useState<'ES' | 'EN'>('ES');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +73,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-6 lg:px-10 py-3 lg:py-4 border shadow-sm ${
           isScrolled 
-            ? 'bg-white/90 backdrop-blur-md border-brand-green/10 shadow-xl' 
+            ? 'bg-brand-sand backdrop-blur-md border-brand-green/10 shadow-xl' 
             : 'bg-white/10 backdrop-blur-sm border-white/20'
         }`}
       >
@@ -41,7 +81,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
         <a href="#hero" className="relative h-8 w-40 lg:h-10 lg:w-48 transition-opacity duration-500 hover:opacity-80">
           <Image
             src={isScrolled 
-              ? "https://res.cloudinary.com/djqtkbyez/image/upload/v1774551593/Twenty4_Long_Black-cropped_u1gkti.svg" 
+              ? "https://res.cloudinary.com/djqtkbyez/image/upload/v1774858243/Twenty4_Long_Green-cropped_enulok.svg" 
               : "https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
             }
             alt="Twenty4 Studios Logo"
@@ -58,7 +98,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
               key={link.name}
               href={link.href}
               className={`text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 hover:opacity-50 ${
-                isScrolled ? 'text-black' : 'text-white'
+                isScrolled ? 'text-brand-green' : 'text-white'
               }`}
             >
               {link.name}
@@ -68,9 +108,21 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
 
         {/* CTA Button */}
         <div className="flex items-center gap-4">
-          <button className={`hidden lg:block text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-black/60' : 'text-white/60'}`}>
-            ES | EN
-          </button>
+          <div className={`hidden lg:flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-brand-green/60' : 'text-white/60'}`}>
+            <button 
+              onClick={() => setLanguage('ES')}
+              className={`hover:opacity-100 transition-opacity pointer-events-auto ${language === 'ES' ? (isScrolled ? 'text-brand-green opacity-100' : 'text-white opacity-100') : 'opacity-40'}`}
+            >
+              ES
+            </button>
+            <span className="opacity-20">|</span>
+            <button 
+              onClick={() => setLanguage('EN')}
+              className={`hover:opacity-100 transition-opacity pointer-events-auto ${language === 'EN' ? (isScrolled ? 'text-brand-green opacity-100' : 'text-white opacity-100') : 'opacity-40'}`}
+            >
+              EN
+            </button>
+          </div>
           <a 
             href="#contact"
             className={`hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${
@@ -119,9 +171,19 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
                   Contactar
                 </a>
                 <div className="flex gap-4 items-center justify-center">
-                  <button className="text-[1rem] uppercase tracking-[0.2em] font-bold text-brand-green">ES</button>
+                  <button 
+                    onClick={() => setLanguage('ES')}
+                    className={`text-[1rem] uppercase tracking-[0.2em] font-bold transition-opacity ${language === 'ES' ? 'text-brand-green opacity-100' : 'text-brand-green/40'}`}
+                  >
+                    ES
+                  </button>
                   <span className="text-brand-green/20">|</span>
-                  <button className="text-[1rem] uppercase tracking-[0.2em] font-bold text-brand-green/40">EN</button>
+                  <button 
+                    onClick={() => setLanguage('EN')}
+                    className={`text-[1rem] uppercase tracking-[0.2em] font-bold transition-opacity ${language === 'EN' ? 'text-brand-green opacity-100' : 'text-brand-green/40'}`}
+                  >
+                    EN
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -1067,10 +1129,10 @@ const AboutUs = () => {
             <motion.div 
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-10 -right-10 w-32 h-32 bg-brand-sand/10 backdrop-blur-xl border border-white/10 rounded-2xl hidden lg:block overflow-hidden shadow-xl"
+              className="absolute -top-10 -right-10 w-32 h-32 bg-brand-green backdrop-blur-xl border border-white/10 rounded-2xl hidden lg:block overflow-hidden shadow-xl"
             >
               <Image
-                src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774958575/Twenty4_Short_Green_and_Summit_r0veq9.jpg"
+                src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773912109/Twenty4_Short_White_qhrgmr.svg"
                 alt="Twenty4 Studio Logo"
                 fill
                 className="object-cover"
@@ -1217,8 +1279,8 @@ const Footer = ({ footerRef }: { footerRef: React.RefObject<HTMLDivElement | nul
     <footer ref={footerRef} className="bg-brand-green p-3 min-h-[600px] flex flex-col">
       <div className="bg-brand-sand rounded-[1.125rem] flex-grow flex flex-col p-8 lg:p-16 relative overflow-hidden">
         {/* Large Logo Background/Top */}
-        <div className="w-full -mx-8 lg:-mx-16 mb-4 lg:mb-8">
-          <div className="relative h-[20vh] md:h-[30vh] lg:h-[40vh] xl:h-[50vh] w-[calc(100%+4rem)] lg:w-[calc(100%+8rem)]">
+        <div className="w-full px-4 md:px-8 lg:px-0 mb-8 lg:mb-12">
+          <div className="relative h-[15vh] md:h-[25vh] lg:h-[35vh] xl:h-[45vh] w-full">
             <Image
               src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774858243/Twenty4_Long_Green-cropped_enulok.svg"
               alt="Twenty4 Studios Logo"
@@ -1229,10 +1291,10 @@ const Footer = ({ footerRef }: { footerRef: React.RefObject<HTMLDivElement | nul
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-auto">
-          <div className="space-y-8">
-            <p className="text-brand-green text-xl md:text-2xl font-serif max-w-md leading-relaxed">
-              Elevating the narrative of modern sports through premium editorial branding and fashion-tech innovation.
+        <div className="mt-auto space-y-12">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+            <p className="text-brand-green text-xl md:text-2xl lg:text-3xl font-serif leading-relaxed">
+              we help brand and athletes find that <span className="text-brand-green text-xl md:text-2xl lg:text-3xl font-serif font-black" >.thing</span>
             </p>
             <div className="flex space-x-6 text-brand-green">
               <a href="#" className="hover:opacity-50 transition-opacity"><Instagram size={24} /></a>
@@ -1241,7 +1303,7 @@ const Footer = ({ footerRef }: { footerRef: React.RefObject<HTMLDivElement | nul
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 lg:justify-items-end">
+          <div className="grid grid-cols-2 gap-8 lg:justify-items-start">
             <div>
               <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Navigation</h5>
               <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
@@ -1274,10 +1336,16 @@ const Footer = ({ footerRef }: { footerRef: React.RefObject<HTMLDivElement | nul
 // --- Main Page ---
 
 export default function LandingPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
   const footerRef = useRef<HTMLDivElement>(null);
-  const isFooterInView = useInView(footerRef, { amount: 0.1 });
 
   useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2800);
+
     // Force scroll to top on initial load
     if (typeof window !== 'undefined') {
       window.scrollTo(0, 0);
@@ -1286,25 +1354,58 @@ export default function LandingPage() {
         window.history.replaceState(null, '', window.location.pathname);
       }
     }
+
+    return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (isLoading) return;
+
+    const handleScroll = () => {
+      if (footerRef.current) {
+        const rect = footerRef.current.getBoundingClientRect();
+        // If the top of the footer is within 100px of the viewport height from the bottom
+        // or if any part of the footer is in view
+        setIsFooterVisible(rect.top < window.innerHeight - 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial check
+    setTimeout(handleScroll, 100); 
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading]);
+
   return (
-    <main className="relative min-h-screen bg-black bg-fixed">
-      <Navbar hide={isFooterInView} />
-      <Hero />
-      
-      <div className="relative z-30">
-        <BrandShowcase />
-        <Projects />
-        <Talents />
-        <AboutUs />
-        <Contact />
-        <Footer footerRef={footerRef} />
-      </div>
-      
-      {/* Custom Cursor */}
-      <CustomCursor />
-    </main>
+    <AnimatePresence mode="wait">
+      {isLoading ? (
+        <LoadingScreen key="loader" />
+      ) : (
+        <motion.main 
+          key="main"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative min-h-screen bg-black bg-fixed"
+        >
+          <Navbar hide={isFooterVisible} />
+          <Hero />
+          
+          <div className="relative z-30">
+            <BrandShowcase />
+            <Projects />
+            <Talents />
+            <AboutUs />
+            <Contact />
+            <Footer footerRef={footerRef} />
+          </div>
+          
+          {/* Custom Cursor */}
+          <CustomCursor />
+        </motion.main>
+      )}
+    </AnimatePresence>
   );
 }
 
