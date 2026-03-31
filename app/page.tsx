@@ -923,28 +923,6 @@ const AboutUs = () => {
 
   return (
     <section id="team" className="relative py-24 lg:py-40 px-6 lg:px-12 overflow-hidden min-h-[800px]">
-      {/* Background with Blur */}
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0"
-          >
-            <Image 
-              src={features[activeIndex].image}
-              alt="Background"
-              fill
-              className="object-cover blur-2xl scale-110"
-              referrerPolicy="no-referrer"
-            />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
       <div className="max-w-7xl mx-auto w-full relative z-10">
         {/* Header Section - Now separated and styled like Projects */}
         <div className="mb-20 lg:mb-32 text-left flex flex-col items-start">
@@ -1141,9 +1119,24 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="relative py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white">
+    <section id="contact" className="relative py-24 lg:py-40 px-6 lg:px-12 text-white overflow-hidden">
+      {/* Background with Blur */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 opacity-40">
+          <Image 
+            src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg"
+            alt="Contact Background"
+            fill
+            className="object-cover blur-2xl scale-110"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      </div>
       {/* Top Gradient Transition from Black */}
       <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent pointer-events-none z-10" />
+      
+      {/* Bottom Gradient Transition to Footer Green */}
+      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-brand-green to-transparent pointer-events-none z-10" />
       
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-20">
         <div>
