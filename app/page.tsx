@@ -230,6 +230,9 @@ const Hero = () => {
           <div className="w-[1px] h-16 bg-gradient-to-b from-brand-sand/30 to-transparent" />
         </motion.div>
       </motion.div>
+      
+      {/* Bottom Gradient Transition to Black */}
+      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-black to-transparent pointer-events-none z-40" />
     </section>
   );
 };
@@ -940,7 +943,6 @@ const AboutUs = () => {
             />
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 bg-black/80" />
       </div>
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
@@ -1139,8 +1141,11 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+    <section id="contact" className="relative py-24 lg:py-40 px-6 lg:px-12 bg-brand-green text-white">
+      {/* Top Gradient Transition from Black */}
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent pointer-events-none z-10" />
+      
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-20">
         <div>
           <span className="text-brand-sand/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
             05 / Contact 
