@@ -73,17 +73,14 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-6 lg:px-10 py-3 lg:py-4 border shadow-sm ${
           isScrolled 
-            ? 'bg-brand-sand backdrop-blur-md border-brand-green/10 shadow-xl' 
+            ? 'bg-white/10 backdrop-blur-md border-white/20 shadow-xl' 
             : 'bg-white/10 backdrop-blur-sm border-white/20'
         }`}
       >
         {/* Logo */}
         <a href="#hero" className="relative h-8 w-40 lg:h-10 lg:w-48 transition-opacity duration-500 hover:opacity-80">
           <Image
-            src={isScrolled 
-              ? "https://res.cloudinary.com/djqtkbyez/image/upload/v1774858243/Twenty4_Long_Green-cropped_enulok.svg" 
-              : "https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
-            }
+            src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
             alt="Twenty4 Studios Logo"
             fill
             className="object-contain"
@@ -97,9 +94,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
             <a
               key={link.name}
               href={link.href}
-              className={`text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 hover:opacity-50 ${
-                isScrolled ? 'text-brand-green' : 'text-white'
-              }`}
+              className="text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 hover:opacity-50 text-white"
             >
               {link.name}
             </a>
@@ -108,35 +103,31 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
 
         {/* CTA Button */}
         <div className="flex items-center gap-4">
-          <div className={`hidden lg:flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 ${isScrolled ? 'text-brand-green/60' : 'text-white/60'}`}>
+          <div className="hidden lg:flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-colors duration-500 text-white/60">
             <button 
               onClick={() => setLanguage('ES')}
-              className={`hover:opacity-100 transition-opacity pointer-events-auto ${language === 'ES' ? (isScrolled ? 'text-brand-green opacity-100' : 'text-white opacity-100') : 'opacity-40'}`}
+              className={`hover:opacity-100 transition-opacity pointer-events-auto ${language === 'ES' ? 'text-white opacity-100' : 'opacity-40'}`}
             >
               ES
             </button>
             <span className="opacity-20">|</span>
             <button 
               onClick={() => setLanguage('EN')}
-              className={`hover:opacity-100 transition-opacity pointer-events-auto ${language === 'EN' ? (isScrolled ? 'text-brand-green opacity-100' : 'text-white opacity-100') : 'opacity-40'}`}
+              className={`hover:opacity-100 transition-opacity pointer-events-auto ${language === 'EN' ? 'text-white opacity-100' : 'opacity-40'}`}
             >
               EN
             </button>
           </div>
           <a 
             href="#contact"
-            className={`hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${
-              isScrolled 
-                ? 'bg-brand-green text-brand-sand hover:bg-brand-green/90' 
-                : 'bg-white text-brand-green hover:bg-brand-sand'
-            }`}
+            className="hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 bg-white text-brand-green hover:bg-brand-sand"
           >
             Contactar
           </a>
           
           {/* Mobile Toggle */}
           <button 
-            className={`lg:hidden transition-colors duration-500 ${isScrolled ? 'text-brand-green' : 'text-white'}`}
+            className="lg:hidden transition-colors duration-500 text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
