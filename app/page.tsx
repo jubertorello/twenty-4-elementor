@@ -1006,7 +1006,7 @@ const AboutUs = () => {
                   onMouseEnter={() => setActiveIndex(i)}
                   className="text-left group"
                 >
-                  <h3 className={`text-4xl md:text-5xl lg:text-[3.125rem] font-serif font-black transition-all duration-500 ${
+                  <h3 className={`text-4xl md:text-5xl lg:text-[3.125rem] font-serif transition-all duration-500 ${
                     activeIndex === i ? 'text-white' : 'text-white/20 hover:text-white/40'
                   }`}>
                     {feature.title}
