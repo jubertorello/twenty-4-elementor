@@ -141,14 +141,14 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="absolute top-full left-0 w-full mt-4 bg-white rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-brand-green/10"
+              className="absolute top-full left-0 w-full mt-4 bg-white/10 backdrop-blur-xl rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/20"
             >
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-[1rem] font-serif italic text-brand-green border-b border-brand-green/5 pb-2"
+                  className="text-[1rem] font-serif italic text-white border-b border-white/10 pb-2"
                 >
                   {link.name}
                 </a>
@@ -157,21 +157,21 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
                 <a 
                   href="#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="bg-brand-green text-brand-sand px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg"
+                  className="bg-white text-brand-green px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg hover:bg-brand-sand transition-colors"
                 >
                   Contactar
                 </a>
                 <div className="flex gap-4 items-center justify-center">
                   <button 
                     onClick={() => setLanguage('ES')}
-                    className={`text-[1rem] uppercase tracking-[0.2em] font-bold transition-opacity ${language === 'ES' ? 'text-brand-green opacity-100' : 'text-brand-green/40'}`}
+                    className={`text-[1rem] uppercase tracking-[0.2em] font-bold transition-opacity ${language === 'ES' ? 'text-white opacity-100' : 'text-white/40'}`}
                   >
                     ES
                   </button>
-                  <span className="text-brand-green/20">|</span>
+                  <span className="text-white/20">|</span>
                   <button 
                     onClick={() => setLanguage('EN')}
-                    className={`text-[1rem] uppercase tracking-[0.2em] font-bold transition-opacity ${language === 'EN' ? 'text-brand-green opacity-100' : 'text-brand-green/40'}`}
+                    className={`text-[1rem] uppercase tracking-[0.2em] font-bold transition-opacity ${language === 'EN' ? 'text-white opacity-100' : 'text-white/40'}`}
                   >
                     EN
                   </button>
@@ -922,6 +922,7 @@ const Talents = () => {
 
 const AboutUs = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   
   const features = [
     {
@@ -973,6 +974,16 @@ const AboutUs = () => {
       }
     },
   };
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % features.length);
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, features.length]);
 
   return (
     <section id="team" className="relative py-24 lg:py-40 px-6 lg:px-12 overflow-hidden min-h-[800px]">
@@ -1051,7 +1062,11 @@ const AboutUs = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           {/* Left: Interactive List */}
-          <div className="space-y-12">
+          <div 
+            className="space-y-12"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <div className="flex flex-col gap-8">
               {features.map((feature, i) => (
                 <button
