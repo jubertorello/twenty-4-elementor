@@ -61,7 +61,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
 
   const navLinks = [
     { name: 'Projects', href: '#projects' },
-    { name: 'Talents', href: '#talents' },
+    { name: 'Talents & Brands', href: '#talents' },
     { name: 'About Us', href: '#team' },
   ];
 
@@ -71,7 +71,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-6 lg:px-10 py-3 lg:py-4 border shadow-sm ${
+        className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-4 lg:px-10 py-3 lg:py-4 border shadow-sm ${
           isScrolled 
             ? 'bg-white/10 backdrop-blur-md border-white/20 shadow-xl' 
             : 'bg-white/10 backdrop-blur-sm border-white/20'
@@ -83,7 +83,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
             src="https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg"
             alt="Twenty4 Studios Logo"
             fill
-            className="object-contain"
+            className="object-contain object-left"
             referrerPolicy="no-referrer"
           />
         </a>
@@ -127,7 +127,7 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
           
           {/* Mobile Toggle */}
           <button 
-            className="lg:hidden transition-colors duration-500 text-white"
+            className="lg:hidden transition-colors duration-500 text-white p-0"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -770,37 +770,43 @@ const Talents = () => {
       name: 'Juan Lebrón', 
       tag: 'Padel', 
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774783981/656067117_18464630485103231_6128771137241890857_n_rfok3q.jpg',
-      description: 'Representing the peak of modern tennis with a focus on precision and power.'
+      description: 'Representing the peak of modern Padel with a focus on precision and power.'
+    },
+    { 
+      name: 'Robert Navarro', 
+      tag: 'Futbol', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/625013552_17943968889117098_1308860520742695209_n_z7m4kq.jpg',
+      description: 'Talented midfielder known for his vision and technical ability on the field.'
+    },
+    { 
+      name: 'Claudia Fernández', 
+      tag: 'Padel', 
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774783833/582862944_17933448663117098_1238044410887099727_n_dc4g1w.jpg',
+      description: 'One of the brightest young stars in the world of professional Padel.'
     },
     { 
       name: 'Coki Nieto', 
       tag: 'Padel', 
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938919/509099364_17913543999117098_66790166839734862_n_zqfkgr.jpg',
-      description: 'A dynamic force on the court, redefining the role of the modern point guard.'
+      description: 'A dynamic force on the court, known for his incredible defensive skills.'
     },
     { 
       name: 'Jon Sanz', 
       tag: 'Padel', 
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/514705923_17915526867117098_2707657693738721723_n_wi9n8z.jpg',
-      description: 'Breaking records and barriers in world-class sprinting competitions.'
-    },
-    { 
-      name: 'Claudia Fernandez', 
-      tag: 'Padel', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774783833/582862944_17933448663117098_1238044410887099727_n_dc4g1w.jpg',
-      description: 'Olympic gold medalist with a passion for aquatic excellence.'
+      description: 'Explosive player with a unique style that dominates the professional circuit.'
     },
     { 
       name: 'Sofia Araujo', 
       tag: 'Padel', 
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774784855/657222434_18574609390034562_3547455622250560859_n_enefcy.jpg',
-      description: 'Artistic gymnast known for her grace and technical mastery.'
+      description: 'Powerful Portuguese player consistently ranked among the world\'s best.'
     },
     { 
       name: 'Jairo Bautista', 
-      tag: 'Futbol', 
+      tag: 'Padel', 
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/625013552_17943968889117098_1308860520742695209_n_z7m4kq.jpg',
-      description: 'Rising star in Formula racing with exceptional track vision and speed.'
+      description: 'Rising star in the Padel world with exceptional talent and competitive spirit.'
     }
   ];
 
@@ -820,6 +826,17 @@ const Talents = () => {
       title: 'DIGITAL STRATEGY',
       description: 'Desarrollo de la identidad visual y narrativa para conectar con audiencias globales.'
     }
+  ];
+
+  const brands = [
+    { name: "OYSHO", logo: "https://res.cloudinary.com/djqtkbyez/image/upload/v1775038752/oysho_memulw.webp" },
+    { name: "BABOLAT PADEL" },
+    { name: "HEAD PADEL", logo: "https://res.cloudinary.com/djqtkbyez/image/upload/v1775038836/HEAD_xbiiit.webp" },
+    { name: "DROPSHOT PADEL" },
+    { name: "KUIKMA" },
+    { name: "MB COMUNICACION" },
+    { name: "ALPINE" },
+    { name: "GASARI" }
   ];
 
   const title = "Built For Impact";
@@ -889,7 +906,7 @@ const Talents = () => {
         {/* Header */}
         <div className="flex flex-col items-start mb-20 gap-4">
           <motion.span variants={itemVariants} className="text-white uppercase tracking-widest text-xs md:text-sm block font-bold">
-            03 / TALENTS
+            03 / TALENTS & BRANDS
           </motion.span>
           <motion.h2 
             variants={titleContainer}
@@ -966,7 +983,7 @@ const Talents = () => {
                         className="hidden lg:block"
                       >
                         <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
-                          Professional Athlete
+                          {talent.tag === 'Padel' ? 'Padel Player' : 'Football Player'}
                         </p>
                       </motion.div>
                     )}
@@ -977,8 +994,64 @@ const Talents = () => {
           ))}
         </div>
 
+        {/* Brand Ticker */}
+        <div className="relative py-20 overflow-hidden -mx-6 lg:-mx-12 bg-black mb-32">
+          <div className="flex whitespace-nowrap">
+            <motion.div 
+              animate={{ x: ["0%", "-100%"] }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="flex items-center gap-16 md:gap-24 px-8 md:px-12"
+            >
+              {brands.map((brand, i) => (
+                <div key={i} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
+                  <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">[</span>
+                  {brand.logo ? (
+                    <div className="relative w-40 md:w-64 h-16 md:h-24 opacity-70 group-hover:opacity-100 transition-all duration-500">
+                      <Image 
+                        src={brand.logo} 
+                        alt={brand.name} 
+                        fill 
+                        className="object-contain brightness-0 invert"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                  ) : (
+                    <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
+                  )}
+                  <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">]</span>
+                </div>
+              ))}
+            </motion.div>
+            <motion.div 
+              animate={{ x: ["0%", "-100%"] }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="flex items-center gap-16 md:gap-24 px-8 md:px-12"
+            >
+              {brands.map((brand, i) => (
+                <div key={i + 10} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
+                  <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">[</span>
+                  {brand.logo ? (
+                    <div className="relative w-40 md:w-64 h-16 md:h-24 opacity-70 group-hover:opacity-100 transition-all duration-500">
+                      <Image 
+                        src={brand.logo} 
+                        alt={brand.name} 
+                        fill 
+                        className="object-contain brightness-0 invert"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                  ) : (
+                    <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
+                  )}
+                  <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">]</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
         {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-24 mb-32">
           {services.map((service, i) => (
             <motion.div
               key={i}
