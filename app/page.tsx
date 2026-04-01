@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, Variants, useInView } from 'motion/react';
-import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 
 // --- Components ---
@@ -496,7 +496,14 @@ const Projects = () => {
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654026590_17956035957117098_5856671028597925931_n_unocse.jpg',
       year: '2024',
       videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1102574741/rendition/2160p/file.mp4?loc=external&log_user=0&signature=cbfdb8d1762b90739e851c2faca190fb0dea5c608d86e3e24e0261f36fa7332e',
-      isVideoEmbed: false
+      isVideoEmbed: false,
+      caseStudyImages: [
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654026590_17956035957117098_5856671028597925931_n_unocse.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939249/531600444_17921122038117098_5360922844406571590_n_xyddjc.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg'
+      ]
     },
     {
       title: 'YouTube Festival',
@@ -505,7 +512,12 @@ const Projects = () => {
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939096/479487334_17895797886117098_1135703105300039762_n_m9g8ha.jpg',
       year: '2024',
       videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1109107424/rendition/1080p/file.mp4?loc=external&log_user=0&signature=d14d2b21294c474b4a376647b638c254d4f99ea2a56e8e1b747746d512808c6d',
-      isVideoEmbed: false
+      isVideoEmbed: false,
+      caseStudyImages: [
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939096/479487334_17895797886117098_1135703105300039762_n_m9g8ha.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg'
+      ]
     },
     {
       title: 'OpenAI in Germany',
@@ -514,7 +526,11 @@ const Projects = () => {
       img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774795013/525533485_17919021303117098_6405116482587988328_n_pz9zch.jpg',
       year: '2023',
       videoUrl: 'https://talentfinder.cloud/embed/7hma475c3nrk?autoplay=yes&loop=yes&kiosk=yes&fill=yes',
-      isVideoEmbed: true
+      isVideoEmbed: true,
+      caseStudyImages: [
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774795013/525533485_17919021303117098_6405116482587988328_n_pz9zch.jpg',
+        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg'
+      ]
     },
     {
       title: 'Sundance 2024',
@@ -537,6 +553,7 @@ const Projects = () => {
   ];
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const title = "Selected Work";
   const words = title.split(" ");
 
@@ -599,14 +616,14 @@ const Projects = () => {
 
         <div className="space-y-32 lg:space-y-64">
           {projects.map((project, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className={`flex flex-col ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}
-            >
+            <div key={i} className="flex flex-col gap-12">
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className={`flex flex-col ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}
+              >
               {/* Image Container */}
               <div 
                 className="w-full lg:w-3/5"
@@ -665,16 +682,81 @@ const Projects = () => {
                 </p>
 
                 <div className="pt-4">
-                  <button className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm">
-                    <span>View Case Study</span>
-                    <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                  </button>
+                  {project.caseStudyImages && (
+                    <button 
+                      onClick={() => setExpandedIndex(expandedIndex === i ? null : i)}
+                      className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm"
+                    >
+                      <span>{expandedIndex === i ? 'Close Case Study' : 'View Case Study'}</span>
+                      <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
+                      <ArrowUpRight className={`w-4 h-4 transition-transform ${expandedIndex === i ? 'rotate-45' : 'group-hover:translate-x-1 group-hover:-translate-y-1'}`} />
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>
-          ))}
-        </div>
+
+            {/* Expanded Gallery */}
+            <AnimatePresence>
+              {expandedIndex === i && project.caseStudyImages && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 48 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden w-full"
+                >
+                  <div className="relative group/gallery">
+                    <div className="flex overflow-x-auto gap-6 pb-12 lg:pb-24 no-scrollbar snap-x snap-mandatory px-4 -mx-4">
+                      {project.caseStudyImages.map((img, imgIdx) => (
+                        <motion.div
+                          key={imgIdx}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: imgIdx * 0.1 }}
+                          className="relative flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl border border-white/5 snap-center"
+                        >
+                          <Image
+                            src={img}
+                            alt={`${project.title} detail ${imgIdx}`}
+                            fill
+                            className="object-cover hover:scale-105 transition-transform duration-700"
+                            referrerPolicy="no-referrer"
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    {/* Navigation Arrows */}
+                    {project.caseStudyImages.length > 1 && (
+                      <div className={`absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-4 pointer-events-none opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 ${project.caseStudyImages.length < 3 ? 'lg:hidden' : ''}`}>
+                        <button 
+                          onClick={(e) => {
+                            const container = e.currentTarget.parentElement?.previousElementSibling;
+                            if (container) container.scrollBy({ left: -window.innerWidth * 0.8, behavior: 'smooth' });
+                          }}
+                          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white pointer-events-auto hover:bg-brand-green transition-colors"
+                        >
+                          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            const container = e.currentTarget.parentElement?.previousElementSibling;
+                            if (container) container.scrollBy({ left: window.innerWidth * 0.8, behavior: 'smooth' });
+                          }}
+                          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white pointer-events-auto hover:bg-brand-green transition-colors"
+                        >
+                          <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </div>
       </div>
     </section>
   );
