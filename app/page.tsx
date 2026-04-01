@@ -388,7 +388,7 @@ const BrandShowcase = () => {
         style={{ opacity, y }}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.05 }}
         variants={sectionVariants}
         className="w-full flex flex-col gap-6 lg:gap-12"
       >
@@ -435,7 +435,7 @@ const BrandShowcase = () => {
             variants={container}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.1 }}
             className="text-2xl md:text-4xl lg:text-[3.125rem] font-serif font-bold text-white leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
           >
             {words.map((word, i) => (
@@ -800,7 +800,7 @@ const Talents = () => {
       <motion.div 
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.05 }}
         variants={sectionVariants}
         className="max-w-7xl mx-auto"
       >
@@ -811,6 +811,9 @@ const Talents = () => {
           </motion.span>
           <motion.h2 
             variants={titleContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
             className="text-4xl md:text-6xl lg:text-[4.5rem] font-black font-serif max-w-3xl leading-[1.05] flex flex-wrap gap-x-[0.3em]"
           >
             {words.map((word, i) => (
@@ -1002,7 +1005,7 @@ const AboutUs = () => {
             variants={titleContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.1 }}
             className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter flex flex-wrap gap-x-[0.3em]"
           >
             {wordsTitle.map((word, i) => (
@@ -1018,7 +1021,7 @@ const AboutUs = () => {
           <motion.p
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={{
               hidden: { opacity: 0 },
               visible: {
@@ -1215,7 +1218,7 @@ const Contact = () => {
             variants={titleContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.1 }}
             className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-sand leading-tight mb-8 flex flex-wrap gap-x-[0.3em]"
           >
             {words.map((word, i) => (
@@ -1350,7 +1353,7 @@ export default function LandingPage() {
     // Simulate loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2800);
+    }, 2200);
 
     // Force scroll to top on initial load
     if (typeof window !== 'undefined') {
