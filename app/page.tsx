@@ -959,6 +959,12 @@ const Talents = () => {
                   </div>
                   
                   {/* Mobile & Desktop Info */}
+                  <div className="lg:hidden">
+                    <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
+                      {talent.tag === 'Padel' ? 'Padel Player' : 'Football Player'}
+                    </p>
+                  </div>
+                  
                   <a 
                     href="https://www.instagram.com" 
                     target="_blank" 
