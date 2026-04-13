@@ -657,19 +657,19 @@ const Talents = () => {
     { 
       name: 'Claudia Fernández', 
       tag: 'Padel', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774783833/582862944_17933448663117098_1238044410887099727_n_dc4g1w.jpg',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1776069982/656298403_18147960991471008_8014118617644179898_n_coybhx.jpg',
       description: 'One of the brightest young stars in the world of professional Padel.'
     },
     { 
       name: 'Coki Nieto', 
       tag: 'Padel', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938919/509099364_17913543999117098_66790166839734862_n_zqfkgr.jpg',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1776069803/639504980_18571767097022001_4690402623885963966_n_zznrsi.jpg',
       description: 'A dynamic force on the court, known for his incredible defensive skills.'
     },
     { 
       name: 'Jon Sanz', 
       tag: 'Padel', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/514705923_17915526867117098_2707657693738721723_n_wi9n8z.jpg',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1776070200/649484335_18575491819015865_1833985684367627336_n_pnmikm.jpg',
       description: 'Explosive player with a unique style that dominates the professional circuit.'
     },
     { 
@@ -681,7 +681,7 @@ const Talents = () => {
     { 
       name: 'Jairo Bautista', 
       tag: 'Padel', 
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/625013552_17943968889117098_1308860520742695209_n_z7m4kq.jpg',
+      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1776070067/654019028_18572070406008267_122935407247781213_n_tvhuem.jpg',
       description: 'Rising star in the Padel world with exceptional talent and competitive spirit.'
     }
   ];
@@ -689,18 +689,18 @@ const Talents = () => {
   const services = [
     {
       number: '01',
-      title: 'SOCIAL MEDIA & CONTENT CREATION',
-      description: 'Creación de contenido de alta calidad, desde reels hasta documentales, capturando la esencia de cada talento.'
+      title: 'EXPERIENCIA ATLETAS',
+      description: 'Trabajamos mano a mano con deportistas de alto rendimiento, creando un entorno ideal para contar su historia de la mejor manera posible.'
     },
     {
       number: '02',
-      title: 'BRANDING & CREATIVITIES',
-      description: 'Planificación y ejecución de calendarios editoriales para maximizar el impacto en redes sociales.'
+      title: 'EXPERIENCIA MARCAS',
+      description: 'Forjamos uniones con marcas globales basadas en la confianza y el compromiso por crear historias con impacto duradero.'
     },
     {
       number: '03',
-      title: 'DIGITAL STRATEGY',
-      description: 'Desarrollo de la identidad visual y narrativa para conectar con audiencias globales.'
+      title: 'DIRECCIÓN CREATIVA',
+      description: 'Nuestra trayectoria impulsa la dirección creativa de Twenty4 Studios, rompiendo barreras en el mundo de la comunicación.'
     }
   ];
 
@@ -958,27 +958,32 @@ const Talents = () => {
   );
 };
 
+const features = [
+  {
+    title: "Producción",
+    description: "Damos vida a las ideas a través de contenido visualmente impactante y con fuerza. Desde el concepto hasta la entrega final, gestionamos cada paso del proceso.",
+    image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg"
+  },
+  {
+    title: "Social Media",
+    description: "Ayudamos a los atletas y las marcas a hacer crecer sus comunidades y conectar con su audiencia de manera auténtica y estratégica.",
+    image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg"
+  },
+  {
+    title: "Contenido",
+    description: "Creamos historias únicas que posicionan a nuestros clientes en el punto de mira. Diseñamos contenido con un propósito narrativo para emocionar.",
+    image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg"
+  },
+  {
+    title: "Roadmap del Atleta",
+    description: "Construimos y elevamos las marcas personales de los deportistas. Guiamos a los atletas para que creen una marca que refleje quiénes son.",
+    image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774783981/656067117_18464630485103231_6128771137241890857_n_rfok3q.jpg"
+  }
+];
+
 const AboutUs = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  
-  const features = [
-    {
-      title: "Branding & Strategy",
-      description: "Elevamos la identidad de cada atleta a través de una narrativa visual única y una estrategia de marca impecable.",
-      image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg"
-    },
-    {
-      title: "Content Creation",
-      description: "Producción de contenido premium que captura la esencia del deporte y la moda con una estética editorial.",
-      image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg"
-    },
-    {
-      title: "Digital Presence",
-      description: "Maximizamos el impacto digital con estrategias innovadoras y una gestión de redes sociales de alto nivel.",
-      image: "https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg"
-    }
-  ];
 
   const title = "Driven By Passion";
   const wordsTitle = title.split(" ");
@@ -1021,7 +1026,7 @@ const AboutUs = () => {
     }, 5000); // Change every 5 seconds
 
     return () => clearInterval(interval);
-  }, [isPaused, features.length]);
+  }, [isPaused]);
 
   return (
     <section id="team" className="relative py-24 lg:py-40 px-6 lg:px-12 overflow-hidden min-h-[800px]">
@@ -1069,7 +1074,7 @@ const AboutUs = () => {
             }}
             className="text-white/70 text-lg md:text-xl leading-relaxed text-white tracking-tight italic font-serif flex flex-wrap justify-center gap-x-[0.3em]"
           >
-            {"Nuestra visión es elevar el potencial de cada talento a través de una narrativa visual única y una estrategia de marca impecable. Born in 2019 to help athletes and brands find authentic, genuine ways to enhance their narratives and express who they are.".split(" ").map((word, i) => (
+            {"Nuestra misión es romper barreras en el mundo de la comunicación. Creamos historias únicas a través de contenido llamativo, combinando creatividad, emoción y estrategia para dar forma a trabajos con una identidad visual sólida y un impacto duradero.".split(" ").map((word, i) => (
               <motion.span
                 key={i}
                 variants={{
@@ -1134,8 +1139,8 @@ const AboutUs = () => {
                 className="relative aspect-[4/3] lg:aspect-[1.2/1] rounded-[2rem] overflow-hidden shadow-2xl group"
               >
                 <Image 
-                  src={features[activeIndex].image}
-                  alt={features[activeIndex].title}
+                  src={features[activeIndex]?.image || ''}
+                  alt={features[activeIndex]?.title || ''}
                   fill
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   referrerPolicy="no-referrer"
@@ -1152,10 +1157,10 @@ const AboutUs = () => {
                     className="space-y-2"
                   >
                     <h4 className="text-2xl font-serif font-bold text-white">
-                      {features[activeIndex].title}
+                      {features[activeIndex]?.title}
                     </h4>
                     <p className="text-white/70 text-sm max-w-sm leading-relaxed">
-                      {features[activeIndex].description}
+                      {features[activeIndex]?.description}
                     </p>
                   </motion.div>
                 </div>
@@ -1337,7 +1342,7 @@ const Footer = ({ footerRef }: { footerRef?: React.RefObject<HTMLDivElement | nu
             </div>
             <div className="mt-auto">
               <p className="text-brand-green text-xl md:text-1xl lg:text-2xl font-serif leading-relaxed">
-                we help brand and athletes find that <span className="text-brand-green text-xl md:text-1xl lg:text-2xl font-serif font-black" >.thing</span>
+                La creencia es mutua por eso es que <span className="text-brand-green text-xl md:text-1xl lg:text-2xl font-serif font-black" >funciona.</span>
               </p>
             </div>
           </div>
