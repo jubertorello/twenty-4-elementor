@@ -5,7 +5,8 @@ import { useParams, useRouter, notFound } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, ArrowRight, Instagram, Twitter, Linkedin, Play, X } from 'lucide-react';
 import Image from 'next/image';
-import { projects, Project } from '../../data/projects';
+import Link from 'next/link';
+import { projects } from '../../data/projects';
 
 const ProjectDetail = () => {
   const params = useParams();
@@ -24,7 +25,7 @@ const ProjectDetail = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center pointer-events-none">
         <button 
-          onClick={() => router.push('/version-2#projects')}
+          onClick={() => router.push('/#projects')}
           className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-black transition-all duration-500"
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -145,11 +146,6 @@ const ProjectDetail = () => {
               <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Year</span>
               <p className="text-lg">{project.year}</p>
             </div>
-            
-            <button className="w-full py-4 bg-white text-black rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-brand-green hover:text-white transition-all duration-500 flex items-center justify-center gap-3">
-              <span>Start a Project</span>
-              <ArrowRight size={14} />
-            </button>
           </motion.div>
         </div>
       </section>
@@ -235,16 +231,12 @@ const ProjectDetail = () => {
       {/* Footer Mini */}
       <footer className="py-20 border-t border-white/10 text-center space-y-8">
         <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-bold">Next Project</p>
-        <button 
-          onClick={() => {
-            const currentIndex = projects.findIndex(p => p.slug === slug);
-            const nextIndex = (currentIndex + 1) % projects.length;
-            router.push(`/version-2/projects/${projects[nextIndex].slug}`);
-          }}
+        <Link 
+          href={`/projects/${projects[(projects.findIndex(p => p.slug === slug) + 1) % projects.length].slug}`}
           className="text-4xl md:text-6xl font-serif font-black hover:text-brand-green transition-colors"
         >
           {projects[(projects.findIndex(p => p.slug === slug) + 1) % projects.length].title}
-        </button>
+        </Link>
       </footer>
     </main>
   );

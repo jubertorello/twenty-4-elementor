@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, Variants, useInView } from 'motion/react';
-import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { projects } from './data/projects';
 
 // --- Components ---
 
@@ -141,14 +143,14 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="absolute top-full left-0 w-full mt-4 bg-white/10 backdrop-blur-xl rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/20"
+              className="absolute top-full left-0 w-full mt-4 bg-black/95 backdrop-blur-xl rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/10"
             >
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-[1rem] font-serif italic text-white border-b border-white/10 pb-2"
+                  className="text-[1.25rem] uppercase tracking-[0.2em] font-bold text-white border-b border-white/10 pb-4"
                 >
                   {link.name}
                 </a>
@@ -175,6 +177,24 @@ const Navbar = ({ hide }: { hide?: boolean }) => {
                   >
                     EN
                   </button>
+                </div>
+                <div className="flex gap-8 items-center justify-center pt-4 border-t border-white/10">
+                  <a 
+                    href="https://instagram.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[0.75rem] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-white transition-colors"
+                  >
+                    Instagram
+                  </a>
+                  <a 
+                    href="https://linkedin.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[0.75rem] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-white transition-colors"
+                  >
+                    Linkedin
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -488,72 +508,7 @@ const BrandShowcase = () => {
 };
 
 const Projects = () => {
-  const projects = [
-    {
-      title: 'BARO',
-      category: 'Netflix Documentation',
-      description: 'The story of a man who changed German rap forever. A deep dive into the life and legacy of an icon.',
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654026590_17956035957117098_5856671028597925931_n_unocse.jpg',
-      year: '2024',
-      videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1102574741/rendition/2160p/file.mp4?loc=external&log_user=0&signature=cbfdb8d1762b90739e851c2faca190fb0dea5c608d86e3e24e0261f36fa7332e',
-      isVideoEmbed: false,
-      caseStudyImages: [
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654026590_17956035957117098_5856671028597925931_n_unocse.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939249/531600444_17921122038117098_5360922844406571590_n_xyddjc.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg'
-      ]
-    },
-    {
-      title: 'YouTube Festival',
-      category: 'Event Production',
-      description: 'Together with Google, we explored how generative AI is reshaping brand storytelling at the YouTube Festival 2024.',
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939096/479487334_17895797886117098_1135703105300039762_n_m9g8ha.jpg',
-      year: '2024',
-      videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1109107424/rendition/1080p/file.mp4?loc=external&log_user=0&signature=d14d2b21294c474b4a376647b638c254d4f99ea2a56e8e1b747746d512808c6d',
-      isVideoEmbed: false,
-      caseStudyImages: [
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1773939096/479487334_17895797886117098_1135703105300039762_n_m9g8ha.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/653060378_17956036014117098_6147440382387293_n_vqfcrn.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774773890/654031290_17956035993117098_4433731200775056854_n_rp4pvn.jpg'
-      ]
-    },
-    {
-      title: 'OpenAI in Germany',
-      category: 'Tech Showcase',
-      description: 'OpenAI\'s arrival in Germany became a space for artistic exploration with two immersive pieces produced by TWENTY4.',
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774795013/525533485_17919021303117098_6405116482587988328_n_pz9zch.jpg',
-      year: '2023',
-      videoUrl: 'https://talentfinder.cloud/embed/7hma475c3nrk?autoplay=yes&loop=yes&kiosk=yes&fill=yes',
-      isVideoEmbed: true,
-      caseStudyImages: [
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774795013/525533485_17919021303117098_6405116482587988328_n_pz9zch.jpg',
-        'https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg'
-      ]
-    },
-    {
-      title: 'Sundance 2024',
-      category: 'Film Festival',
-      description: 'The rise, the trends, and what\'s next for indie cinema. A cinematic journey through the world\'s premier film festival.',
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773938918/475271473_17893917237117098_3840431804277799553_n_gewozi.jpg',
-      year: '2024',
-      videoUrl: 'https://talentfinder.cloud/embed/d8ay25a4mwdd?autoplay=yes&loop=yes&kiosk=yes&fill=yes',
-      isVideoEmbed: true
-    },
-    {
-      title: 'Vattenfall Solar',
-      category: 'Documentary',
-      description: 'How can an energy company credibly position itself as a pioneer of a fossil-free future? Telling real stories.',
-      img: 'https://res.cloudinary.com/djqtkbyez/image/upload/v1774774174/655199745_17956930731117098_1449537988951363301_n_e4xbis.jpg',
-      year: '2023',
-      videoUrl: 'https://player.vimeo.com/progressive_redirect/playback/1102574741/rendition/2160p/file.mp4?loc=external&log_user=0&signature=cbfdb8d1762b90739e851c2faca190fb0dea5c608d86e3e24e0261f36fa7332e',
-      isVideoEmbed: false
-    }
-  ];
-
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const title = "Selected Work";
   const words = title.split(" ");
 
@@ -682,78 +637,17 @@ const Projects = () => {
                 </p>
 
                 <div className="pt-4">
-                  {project.caseStudyImages && (
-                    <button 
-                      onClick={() => setExpandedIndex(expandedIndex === i ? null : i)}
-                      className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm"
-                    >
-                      <span>{expandedIndex === i ? 'Close Case Study' : 'View Case Study'}</span>
-                      <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
-                      <ArrowUpRight className={`w-4 h-4 transition-transform ${expandedIndex === i ? 'rotate-45' : 'group-hover:translate-x-1 group-hover:-translate-y-1'}`} />
-                    </button>
-                  )}
+                  <Link 
+                    href={`/projects/${project.slug}`}
+                    className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm"
+                  >
+                    <span>View Case Study</span>
+                    <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
+                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  </Link>
                 </div>
               </div>
             </motion.div>
-
-            {/* Expanded Gallery */}
-            <AnimatePresence>
-              {expandedIndex === i && project.caseStudyImages && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: 48 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                  className="overflow-hidden w-full"
-                >
-                  <div className="relative group/gallery">
-                    <div className="flex overflow-x-auto gap-6 pb-12 lg:pb-24 no-scrollbar snap-x snap-mandatory px-4 -mx-4">
-                      {project.caseStudyImages.map((img, imgIdx) => (
-                        <motion.div
-                          key={imgIdx}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: imgIdx * 0.1 }}
-                          className="relative flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl border border-white/5 snap-center"
-                        >
-                          <Image
-                            src={img}
-                            alt={`${project.title} detail ${imgIdx}`}
-                            fill
-                            className="object-cover hover:scale-105 transition-transform duration-700"
-                            referrerPolicy="no-referrer"
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                    
-                    {/* Navigation Arrows */}
-                    {project.caseStudyImages.length > 1 && (
-                      <div className={`absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-4 pointer-events-none opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 ${project.caseStudyImages.length < 3 ? 'lg:hidden' : ''}`}>
-                        <button 
-                          onClick={(e) => {
-                            const container = e.currentTarget.parentElement?.previousElementSibling;
-                            if (container) container.scrollBy({ left: -window.innerWidth * 0.8, behavior: 'smooth' });
-                          }}
-                          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white pointer-events-auto hover:bg-brand-green transition-colors"
-                        >
-                          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-                        </button>
-                        <button 
-                          onClick={(e) => {
-                            const container = e.currentTarget.parentElement?.previousElementSibling;
-                            if (container) container.scrollBy({ left: window.innerWidth * 0.8, behavior: 'smooth' });
-                          }}
-                          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white pointer-events-auto hover:bg-brand-green transition-colors"
-                        >
-                          <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         ))}
       </div>
@@ -1453,48 +1347,54 @@ const Footer = ({ footerRef }: { footerRef: React.RefObject<HTMLDivElement | nul
   return (
     <footer ref={footerRef} className="bg-brand-green p-3 min-h-[600px] flex flex-col">
       <div className="bg-brand-sand rounded-[1.125rem] flex-grow flex flex-col p-8 lg:p-16 relative overflow-hidden">
-        {/* Large Logo Background/Top */}
-        <div className="w-full px-4 md:px-8 lg:px-0 mb-8 lg:mb-12">
-          <div className="relative h-[15vh] md:h-[25vh] lg:h-[35vh] xl:h-[45vh] w-full">
-            <Image
-              src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774858243/Twenty4_Long_Green-cropped_enulok.svg"
-              alt="Twenty4 Studios Logo"
-              fill
-              className="object-contain object-center"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        </div>
-
-        <div className="mt-auto space-y-12">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-            <p className="text-brand-green text-xl md:text-2xl lg:text-3xl font-serif leading-relaxed">
-              La creencia es mutua por eso es que <span className="text-brand-green text-xl md:text-2xl lg:text-3xl font-serif font-black" >funciona.</span>
-            </p>
-            <div className="flex space-x-6 text-brand-green">
-              <a href="#" className="hover:opacity-50 transition-opacity"><Instagram size={24} /></a>
-              <a href="#" className="hover:opacity-50 transition-opacity"><Twitter size={24} /></a>
-              <a href="#" className="hover:opacity-50 transition-opacity"><Linkedin size={24} /></a>
+        
+        <div className="flex-grow flex flex-col lg:flex-row gap-12 lg:gap-20">
+          {/* Left Side: Logo & Brand Message */}
+          <div className="lg:w-1/2 flex flex-col">
+            <div className="relative h-[15vh] md:h-[20vh] lg:h-[25vh] w-full mb-12 lg:mb-0">
+              <Image
+                src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774858243/Twenty4_Long_Green-cropped_enulok.svg"
+                alt="Twenty4 Studios Logo"
+                fill
+                className="object-contain object-left"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="mt-auto">
+              <p className="text-brand-green text-xl md:text-1xl lg:text-2xl font-serif leading-relaxed">
+                La creencia es mutua por eso es que <span className="text-brand-green text-xl md:text-1xl lg:text-2xl font-serif font-black" >funciona.</span>
+              </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 lg:justify-items-start">
-            <div>
-              <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Navigation</h5>
-              <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
-                <li><a href="#hero" className="hover:opacity-50 transition-opacity">Studio</a></li>
-                <li><a href="#projects" className="hover:opacity-50 transition-opacity">Projects</a></li>
-                <li><a href="#talents" className="hover:opacity-50 transition-opacity">Talents</a></li>
-                <li><a href="#contact" className="hover:opacity-50 transition-opacity">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Legal</h5>
-              <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
-                <li><a href="#" className="hover:opacity-50 transition-opacity">Privacy Policy</a></li>
-                <li><a href="#" className="hover:opacity-50 transition-opacity">Terms of Service</a></li>
-                <li><a href="#" className="hover:opacity-50 transition-opacity">Cookies</a></li>
-              </ul>
+          {/* Right Side: Links Grid & Social Icons */}
+          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-green/5">
+            <div className="mt-auto space-y-12">
+              <div className="flex space-x-6 text-brand-green">
+                <a href="#" className="hover:opacity-50 transition-opacity"><Instagram size={24} /></a>
+                <a href="#" className="hover:opacity-50 transition-opacity"><Twitter size={24} /></a>
+                <a href="#" className="hover:opacity-50 transition-opacity"><Linkedin size={24} /></a>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-8 lg:justify-items-start">
+                <div>
+                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Navigation</h5>
+                  <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
+                    <li><a href="#hero" className="hover:opacity-50 transition-opacity">Studio</a></li>
+                    <li><a href="#projects" className="hover:opacity-50 transition-opacity">Projects</a></li>
+                    <li><a href="#talents" className="hover:opacity-50 transition-opacity">Talents</a></li>
+                    <li><a href="#contact" className="hover:opacity-50 transition-opacity">Contact</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Legal</h5>
+                  <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
+                    <li><a href="#" className="hover:opacity-50 transition-opacity">Privacy Policy</a></li>
+                    <li><a href="#" className="hover:opacity-50 transition-opacity">Terms of Service</a></li>
+                    <li><a href="#" className="hover:opacity-50 transition-opacity">Cookies</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
