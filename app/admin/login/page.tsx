@@ -6,6 +6,7 @@ import { Lock, Mail, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -13,16 +14,36 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulación de login
-    setTimeout(() => {
+    setError(null);
+
+    // Restricción estricta de email
+    if (email !== 'team@twenty4studios.com') {
+      setError('Acceso denegado. Este email no tiene permisos de administración.');
       setIsLoading(false);
+      return;
+    }
+
+    console.log('Intentando login para:', email);
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (authError) {
+      console.error('Error de auth:', authError.message);
+      setError(authError.message === 'Invalid login credentials' ? 'Contraseña o email incorrectos' : authError.message);
+      setIsLoading(false);
+    } else {
+      console.log('Login exitoso, redirigiendo...');
+      // Mantenemos isLoading(true) mientras redirige para feedback visual, 
+      // pero nos aseguramos de que no haya errores silenciosos
       router.push('/admin');
-    }, 1500);
+    }
   };
 
   return (
@@ -60,20 +81,29 @@ export default function AdminLoginPage() {
 
         {/* Login Card */}
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 shadow-2xl">
+          {error && (
+            <motion.div 
+              initial={{ opacity: 0, x: -10 }} 
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] uppercase tracking-widest font-bold p-4 rounded-xl mb-6 text-center"
+            >
+              {error}
+            </motion.div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="text-[10px] uppercase tracking-widest font-bold text-white/40 ml-1">
                 Email Address
               </label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-brand-green transition-colors" size={18} />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-brand-green transition-colors z-10" size={18} />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@twenty4studios.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white text-sm outline-none focus:border-brand-green/50 transition-all placeholder:text-white/10"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white text-sm outline-none focus:border-brand-green/50 focus:bg-white/10 transition-all placeholder:text-white/10"
                 />
               </div>
             </div>
@@ -83,24 +113,21 @@ export default function AdminLoginPage() {
                 <label className="text-[10px] uppercase tracking-widest font-bold text-white/40">
                   Password
                 </label>
-                <button type="button" className="text-[8px] uppercase tracking-widest font-bold text-white/20 hover:text-white transition-colors">
-                  ¿Olvidaste tu contraseña?
-                </button>
               </div>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-brand-green transition-colors" size={18} />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-brand-green transition-colors z-10" size={18} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white text-sm outline-none focus:border-brand-green/50 transition-all placeholder:text-white/10"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white text-sm outline-none focus:border-brand-green/50 focus:bg-white/10 transition-all placeholder:text-white/10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-brand-green transition-colors z-20"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -110,10 +137,13 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-brand-green hover:bg-brand-green/90 text-white font-black uppercase tracking-[0.2em] text-[11px] py-4 rounded-xl shadow-lg shadow-brand-green/20 transition-all flex items-center justify-center gap-3 group relative overflow-hidden disabled:opacity-50"
+              className="w-full bg-brand-green hover:bg-brand-green/90 text-white font-black uppercase tracking-[0.2em] text-[11px] py-4 rounded-xl shadow-lg shadow-brand-green/20 transition-all flex items-center justify-center gap-3 group relative overflow-hidden disabled:opacity-70"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span>Verificando...</span>
+                </div>
               ) : (
                 <>
                   <span>Entrar al Panel</span>

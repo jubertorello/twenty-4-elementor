@@ -1,20 +1,73 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useRouter, notFound } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, ArrowRight, Instagram, Twitter, Linkedin, Play, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { projects } from '../../data/projects';
+import { projects as staticProjects } from '../../data/projects';
+import { supabase } from '@/lib/supabase';
 
 const ProjectDetail = () => {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
   const [isPlaying, setIsPlaying] = useState(false);
+  const [project, setProject] = useState<any>(null);
+  const [nextProject, setNextProject] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const project = projects.find(p => p.slug === slug);
+  useEffect(() => {
+    const fetchProject = async () => {
+      setLoading(true);
+      // 1. Obtener el proyecto actual
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+      
+      if (data) {
+        setProject(data);
+        
+        // 2. Obtener el siguiente proyecto para el footer (el siguiente por order_index)
+        const { data: nextData } = await supabase
+          .from('projects')
+          .select('slug, title_es')
+          .eq('is_archived', false)
+          .gt('order_index', data.order_index)
+          .order('order_index', { ascending: true })
+          .limit(1)
+          .single();
+        
+        if (nextData) {
+          setNextProject(nextData);
+        } else {
+          // Si no hay siguiente, volvemos al primero
+          const { data: firstData } = await supabase
+            .from('projects')
+            .select('slug, title_es')
+            .eq('is_archived', false)
+            .order('order_index', { ascending: true })
+            .limit(1)
+            .single();
+          setNextProject(firstData);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchProject();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-brand-green border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!project) {
     notFound();
@@ -48,8 +101,8 @@ const ProjectDetail = () => {
           className="absolute inset-0"
         >
           <Image
-            src={project.img}
-            alt={project.title}
+            src={project.image_url || ''}
+            alt={project.title_es || 'Project Image'}
             fill
             className="object-cover opacity-60"
             priority
@@ -66,10 +119,10 @@ const ProjectDetail = () => {
             className="space-y-4"
           >
             <span className="text-brand-sand uppercase tracking-[0.4em] text-xs font-bold block">
-              {project.category} — {project.year}
+              {project.category_es} — {project.year}
             </span>
-            <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-serif font-black leading-none tracking-tighter">
-              {project.title}
+            <h1 className="text-4xl md:text-6xl lg:text-[7rem] font-serif font-black leading-none tracking-tighter break-words hyphens-auto max-w-full">
+              {project.title_es}
             </h1>
           </motion.div>
 
@@ -96,34 +149,11 @@ const ProjectDetail = () => {
             className="space-y-6"
           >
             <h2 className="text-3xl md:text-4xl font-serif font-bold italic">The Story</h2>
-            <p className="text-xl md:text-2xl text-white/70 leading-relaxed font-light">
-              {project.description}
+            <p className="whitespace-pre-wrap text-xl md:text-2xl text-white/70 leading-relaxed font-light">
+              {project.description_es}
             </p>
           </motion.div>
 
-          {project.details && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-white/10">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="space-y-4"
-              >
-                <h3 className="text-xs uppercase tracking-widest font-bold text-brand-sand">The Challenge</h3>
-                <p className="text-white/60 leading-relaxed">{project.details.challenge}</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="space-y-4"
-              >
-                <h3 className="text-xs uppercase tracking-widest font-bold text-brand-sand">The Solution</h3>
-                <p className="text-white/60 leading-relaxed">{project.details.solution}</p>
-              </motion.div>
-            </div>
-          )}
         </div>
 
         {/* Right: Info Sidebar */}
@@ -136,11 +166,11 @@ const ProjectDetail = () => {
           >
             <div className="space-y-2">
               <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Client / Project</span>
-              <p className="text-xl font-serif font-bold">{project.title}</p>
+              <p className="text-xl font-serif font-bold">{project.client || project.title_es}</p>
             </div>
             <div className="space-y-2">
               <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Services</span>
-              <p className="text-lg">{project.category}</p>
+              <p className="text-lg">{project.category_es}</p>
             </div>
             <div className="space-y-2">
               <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Year</span>
@@ -151,18 +181,18 @@ const ProjectDetail = () => {
       </section>
 
       {/* Gallery Section */}
-      {project.caseStudyImages && (
+      {project.gallery && project.gallery.length > 0 && (
         <section className="pb-24 lg:pb-40 px-6">
           <div className="max-w-7xl mx-auto space-y-12">
             <div className="flex justify-between items-end">
               <h2 className="text-3xl md:text-4xl font-serif font-bold italic">Visual Journey</h2>
               <span className="text-white/30 text-xs uppercase tracking-widest font-bold">
-                {project.caseStudyImages.length} Images
+                {project.gallery.length} Images
               </span>
             </div>
             
             <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-              {project.caseStudyImages.map((img, i) => (
+              {project.gallery.map((img: string, i: number) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
@@ -173,7 +203,7 @@ const ProjectDetail = () => {
                 >
                   <Image
                     src={img}
-                    alt={`${project.title} gallery ${i}`}
+                    alt={`${project.title_es} gallery ${i}`}
                     width={800}
                     height={1000}
                     className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
@@ -208,16 +238,16 @@ const ProjectDetail = () => {
               exit={{ scale: 0.9, opacity: 0 }}
               className="relative w-full max-w-6xl aspect-video rounded-3xl overflow-hidden shadow-2xl bg-white/5"
             >
-              {project.isVideoEmbed ? (
+              {project.is_video_embed ? (
                 <iframe
-                  src={project.videoUrl}
+                  src={project.video_url}
                   className="w-full h-full"
                   allow="autoplay; fullscreen"
                   style={{ border: 'none' }}
                 />
               ) : (
                 <video
-                  src={project.videoUrl}
+                  src={project.video_url}
                   autoPlay
                   controls
                   className="w-full h-full object-cover"
@@ -229,15 +259,17 @@ const ProjectDetail = () => {
       </AnimatePresence>
 
       {/* Footer Mini */}
-      <footer className="py-20 border-t border-white/10 text-center space-y-8">
-        <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-bold">Next Project</p>
-        <Link 
-          href={`/projects/${projects[(projects.findIndex(p => p.slug === slug) + 1) % projects.length].slug}`}
-          className="text-4xl md:text-6xl font-serif font-black hover:text-brand-green transition-colors"
-        >
-          {projects[(projects.findIndex(p => p.slug === slug) + 1) % projects.length].title}
-        </Link>
-      </footer>
+      {nextProject && (
+        <footer className="py-20 border-t border-white/10 text-center space-y-8">
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-bold">Next Project</p>
+          <Link 
+            href={`/projects/${nextProject.slug}`}
+            className="text-4xl md:text-6xl font-serif font-black hover:text-brand-green transition-colors"
+          >
+            {nextProject.title_es}
+          </Link>
+        </footer>
+      )}
     </main>
   );
 };

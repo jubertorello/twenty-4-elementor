@@ -10,9 +10,10 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { DashboardSection, LeadsSection } from './dashboard-leads';
+import { ProjectsAdminSection } from './projects-section';
 import {
   GeneralSection, HeroSection, PresentationSection,
-  ProjectsSection, TalentsSection, AboutSection, ContactSection
+  TalentsSection, AboutSection, ContactSection
 } from './components';
 
 // --- Sidebar ---
@@ -207,7 +208,7 @@ export default function AdminPage() {
               {activeSection === 'general' && <GeneralSection />}
               {activeSection === 'hero' && <HeroSection />}
               {activeSection === 'presentation' && <PresentationSection />}
-              {activeSection === 'projects' && <ProjectsSection />}
+              {activeSection === 'projects' && <ProjectsAdminSection />}
               {activeSection === 'talents' && <TalentsSection />}
               {activeSection === 'about' && <AboutSection />}
               {activeSection === 'contact' && <ContactSection />}

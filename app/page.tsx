@@ -5,7 +5,8 @@ import { motion, useScroll, useTransform, AnimatePresence, Variants, useInView }
 import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { projects } from './data/projects';
+import { projects as staticProjects } from './data/projects';
+import { supabase } from '@/lib/supabase';
 
 // --- Components ---
 
@@ -509,6 +510,39 @@ const BrandShowcase = () => {
 
 const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [projectsList, setProjectsList] = useState<any[]>(staticProjects);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('is_archived', false)
+        .order('order_index', { ascending: true })
+        .limit(6);
+
+      if (data && data.length > 0) {
+        // Mapeamos los datos de la DB al formato que espera el componente
+        const mappedProjects = data.map(p => ({
+          slug: p.slug,
+          title: p.title_es,
+          category: p.category_es,
+          description: p.mini_description_es || p.description_es,
+          img: p.image_url,
+          videoUrl: p.video_url,
+          isVideoEmbed: p.is_video_embed,
+          year: p.year,
+          has_case_study: p.has_case_study
+        }));
+        setProjectsList(mappedProjects);
+      }
+      setLoading(false);
+    };
+
+    fetchProjects();
+  }, []);
+
   const title = "Selected Work";
   const words = title.split(" ");
 
@@ -570,7 +604,7 @@ const Projects = () => {
         </div>
 
         <div className="space-y-32 lg:space-y-64">
-          {projects.map((project, i) => (
+          {projectsList.map((project, i) => (
             <div key={i} className="flex flex-col gap-12">
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
@@ -636,15 +670,17 @@ const Projects = () => {
                   {project.description}
                 </p>
 
-                <div className="pt-4">
-                  <Link 
-                    href={`/projects/${project.slug}`}
-                    className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm"
-                  >
-                    <span>View Case Study</span>
-                    <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                  </Link>
+                <div className="pt-4 min-h-[40px]">
+                  {project.has_case_study && (
+                    <Link 
+                      href={`/projects/${project.slug}`}
+                      className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm"
+                    >
+                      <span>View Case Study</span>
+                      <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
+                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -1305,41 +1341,102 @@ const Contact = () => {
           viewport={{ once: true }}
           className="bg-white/5 backdrop-blur-md border border-white/10 p-8 lg:p-12 rounded-[1.125rem]"
         >
-          <form className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-2">
-                <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Name</label>
-                <input type="text" className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Email</label>
-                <input type="email" className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Subject</label>
-              <select className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
-                <option className="bg-black">New Project</option>
-                <option className="bg-black">Talent Inquiry</option>
-                <option className="bg-black">Partnership</option>
-                <option className="bg-black">Other</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Message</label>
-              <textarea rows={4} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none"></textarea>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-white text-brand-green py-4 rounded-lg uppercase tracking-widest text-xs font-bold"
-            >
-              Send Message
-            </motion.button>
-          </form>
+          <ContactForm />
         </motion.div>
       </div>
     </section>
+  );
+};
+
+// Componente extraído para manejar el estado del formulario
+const ContactForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: 'New Project',
+    message: ''
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Importamos dinámicamente para evitar problemas de SSR si fuera necesario, 
+    // pero como es 'use client' podemos importarlo arriba o usar un import normal
+    const { submitLead } = await import('./actions/leads');
+    const result = await submitLead(formData);
+    
+    setIsSubmitting(false);
+    if (result.success) {
+      setIsSuccess(true);
+      setFormData({ name: '', email: '', subject: 'New Project', message: '' });
+      setTimeout(() => setIsSuccess(false), 5000);
+    } else {
+      alert('Error enviando el mensaje. Por favor intenta de nuevo.');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-2">
+          <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Name</label>
+          <input 
+            type="text" 
+            required
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" 
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Email</label>
+          <input 
+            type="email" 
+            required
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" 
+          />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Subject</label>
+        <select 
+          value={formData.subject}
+          onChange={(e) => setFormData({...formData, subject: e.target.value})}
+          className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none"
+        >
+          <option className="bg-black">New Project</option>
+          <option className="bg-black">Talent Inquiry</option>
+          <option className="bg-black">Partnership</option>
+          <option className="bg-black">Other</option>
+        </select>
+      </div>
+      <div className="space-y-2">
+        <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Message</label>
+        <textarea 
+          rows={4} 
+          required
+          value={formData.message}
+          onChange={(e) => setFormData({...formData, message: e.target.value})}
+          className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none"
+        ></textarea>
+      </div>
+      <motion.button
+        type="submit"
+        disabled={isSubmitting || isSuccess}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className={`w-full py-4 rounded-lg uppercase tracking-widest text-xs font-bold transition-all ${
+          isSuccess ? 'bg-brand-green text-white' : 'bg-white text-brand-green'
+        }`}
+      >
+        {isSubmitting ? 'Sending...' : isSuccess ? 'Message Sent!' : 'Send Message'}
+      </motion.button>
+    </form>
   );
 };
 
