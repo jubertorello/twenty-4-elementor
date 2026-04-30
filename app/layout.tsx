@@ -1,12 +1,12 @@
 import type {Metadata} from 'next';
 import './globals.css';
 
-import { supabase } from '@/lib/supabase';
+import { supabaseServer } from '@/lib/supabase-server';
 
 export async function generateMetadata(): Promise<Metadata> {
   let settings: any = {};
   try {
-    const { data } = await supabase.from('site_settings').select('data').eq('id', 'general').single();
+    const { data } = await supabaseServer.from('site_settings').select('data').eq('id', 'general').single();
     if (data?.data) settings = data.data;
   } catch (e) {
     console.error('Error fetching global metadata:', e);

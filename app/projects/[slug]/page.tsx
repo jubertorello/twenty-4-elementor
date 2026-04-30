@@ -1,12 +1,15 @@
 import { Metadata } from 'next';
-import { supabase } from '@/lib/supabase';
+import { supabaseServer } from '@/lib/supabase-server';
 import ProjectDetailClient from './client';
+
+// ISR: revalidate project pages every hour
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   
   // 1. Obtener datos del proyecto
-  const { data: project } = await supabase
+  const { data: project } = await supabaseServer
     .from('projects')
     .select('*')
     .eq('slug', resolvedParams.slug)
@@ -17,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   // 2. Obtener la metadata global por si acaso falta algo
-  const { data: settingsData } = await supabase
+  const { data: settingsData } = await supabaseServer
     .from('site_settings')
     .select('data')
     .eq('id', 'general')
