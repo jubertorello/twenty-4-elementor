@@ -24,19 +24,24 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [leadsRes, projectsRes, talentsRes, brandsRes] = await Promise.all([
+      const [leadsRes, projectsRes, talentsRes, settingsRes] = await Promise.all([
         supabase.from('leads').select('id, status', { count: 'exact' }),
         supabase.from('projects').select('id', { count: 'exact' }),
         supabase.from('talents').select('id', { count: 'exact' }),
-        supabase.from('brands').select('id', { count: 'exact' }),
+        supabase.from('site_settings').select('data').eq('id', 'talents').maybeSingle(),
       ]);
+
+      const brandList = settingsRes.data?.data?.brands || [];
+      const activeBrands = Array.isArray(brandList) 
+        ? brandList.filter((b: any) => !(typeof b === 'object' && b?.is_archived)).length
+        : 0;
 
       setStats({
         totalLeads: leadsRes.count || 0,
         newLeads: (leadsRes.data || []).filter(l => l.status === 'new').length,
         projects: projectsRes.count || 0,
         talents: talentsRes.count || 0,
-        brands: brandsRes.count || 0,
+        brands: activeBrands,
         seoHealth: 94
       });
     };
@@ -84,22 +89,17 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white/5 rounded-2xl border border-white/10 p-6 space-y-5">
-          <h3 className="text-[10px] uppercase tracking-widest font-bold text-white/40">Actividad reciente</h3>
-          <div className="space-y-4">
-            <p className="text-white/20 text-xs italic">Los leads aparecerán aquí en tiempo real...</p>
-          </div>
-        </div>
-
+      <div className="max-w-xl">
         <div className="bg-white/5 rounded-2xl border border-white/10 p-6 space-y-5">
           <h3 className="text-[10px] uppercase tracking-widest font-bold text-white/40">Acciones rápidas</h3>
           <div className="space-y-3">
             {[
               { label: 'Ver Leads', id: 'leads', icon: Mail },
               { label: 'Nuevo Proyecto', id: 'projects', icon: Briefcase },
+              { label: 'Añadir Talent', id: 'talents', icon: Star },
+              { label: 'Añadir Marca', id: 'talents', icon: Users },
             ].map(a => (
-              <button key={a.id} onClick={() => setActiveSection(a.id)}
+              <button key={a.label} onClick={() => setActiveSection(a.id)}
                 className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-brand-green/20 border border-white/10 hover:border-brand-green/30 rounded-xl transition-all group">
                 <a.icon size={15} className="text-white/40 group-hover:text-brand-green transition-colors" />
                 <span className="text-sm font-bold text-white/60 group-hover:text-white transition-colors">{a.label}</span>

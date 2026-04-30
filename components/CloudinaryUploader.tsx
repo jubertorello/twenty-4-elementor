@@ -10,6 +10,7 @@ declare global {
 export const optimizeCloudinaryUrl = (url: string, type: 'image' | 'video'): string => {
   if (!url || !url.includes('res.cloudinary.com')) return url;
   if (type === 'image') {
+    if (url.toLowerCase().endsWith('.svg')) return url;
     return url.replace('/upload/', '/upload/f_webp,q_auto:good,w_1920,c_limit/');
   }
   if (type === 'video') {
@@ -24,6 +25,8 @@ interface CloudinaryUploaderProps {
   label?: string;
   currentUrl?: string;
   className?: string;
+  previewClassName?: string;
+  imageClassName?: string;
 }
 
 export const CloudinaryUploader = ({
@@ -32,7 +35,10 @@ export const CloudinaryUploader = ({
   label = 'Subir archivo',
   currentUrl,
   className = '',
-}: CloudinaryUploaderProps) => {
+  previewClassName = 'aspect-video',
+  imageClassName = 'object-cover',
+  children,
+}: CloudinaryUploaderProps & { children?: React.ReactNode }) => {
   const widgetRef = useRef<any>(null);
   const onUploadRef = useRef(onUpload);
   useEffect(() => { onUploadRef.current = onUpload; }, [onUpload]);
@@ -67,13 +73,8 @@ export const CloudinaryUploader = ({
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
-    console.log('--- Cloudinary Config Check ---');
-    console.log('Cloud Name:', cloudName);
-    console.log('Preset:', uploadPreset);
-    console.log('Accept Mode:', accept);
-
     if (!cloudName || !uploadPreset) {
-      console.error('Faltan variables de entorno de Cloudinary');
+      console.error('Missing Cloudinary env vars');
       alert('Error de configuración: Faltan claves de Cloudinary en el .env.local');
       return;
     }
@@ -86,15 +87,15 @@ export const CloudinaryUploader = ({
         cloudName: cloudName,
         uploadPreset: uploadPreset,
         // Usamos 'auto' para evitar errores de tipo, pero filtramos por formato abajo
-        resourceType: 'auto', 
+        resourceType: 'auto',
         sources: ['local', 'url'],
         multiple: false,
         maxFileSize: 209715200, // 200MB
-        clientAllowedFormats: isImage 
-          ? ['jpg', 'jpeg', 'png', 'webp'] 
-          : isVideo 
-          ? ['mp4', 'mov', 'webm'] 
-          : undefined,
+        clientAllowedFormats: isImage
+          ? ['jpg', 'jpeg', 'png', 'webp', 'svg']
+          : isVideo
+            ? ['mp4', 'mov', 'webm']
+            : undefined,
         styles: {
           palette: {
             window: '#0a0a0a',
@@ -118,7 +119,6 @@ export const CloudinaryUploader = ({
           console.error('DETALLE ERROR CLOUDINARY:', error);
         }
         if (result && result.event === 'success') {
-          console.log('Upload Success:', result.info);
           const { secure_url, resource_type } = result.info;
           const optimizedUrl = optimizeCloudinaryUrl(secure_url, resource_type as 'image' | 'video');
           onUploadRef.current(optimizedUrl, resource_type as 'image' | 'video');
@@ -131,14 +131,18 @@ export const CloudinaryUploader = ({
 
   const isVideoPreview = currentUrl && (currentUrl.includes('/video/') || currentUrl.match(/\.(mp4|mov|webm)$/i));
 
+  if (children) {
+    return <div className={className} onClick={openWidget}>{children}</div>;
+  }
+
   return (
     <div className={`space-y-3 ${className}`}>
       {currentUrl && (
-        <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-white/5 border border-white/10 group/preview">
+        <div className={`relative w-full ${previewClassName} rounded-2xl overflow-hidden bg-white/5 border border-white/10 group/preview`}>
           {isVideoPreview ? (
-            <video src={currentUrl} controls className="w-full h-full object-cover" />
+            <video src={currentUrl} controls className={`w-full h-full ${imageClassName}`} />
           ) : (
-            <img src={currentUrl} alt="Preview" className="w-full h-full object-cover" />
+            <img src={currentUrl} alt="Preview" className={`w-full h-full ${imageClassName}`} />
           )}
           <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2">
             {isVideoPreview ? <Video size={12} className="text-blue-400" /> : <ImageIcon size={12} className="text-brand-green" />}
@@ -158,7 +162,7 @@ export const CloudinaryUploader = ({
             {currentUrl ? 'Cambiar archivo' : label}
           </p>
           <p className="text-[8px] text-white/10 mt-0.5 uppercase tracking-widest font-bold">
-            {accept === 'image' ? 'Imágenes (JPG, PNG, WebP)' : accept === 'video' ? 'Vídeos (MP4, MOV)' : 'Auto'}
+            {accept === 'image' ? 'Imágenes (JPG, PNG, WebP, SVG)' : accept === 'video' ? 'Vídeos (MP4, MOV)' : 'Auto'}
           </p>
         </div>
       </button>
