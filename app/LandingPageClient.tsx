@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence, Variants, useInView } from 'motion/react';
-import { Menu, X, ArrowRight, Instagram, Twitter, Linkedin, ArrowUpRight, ChevronRight, Mail, Check } from 'lucide-react';
+import { motion, useScroll, useTransform, AnimatePresence, Variants } from 'motion/react';
+import { Menu, X, ArrowUpRight, ChevronRight, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -217,6 +217,14 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
 
 const Hero = ({ heroData }: { heroData: any }) => {
   const sectionRef = useRef(null);
+  const [iframeReady, setIframeReady] = useState(false);
+
+  useEffect(() => {
+    // Defer iframe mount until after first paint so it doesn't block LCP
+    const id = requestAnimationFrame(() => setIframeReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
@@ -279,7 +287,7 @@ const Hero = ({ heroData }: { heroData: any }) => {
               referrerPolicy="no-referrer"
             />
           ) : (
-            bgVideoUrl && (
+            bgVideoUrl && iframeReady && (
               <iframe
                 src={bgVideoUrl}
                 className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover opacity-70 pointer-events-none"
@@ -545,32 +553,34 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
                         src={project.img}
                         alt={project.title}
                         fill
-                        className={`object-cover transition-all duration-700 ${hoveredIndex === i ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}
+                        className={`object-cover transition-all duration-700 ${hoveredIndex === i && project.videoUrl ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}
                         referrerPolicy="no-referrer"
                       />
                     )}
 
-                    <div className={`absolute inset-0 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                      {hoveredIndex === i && (
-                        project.isVideoEmbed ? (
-                          <iframe
-                            src={project.videoUrl}
-                            className="w-full h-full object-cover"
-                            allow="autoplay; fullscreen"
-                            style={{ border: 'none' }}
-                          />
-                        ) : (
-                          <video
-                            src={project.videoUrl}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            className="w-full h-full object-cover"
-                          />
-                        )
-                      )}
-                    </div>
+                    {project.videoUrl && (
+                      <div className={`absolute inset-0 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                        {hoveredIndex === i && (
+                          project.isVideoEmbed ? (
+                            <iframe
+                              src={project.videoUrl}
+                              className="w-full h-full object-cover"
+                              allow="autoplay; fullscreen"
+                              style={{ border: 'none' }}
+                            />
+                          ) : (
+                            <video
+                              src={project.videoUrl}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              className="w-full h-full object-cover"
+                            />
+                          )
+                        )}
+                      </div>
+                    )}
 
                     <div className={`absolute inset-0 bg-black/10 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-0' : 'opacity-100'}`} />
                   </div>
@@ -682,12 +692,14 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
         variants={sectionVariants}
         className="w-full space-y-20"
       >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10">
+        {/* Desktop: flex accordion */}
+        <div className="hidden lg:flex gap-3 mb-32 h-[650px] max-w-7xl mx-auto">
           {talentsData.map((talent, i) => (
             <motion.div
               key={talent.id}
-              variants={itemVariants}
-              className="group relative aspect-[3/4] rounded-[1.125rem] overflow-hidden bg-white/5 border border-white/5"
+              className={`relative overflow-hidden rounded-[0.5rem] cursor-pointer h-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                hoveredIndex === i ? 'flex-[3]' : 'flex-[1]'
+              }`}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
@@ -696,16 +708,53 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                   src={talent.image_url}
                   alt={talent.name}
                   fill
-                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                  className="object-cover"
                   referrerPolicy="no-referrer"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-8">
-                <p className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2">
+              <div className={`absolute inset-0 bg-gradient-to-t from-black via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-40'}`} />
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                <div className={`space-y-4 transition-all duration-500 ${hoveredIndex === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
+                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
+                    {talent[`category_${currentLang}`] || talent.category_es}
+                  </p>
+                  {talent.instagram_url && (
+                    <a href={talent.instagram_url} className="flex items-center gap-3 text-white/80 hover:text-white w-fit group/link">
+                      <span className="text-[10px] uppercase tracking-[0.2em] font-bold">View on Instagram</span>
+                      <div className="w-8 h-[1px] bg-white/30 group-hover/link:w-12 transition-all duration-500" />
+                      <ChevronRight className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Mobile: 2-column grid */}
+        <div className="lg:hidden grid grid-cols-2 gap-3 mb-32 max-w-7xl mx-auto">
+          {talentsData.map((talent) => (
+            <motion.div
+              key={talent.id}
+              variants={itemVariants}
+              className="relative overflow-hidden rounded-[0.5rem] cursor-pointer h-[500px]"
+            >
+              {talent.image_url && (
+                <Image
+                  src={talent.image_url}
+                  alt={talent.name}
+                  fill
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
+              <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-2">
                   {talent[`category_${currentLang}`] || talent.category_es}
                 </p>
-                <h3 className="text-2xl md:text-3xl font-serif font-black text-white">{talent.name}</h3>
+                <h3 className="text-2xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
               </div>
             </motion.div>
           ))}
@@ -801,7 +850,6 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
 
   if (!aboutData) return null;
 
-  const currentLang = language.toLowerCase();
   const title = (language === 'ES' ? aboutData.title_es : aboutData.title_en) || '';
   const statement = (language === 'ES' ? aboutData.statement_es : aboutData.statement_en) || '';
   const services = (aboutData.services || []).filter((s: any) => !s.is_hidden);
@@ -920,6 +968,9 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
                     alt="Service"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop";
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                   <div className="absolute bottom-8 left-8 right-8">
@@ -960,7 +1011,7 @@ const ContactForm = () => {
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const [honeypot, setHoneypot] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!acceptedPolicies || honeypot) return;
     setIsSubmitting(true);
@@ -990,17 +1041,17 @@ const ContactForm = () => {
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-2">
-          <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Name</label>
-          <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
+          <label htmlFor="contact-name" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Name</label>
+          <input id="contact-name" name="name" type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Email</label>
-          <input type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
+          <label htmlFor="contact-email" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Email</label>
+          <input id="contact-email" name="email" type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
         </div>
       </div>
       <div className="space-y-2">
-        <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Subject</label>
-        <select value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
+        <label htmlFor="contact-subject" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Subject</label>
+        <select id="contact-subject" name="subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
           <option className="bg-black">New Project</option>
           <option className="bg-black">Talent Inquiry</option>
           <option className="bg-black">Partnership</option>
@@ -1008,8 +1059,8 @@ const ContactForm = () => {
         </select>
       </div>
       <div className="space-y-2">
-        <label className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Message</label>
-        <textarea rows={4} required value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none" />
+        <label htmlFor="contact-message" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Message</label>
+        <textarea id="contact-message" name="message" rows={4} required value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none" />
       </div>
       <div className="pt-2">
         <label className="flex items-center gap-3 cursor-pointer group">
@@ -1144,7 +1195,6 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
 
   const instagram = generalSettings?.instagram_url || "#";
   const linkedin = generalSettings?.linkedin_url || "#";
-  const email = generalSettings?.email || "hello@twenty4studios.com";
 
   return (
     <footer ref={footerRef} className="bg-brand-green p-3 pt-20 lg:pt-32 min-h-[600px] flex flex-col">
@@ -1241,16 +1291,14 @@ const CustomCursor = () => {
 // --- Main Client Component ---
 
 export default function LandingPageClient({ settings, projects, talents }: PageData) {
-  const [isLoading, setIsLoading] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return !sessionStorage.getItem('homeScrollPos');
-  });
+  const [isLoading, setIsLoading] = useState(true);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [language, setLanguage] = useState<Language>('ES');
   const footerRef = useRef<HTMLDivElement>(null);
 
   const generalSettings = settings.general || {};
-  const loadingLogoUrl = generalSettings.loading_logo_url
+  const loadingLogoUrl = process.env.NEXT_PUBLIC_LOADING_LOGO_URL
+    || generalSettings.loading_logo_url
     || generalSettings.header_logo_url
     || "https://res.cloudinary.com/djqtkbyez/image/upload/v1773912109/Twenty4_Short_White_qhrgmr.svg";
   const navLogoUrl = generalSettings.header_logo_url

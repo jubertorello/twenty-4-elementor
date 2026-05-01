@@ -1,11 +1,11 @@
 import { MetadataRoute } from 'next';
-import { supabase } from '@/lib/supabase';
+import { supabaseServer } from '@/lib/supabase-server';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://twenty4studios.com';
 
   // 1. Fetch all active projects
-  const { data: projects } = await supabase
+  const { data: projects } = await supabaseServer
     .from('projects')
     .select('slug, updated_at')
     .eq('is_archived', false);

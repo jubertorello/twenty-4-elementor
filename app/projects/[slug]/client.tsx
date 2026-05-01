@@ -3,10 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter, notFound } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, ArrowRight, Instagram, Twitter, Linkedin, Play, X } from 'lucide-react';
+import { ArrowLeft, Play, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { projects as staticProjects } from '../../data/projects';
 import { supabase } from '@/lib/supabase';
 
 const ProjectDetail = () => {
@@ -22,7 +21,7 @@ const ProjectDetail = () => {
     const fetchProject = async () => {
       setLoading(true);
       // 1. Obtener el proyecto actual
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('projects')
         .select('*')
         .eq('slug', slug)
@@ -99,11 +98,11 @@ const ProjectDetail = () => {
           <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Back</span>
         </button>
         
-        <div className="pointer-events-auto hidden md:flex items-center gap-6 bg-white/10 backdrop-blur-md border border-white/10 px-8 py-3 rounded-full">
-          <a href="#" className="hover:opacity-50 transition-opacity"><Instagram size={16} /></a>
-          <a href="#" className="hover:opacity-50 transition-opacity"><Twitter size={16} /></a>
-          <a href="#" className="hover:opacity-50 transition-opacity"><Linkedin size={16} /></a>
-        </div>
+        {project.client && (
+          <div className="pointer-events-auto hidden md:flex items-center bg-white/10 backdrop-blur-md border border-white/10 px-8 py-3 rounded-full">
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/70">{project.client}</span>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -140,15 +139,17 @@ const ProjectDetail = () => {
             </h1>
           </motion.div>
 
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 1, type: "spring", stiffness: 200 }}
-            onClick={() => setIsPlaying(true)}
-            className="mt-12 w-20 h-20 md:w-24 md:h-24 rounded-full bg-brand-green flex items-center justify-center hover:scale-110 transition-transform duration-500 group"
-          >
-            <Play fill="white" size={32} className="ml-1 group-hover:scale-110 transition-transform" />
-          </motion.button>
+          {project.video_url && (
+            <motion.button
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 1, type: "spring", stiffness: 200 }}
+              onClick={() => setIsPlaying(true)}
+              className="mt-12 w-20 h-20 md:w-24 md:h-24 rounded-full bg-brand-green flex items-center justify-center hover:scale-110 transition-transform duration-500 group"
+            >
+              <Play fill="white" size={32} className="ml-1 group-hover:scale-110 transition-transform" />
+            </motion.button>
+          )}
         </div>
       </section>
 
