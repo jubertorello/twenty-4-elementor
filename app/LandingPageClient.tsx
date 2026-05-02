@@ -136,7 +136,7 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
             href="#contact"
             className="hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 bg-white text-brand-green hover:bg-brand-sand"
           >
-            {language === 'ES' ? 'Contactar' : 'Contact'}
+            {language === 'ES' ? 'Contáctanos' : "Let's work"}
           </a>
 
           <button
@@ -171,7 +171,7 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="bg-white text-brand-green px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg hover:bg-brand-sand transition-colors"
                 >
-                  Contactar
+                  {language === 'ES' ? 'Contáctanos' : "Let's work"}
                 </a>
                 <div className="flex gap-4 items-center justify-center">
                   <button
@@ -406,7 +406,7 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-20 lg:py-32 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 lg:gap-12">
+    <section ref={sectionRef} className="relative pt-20 pb-8 lg:py-32 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 lg:gap-12">
       <motion.div
         style={{ opacity, y }}
         initial="hidden"
@@ -508,7 +508,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
   if (projectsList.length === 0) return null;
 
   return (
-    <section id="projects" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-black overflow-hidden">
+    <section id="projects" className="relative pt-8 pb-20 lg:py-32 px-6 lg:px-12 bg-black overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
           <motion.span
@@ -594,18 +594,16 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
 
                   <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-md">{project.description}</p>
 
-                  <div className="pt-4 min-h-[40px]">
-                    {project.has_case_study && (
-                      <Link
-                        href={`/projects/${project.slug}`}
-                        className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm"
-                      >
-                        <span>View Case Study</span>
-                        <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
-                        <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                      </Link>
-                    )}
-                  </div>
+                  {project.has_case_study && (
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm pt-4"
+                    >
+                      <span>View Case Study</span>
+                      <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
+                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -692,53 +690,73 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
         variants={sectionVariants}
         className="w-full space-y-20"
       >
-        {/* Desktop: flex accordion */}
-        <div className="hidden lg:flex gap-3 mb-32 h-[650px] max-w-7xl mx-auto">
-          {talentsData.map((talent, i) => (
-            <motion.div
-              key={talent.id}
-              className={`relative overflow-hidden rounded-[0.5rem] cursor-pointer h-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                hoveredIndex === i ? 'flex-[3]' : 'flex-[1]'
-              }`}
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {talent.image_url && (
-                <Image
-                  src={talent.image_url}
-                  alt={talent.name}
-                  fill
-                  className="object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              )}
-              <div className={`absolute inset-0 bg-gradient-to-t from-black via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-100' : 'opacity-40'}`} />
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <div className={`space-y-4 transition-all duration-500 ${hoveredIndex === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
-                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
-                    {talent[`category_${currentLang}`] || talent.category_es}
-                  </p>
-                  {talent.instagram_url && (
-                    <a href={talent.instagram_url} className="flex items-center gap-3 text-white/80 hover:text-white w-fit group/link">
-                      <span className="text-[10px] uppercase tracking-[0.2em] font-bold">View on Instagram</span>
-                      <div className="w-8 h-[1px] bg-white/30 group-hover/link:w-12 transition-all duration-500" />
-                      <ChevronRight className="w-4 h-4" />
-                    </a>
-                  )}
+        {/* Desktop: filas de máx. 7, accordion independiente por fila */}
+        {(() => {
+          const numRows = Math.ceil(talentsData.length / 7);
+          const perRow = Math.ceil(talentsData.length / numRows);
+          const talentRows = talentsData.reduce<(typeof talentsData)[]>((rows, talent, i) => {
+            const rowIdx = Math.floor(i / perRow);
+            if (!rows[rowIdx]) rows[rowIdx] = [];
+            rows[rowIdx].push(talent);
+            return rows;
+          }, []);
+          const rowHeight = 'h-[650px]';
+          return (
+            <div className="hidden lg:flex flex-col gap-3 mb-32 max-w-7xl mx-auto">
+              {talentRows.map((row, rowIdx) => (
+                <div key={rowIdx} className={`flex gap-3 ${rowHeight}`}>
+                  {row.map((talent, colIdx) => {
+                    const flatIdx = rowIdx * perRow + colIdx;
+                    return (
+                      <motion.div
+                        key={talent.id}
+                        className={`relative overflow-hidden rounded-[0.5rem] cursor-pointer h-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                          hoveredIndex === flatIdx ? 'flex-[3]' : 'flex-[1]'
+                        }`}
+                        onMouseEnter={() => setHoveredIndex(flatIdx)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        {talent.image_url && (
+                          <Image
+                            src={talent.image_url}
+                            alt={talent.name}
+                            fill
+                            className="object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        )}
+                        <div className={`absolute inset-0 bg-gradient-to-t from-black via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === flatIdx ? 'opacity-100' : 'opacity-40'}`} />
+                        <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                          <div className={`space-y-4 transition-all duration-500 ${hoveredIndex === flatIdx ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
+                            <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
+                              {talent[`category_${currentLang}`] || talent.category_es}
+                            </p>
+                            {talent.instagram_url && (
+                              <a href={talent.instagram_url} className="flex items-center gap-3 text-white/80 hover:text-white w-fit group/link">
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold">View on Instagram</span>
+                                <div className="w-8 h-[1px] bg-white/30 group-hover/link:w-12 transition-all duration-500" />
+                                <ChevronRight className="w-4 h-4" />
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              ))}
+            </div>
+          );
+        })()}
 
-        {/* Mobile: 2-column grid */}
-        <div className="lg:hidden grid grid-cols-2 gap-3 mb-32 max-w-7xl mx-auto">
+        {/* Mobile: 1 columna, listado vertical */}
+        <div className="lg:hidden flex flex-col gap-3 mb-32 max-w-7xl mx-auto">
           {talentsData.map((talent) => (
             <motion.div
               key={talent.id}
               variants={itemVariants}
-              className="relative overflow-hidden rounded-[0.5rem] cursor-pointer h-[500px]"
+              className="relative overflow-hidden rounded-[0.5rem] h-[400px]"
             >
               {talent.image_url && (
                 <Image
@@ -762,7 +780,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
 
         {/* Brand Ticker */}
         {brands.length > 0 && (
-          <div className="relative py-20 overflow-hidden -mx-6 lg:-mx-12 bg-black mb-32">
+          <div className="relative pt-4 lg:py-16 overflow-hidden -mx-6 lg:-mx-12 bg-black">
             <div className="flex whitespace-nowrap">
               <motion.div
                 animate={{ x: ["0%", "-100%"] }}
@@ -808,7 +826,13 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
 
         {/* Experience Section */}
         {talentsSettings?.experience && talentsSettings.experience.some((e: any) => e.title_es || e.title_en) && (
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-3xl overflow-hidden">
+          <motion.div
+            className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.2 } } }}
+          >
             {talentsSettings.experience.map((item: any, i: number) => {
               const expTitle = (language === 'ES' ? item.title_es : item.title_en) || item.title_es || '';
               const expDesc = (language === 'ES' ? item.description_es : item.description_en) || item.description_es || '';
@@ -816,19 +840,19 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15, duration: 0.6 }}
-                  className="bg-black p-10 lg:p-14 space-y-4 group hover:bg-white/5 transition-colors duration-500"
+                  variants={{
+                    hidden: { opacity: 0, y: 30 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as any } }
+                  }}
+                  className="px-10 pt-10 pb-4 lg:p-14 space-y-5"
                 >
-                  <span className="text-brand-green font-black text-4xl leading-none">0{i + 1}</span>
+                  <span className="text-white font-black text-5xl lg:text-6xl leading-none">0{i + 1}</span>
                   <h3 className="text-xl lg:text-2xl font-black uppercase tracking-tight text-white">{expTitle}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed font-light">{expDesc}</p>
+                  <p className="text-lg md:text-xl text-white/70 leading-relaxed font-light">{expDesc}</p>
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </motion.div>
     </section>

@@ -6,7 +6,7 @@ import {
   TrendingUp, Users, Briefcase, Mail, Star, Eye,
   ArrowUpRight, ArrowDownRight, Clock, CheckCircle,
   XCircle, AlertCircle, Trash2, ChevronDown, X, MessageSquare,
-  Phone, Calendar, Filter, Search
+  Phone, Calendar, Filter, Search, Settings, ExternalLink
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
@@ -19,20 +19,27 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
     projects: 0,
     talents: 0,
     brands: 0,
-    seoHealth: 94
+  });
+  const [seoData, setSeoData] = useState({
+    title: 'TWENTY4 STUDIOS',
+    description: 'Editorial, premium, fashion-tech studio connecting brands and athletes.',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://twenty4studios.com',
+    favicon: '',
+    ogImage: '',
   });
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [leadsRes, projectsRes, talentsRes, settingsRes] = await Promise.all([
+      const [leadsRes, projectsRes, talentsRes, talentSettingsRes, generalRes] = await Promise.all([
         supabase.from('leads').select('id, status', { count: 'exact' }),
         supabase.from('projects').select('id', { count: 'exact' }),
         supabase.from('talents').select('id', { count: 'exact' }),
         supabase.from('site_settings').select('data').eq('id', 'talents').maybeSingle(),
+        supabase.from('site_settings').select('data').eq('id', 'general').maybeSingle(),
       ]);
 
-      const brandList = settingsRes.data?.data?.brands || [];
-      const activeBrands = Array.isArray(brandList) 
+      const brandList = talentSettingsRes.data?.data?.brands || [];
+      const activeBrands = Array.isArray(brandList)
         ? brandList.filter((b: any) => !(typeof b === 'object' && b?.is_archived)).length
         : 0;
 
@@ -42,7 +49,15 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
         projects: projectsRes.count || 0,
         talents: talentsRes.count || 0,
         brands: activeBrands,
-        seoHealth: 94
+      });
+
+      const g = generalRes.data?.data || {};
+      setSeoData({
+        title: g.meta_title || g.site_name || 'TWENTY4 STUDIOS',
+        description: g.meta_description_es || g.site_description_es || 'Editorial, premium, fashion-tech studio connecting brands and athletes.',
+        url: process.env.NEXT_PUBLIC_SITE_URL || 'https://twenty4studios.com',
+        favicon: g.favicon_url || '',
+        ogImage: g.og_image || '',
       });
     };
 
@@ -54,18 +69,22 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
     { label: 'Proyectos', value: stats.projects.toString(), change: 'En la web', up: true, icon: Briefcase, color: 'from-blue-500/10 to-blue-500/5', accent: 'text-blue-400' },
     { label: 'Talentos', value: stats.talents.toString(), change: 'Activos', up: true, icon: Star, color: 'from-amber-500/10 to-amber-500/5', accent: 'text-amber-400' },
     { label: 'Marcas', value: stats.brands.toString(), change: 'Colaboraciones', up: true, icon: Users, color: 'from-purple-500/10 to-purple-500/5', accent: 'text-purple-400' },
-    { label: 'Salud SEO', value: `${stats.seoHealth}%`, change: 'Optimizado', up: true, icon: CheckCircle, color: 'from-emerald-500/10 to-emerald-500/5', accent: 'text-emerald-400' },
   ];
 
+  const displayUrl = seoData.url.replace(/^https?:\/\//, '');
+  const truncatedDesc = seoData.description.length > 155
+    ? seoData.description.slice(0, 152) + '...'
+    : seoData.description;
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <div>
         <p className="text-[10px] uppercase tracking-widest font-bold text-white/30 mb-2">Resumen general</p>
         <h2 className="text-3xl font-bold text-white">Dashboard</h2>
       </div>
 
       {/* KPI Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {kpis.map((kpi, i) => (
           <motion.div
             key={kpi.label}
@@ -75,7 +94,7 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
             className={`relative bg-gradient-to-br ${kpi.color} border border-white/10 rounded-2xl p-5 overflow-hidden group hover:border-white/20 transition-colors`}
           >
             <div className="flex items-start justify-between mb-4">
-              <div className={`p-2 rounded-xl bg-white/5`}>
+              <div className="p-2 rounded-xl bg-white/5">
                 <kpi.icon size={16} className={kpi.accent} />
               </div>
               <div className={`flex items-center gap-1 text-[10px] font-bold ${kpi.up ? 'text-emerald-400' : 'text-rose-400'}`}>
@@ -89,8 +108,78 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
         ))}
       </div>
 
-      <div className="max-w-xl">
-        <div className="bg-white/5 rounded-2xl border border-white/10 p-6 space-y-5">
+      {/* Two-column row: SEO preview + Quick actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {/* SEO Preview */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bg-white/5 rounded-2xl border border-white/10 p-6 space-y-5"
+        >
+          <div className="flex items-center justify-between">
+            <h3 className="text-[10px] uppercase tracking-widest font-bold text-white/40">Vista en Google</h3>
+            <button
+              onClick={() => setActiveSection('settings')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-brand-green/20 border border-white/10 hover:border-brand-green/30 text-[10px] uppercase tracking-widest font-bold text-white/40 hover:text-brand-green transition-all"
+            >
+              <Settings size={11} /> Editar SEO
+            </button>
+          </div>
+
+          {/* Google result mock */}
+          <div className="bg-white rounded-xl p-5 space-y-2 shadow-sm">
+            {/* URL row */}
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+                {seoData.favicon ? (
+                  <img src={seoData.favicon} alt="" className="w-full h-full object-contain" />
+                ) : (
+                  <div className="w-3 h-3 rounded-full bg-gray-300" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] text-gray-600 truncate leading-none">Twenty4 Studios</p>
+                <p className="text-[11px] text-gray-500 truncate leading-none">{displayUrl}</p>
+              </div>
+              <ExternalLink size={13} className="ml-auto text-gray-300 shrink-0" />
+            </div>
+            {/* Title */}
+            <p className="text-[#1a0dab] text-lg font-normal leading-tight hover:underline cursor-pointer line-clamp-1">
+              {seoData.title}
+            </p>
+            {/* Description */}
+            <p className="text-[13px] text-[#4d5156] leading-snug line-clamp-2">
+              {truncatedDesc}
+            </p>
+          </div>
+
+          {/* OG image preview */}
+          {seoData.ogImage ? (
+            <div className="space-y-1.5">
+              <p className="text-[9px] uppercase tracking-widest font-bold text-white/20">OG Image (redes sociales)</p>
+              <div className="relative aspect-[1200/630] w-full rounded-lg overflow-hidden border border-white/10">
+                <img src={seoData.ogImage} alt="OG preview" className="w-full h-full object-cover" />
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-1.5">
+              <p className="text-[9px] uppercase tracking-widest font-bold text-white/20">OG Image (redes sociales)</p>
+              <div className="aspect-[1200/630] w-full rounded-lg border border-dashed border-white/10 bg-white/3 flex items-center justify-center">
+                <p className="text-[10px] text-white/20 uppercase tracking-widest font-bold">Sin imagen OG configurada</p>
+              </div>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Quick actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.32 }}
+          className="bg-white/5 rounded-2xl border border-white/10 p-6 space-y-5"
+        >
           <h3 className="text-[10px] uppercase tracking-widest font-bold text-white/40">Acciones rápidas</h3>
           <div className="space-y-3">
             {[
@@ -107,7 +196,8 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
+
       </div>
     </div>
   );

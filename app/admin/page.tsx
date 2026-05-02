@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   LayoutDashboard, Image as ImageIcon, Video, Briefcase,
   Users, Info, Mail, Globe, Save, Settings,
-  ArrowLeft, ChevronRight, Eye, Star, CheckCircle, Shield, LogOut
+  ArrowLeft, ChevronRight, Eye, Star, CheckCircle, Shield, LogOut, Search
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -15,6 +15,7 @@ import { TalentsAdminSection } from './talents-section';
 import { AboutAdminSection } from './about-section';
 import { SettingsSection } from './settings-section';
 import { LegalSection } from './legal-section';
+import { SeoSection } from './seo-section';
 import {
   HeroSection, PresentationSection, PhotosSection
 } from './components';
@@ -38,7 +39,8 @@ const menuGroups = [
       { id: 'talents', label: 'Talentos & Marcas', icon: Users },
       { id: 'about', label: 'About Us', icon: Info },
       { id: 'legal', label: 'Páginas Legales', icon: Shield },
-      { id: 'settings', label: 'Generales', icon: Settings },
+      { id: 'seo', label: 'SEO & Redes', icon: Search },
+      { id: 'settings', label: 'Logos & Footer', icon: Settings },
     ]
   },
   {
@@ -123,10 +125,6 @@ const AdminSidebar = ({
         <LogOut size={15} />
         <span className="text-[11px] uppercase tracking-widest font-bold">Cerrar Sesión</span>
       </button>
-      <div className="mt-3 px-3 flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
-        <span className="text-[8px] uppercase tracking-[0.25em] font-bold text-white/20">Sistema online</span>
-      </div>
     </div>
   </div>
 );
@@ -191,11 +189,13 @@ export default function AdminPage() {
     talents: 'Talentos & Marcas',
     about: 'About Us',
     legal: 'Páginas Legales',
-    settings: 'SEO & Contacto',
+    seo: 'SEO & Redes Sociales',
+    settings: 'Logos & Footer',
     photos: 'Biblioteca de Fotos',
   };
 
   const isContentSection = !['dashboard', 'leads', 'photos'].includes(activeSection);
+
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans flex overflow-hidden">
@@ -280,6 +280,7 @@ export default function AdminPage() {
               {activeSection === 'talents' && <TalentsAdminSection saveTrigger={saveTrigger} onSaveComplete={onSaveComplete} />}
               {activeSection === 'about' && <AboutAdminSection saveTrigger={saveTrigger} onSaveComplete={onSaveComplete} />}
               {activeSection === 'legal' && <LegalSection saveTrigger={saveTrigger} onSaveComplete={onSaveComplete} />}
+              {activeSection === 'seo' && <SeoSection saveTrigger={saveTrigger} onSaveComplete={onSaveComplete} />}
               {activeSection === 'photos' && <PhotosSection />}
             </motion.div>
           </AnimatePresence>
