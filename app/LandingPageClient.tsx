@@ -1035,6 +1035,28 @@ const ContactForm = () => {
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const [honeypot, setHoneypot] = useState('');
 
+  const t = language === 'ES' ? {
+    name: 'Nombre',
+    email: 'Email',
+    subject: 'Asunto',
+    message: 'Mensaje',
+    subjects: ['Nuevo Proyecto', 'Consulta de Talentos', 'Colaboración', 'Otro'],
+    submit: 'Enviar Mensaje',
+    sending: 'Enviando...',
+    sent: '¡Mensaje enviado!',
+  } : {
+    name: 'Name',
+    email: 'Email',
+    subject: 'Subject',
+    message: 'Message',
+    subjects: ['New Project', 'Talent Inquiry', 'Partnership', 'Other'],
+    submit: 'Send Message',
+    sending: 'Sending...',
+    sent: 'Message Sent!',
+  };
+
+  const defaultSubject = t.subjects[0];
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!acceptedPolicies || honeypot) return;
@@ -1044,7 +1066,7 @@ const ContactForm = () => {
     setIsSubmitting(false);
     if (result.success) {
       setIsSuccess(true);
-      setFormData({ name: '', email: '', subject: 'New Project', message: '' });
+      setFormData({ name: '', email: '', subject: defaultSubject, message: '' });
       setTimeout(() => setIsSuccess(false), 5000);
     } else {
       alert('Error enviando el mensaje. Por favor intenta de nuevo.');
@@ -1065,25 +1087,22 @@ const ContactForm = () => {
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-2">
-          <label htmlFor="contact-name" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Name</label>
+          <label htmlFor="contact-name" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.name}</label>
           <input id="contact-name" name="name" type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
         </div>
         <div className="space-y-2">
-          <label htmlFor="contact-email" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Email</label>
+          <label htmlFor="contact-email" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.email}</label>
           <input id="contact-email" name="email" type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
         </div>
       </div>
       <div className="space-y-2">
-        <label htmlFor="contact-subject" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Subject</label>
+        <label htmlFor="contact-subject" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.subject}</label>
         <select id="contact-subject" name="subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
-          <option className="bg-black">New Project</option>
-          <option className="bg-black">Talent Inquiry</option>
-          <option className="bg-black">Partnership</option>
-          <option className="bg-black">Other</option>
+          {t.subjects.map((s) => <option key={s} className="bg-black">{s}</option>)}
         </select>
       </div>
       <div className="space-y-2">
-        <label htmlFor="contact-message" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">Message</label>
+        <label htmlFor="contact-message" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.message}</label>
         <textarea id="contact-message" name="message" rows={4} required value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none" />
       </div>
       <div className="pt-2">
@@ -1110,7 +1129,7 @@ const ContactForm = () => {
         whileTap={acceptedPolicies ? { scale: 0.98 } : {}}
         className={`w-full py-4 rounded-lg uppercase tracking-widest text-xs font-bold transition-all ${isSuccess ? 'bg-brand-green text-white' : (acceptedPolicies ? 'bg-white text-brand-green' : 'bg-white/20 text-white/40 cursor-not-allowed')}`}
       >
-        {isSubmitting ? 'Sending...' : isSuccess ? 'Message Sent!' : 'Send Message'}
+        {isSubmitting ? t.sending : isSuccess ? t.sent : t.submit}
       </motion.button>
     </form>
   );
