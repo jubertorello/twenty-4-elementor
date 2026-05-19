@@ -237,6 +237,42 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
                 />
               </div>
               <div className="space-y-6">
+                {/* Estado del vídeo y botón para desactivar */}
+                <div className={`p-4 rounded-2xl border flex items-center justify-between transition-all ${
+                  form.video_url 
+                    ? 'bg-brand-green/5 border-brand-green/20' 
+                    : 'bg-white/3 border-white/8'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2.5 h-2.5 rounded-full ${form.video_url ? 'bg-brand-green animate-pulse' : 'bg-white/20'}`} />
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white">
+                        {form.video_url ? 'Vídeo Activo' : 'Vídeo Inactivo (Sólo Foto)'}
+                      </p>
+                      <p className="text-[8px] text-white/40 uppercase tracking-widest font-bold mt-0.5">
+                        {form.video_url 
+                          ? 'Se mostrará el vídeo en la home' 
+                          : 'Se mostrará la foto de portada'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  {form.video_url && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (confirm('¿Seguro que quieres eliminar y desactivar el vídeo de este proyecto?')) {
+                          set('video_url', '');
+                          set('is_video_embed', false);
+                        }
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[8px] uppercase tracking-widest font-black bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white transition-all border border-red-500/20"
+                    >
+                      <Trash2 size={12} /> Quitar Vídeo
+                    </button>
+                  )}
+                </div>
+
                 <div>
                   <label className={labelCls}>Vídeo/Reel <span className="opacity-50 lowercase font-normal italic">(Opcional)</span></label>
                   <CloudinaryUploader 

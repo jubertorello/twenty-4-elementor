@@ -73,13 +73,13 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
 
   const navLinks = language === 'ES'
     ? [
-      { name: 'Proyectos', href: '#projects' },
       { name: 'Talentos & Marcas', href: '#talents' },
+      { name: 'Proyectos', href: '#projects' },
       { name: 'Quiénes Somos', href: '#team' },
     ]
     : [
-      { name: 'Projects', href: '#projects' },
       { name: 'Talents & Brands', href: '#talents' },
+      { name: 'Projects', href: '#projects' },
       { name: 'About Us', href: '#team' },
     ];
 
@@ -326,7 +326,7 @@ const Hero = ({ heroData }: { heroData: any }) => {
           transition={{ delay: 1.5 }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 text-brand-sand/30 flex flex-col items-center gap-3"
         >
-          <span className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] font-bold">Discover More</span>
+          <span className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] font-bold">{language === 'ES' ? 'Descubre Más' : 'Discover More'}</span>
           <div className="w-[1px] h-16 bg-gradient-to-b from-brand-sand/30 to-transparent" />
         </motion.div>
       </motion.div>
@@ -517,7 +517,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
             viewport={{ once: true }}
             className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
-            02 / PROJECTS
+            03 / PROJECTS
           </motion.span>
           <motion.h2
             variants={titleContainer}
@@ -596,10 +596,10 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
 
                   {project.has_case_study && (
                     <Link
-                      href={`/projects/${project.slug}`}
+                      href={`/projects/${project.slug}?lang=${language.toLowerCase()}`}
                       className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm pt-4"
                     >
-                      <span>View Case Study</span>
+                      <span>{language === 'ES' ? 'Ver Caso de Estudio' : 'View Case Study'}</span>
                       <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
                       <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </Link>
@@ -667,7 +667,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
             viewport={{ once: true }}
             className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
-            03 / TALENTS
+            02 / TALENTS
           </motion.span>
           <motion.h2
             variants={titleContainer}
@@ -734,7 +734,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                             </p>
                             {talent.instagram_url && (
                               <a href={talent.instagram_url} className="flex items-center gap-3 text-white/80 hover:text-white w-fit group/link">
-                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold">View on Instagram</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold">{language === 'ES' ? 'Ver en Instagram' : 'View on Instagram'}</span>
                                 <div className="w-8 h-[1px] bg-white/30 group-hover/link:w-12 transition-all duration-500" />
                                 <ChevronRight className="w-4 h-4" />
                               </a>
@@ -1069,7 +1069,7 @@ const ContactForm = () => {
       setFormData({ name: '', email: '', subject: defaultSubject, message: '' });
       setTimeout(() => setIsSuccess(false), 5000);
     } else {
-      alert('Error enviando el mensaje. Por favor intenta de nuevo.');
+      alert(language === 'ES' ? 'Error enviando el mensaje. Por favor intenta de nuevo.' : 'Error sending the message. Please try again.');
     }
   };
 
@@ -1339,6 +1339,35 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
   const [language, setLanguage] = useState<Language>('ES');
   const footerRef = useRef<HTMLDivElement>(null);
 
+  // Detect language on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const langParam = params.get('lang')?.toUpperCase();
+      if (langParam === 'EN' || langParam === 'ES') {
+        setLanguage(langParam as Language);
+      } else {
+        const savedLang = localStorage.getItem('language')?.toUpperCase();
+        if (savedLang === 'EN' || savedLang === 'ES') {
+          setLanguage(savedLang as Language);
+        }
+      }
+    }
+  }, []);
+
+  // Sync language changes with localStorage and URL query parameters
+  useEffect(() => {
+    localStorage.setItem('language', language);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      const currentLangParam = url.searchParams.get('lang')?.toUpperCase();
+      if (currentLangParam !== language) {
+        url.searchParams.set('lang', language.toLowerCase());
+        window.history.replaceState(null, '', url.pathname + url.search);
+      }
+    }
+  }, [language]);
+
   const generalSettings = settings.general || {};
   const loadingLogoUrl = process.env.NEXT_PUBLIC_LOADING_LOGO_URL
     || generalSettings.loading_logo_url
@@ -1428,8 +1457,8 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
 
             <div className="relative z-30">
               <BrandShowcase presentationData={settings.presentation || {}} />
-              <Projects projectsData={projects} projectsSettings={settings.projects || {}} />
               <Talents talentsData={talents} talentsSettings={settings.talents || {}} />
+              <Projects projectsData={projects} projectsSettings={settings.projects || {}} />
               <AboutUs aboutData={settings.about || null} />
               <Contact generalSettings={generalSettings} />
               <Footer footerRef={footerRef} generalSettings={generalSettings} />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter, notFound } from 'next/navigation';
+import { useParams, useRouter, notFound, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Play, X } from 'lucide-react';
 import Image from 'next/image';
@@ -11,11 +11,28 @@ import { supabase } from '@/lib/supabase';
 const ProjectDetail = () => {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const slug = params.slug as string;
   const [isPlaying, setIsPlaying] = useState(false);
-  const [project, setProject] = useState<any>(null);
-  const [nextProject, setNextProject] = useState<any>(null);
+  const [projectRaw, setProjectRaw] = useState<any>(null);
+  const [nextProjectRaw, setNextProjectRaw] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [lang, setLang] = useState<'es' | 'en'>('es');
+
+  // Detect language on mount / query changes
+  useEffect(() => {
+    const langQuery = searchParams.get('lang')?.toLowerCase();
+    let currentLang: 'es' | 'en' = 'es';
+    if (langQuery === 'en' || langQuery === 'es') {
+      currentLang = langQuery;
+    } else {
+      const savedLang = localStorage.getItem('language')?.toLowerCase();
+      if (savedLang === 'en' || savedLang === 'es') {
+        currentLang = savedLang;
+      }
+    }
+    setLang(currentLang);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -28,19 +45,12 @@ const ProjectDetail = () => {
         .single();
       
       if (data) {
-        const lang = 'es'; // TODO: Variable de estado para el idioma
-        const localizedProject = {
-          ...data,
-          title: data[`title_${lang}`] || data.title_es,
-          category: data[`category_${lang}`] || data.category_es,
-          description: data[`description_${lang}`] || data.description_es,
-        };
-        setProject(localizedProject);
+        setProjectRaw(data);
         
         // 2. Obtener el siguiente proyecto para el footer (el siguiente por order_index)
         const { data: nextData } = await supabase
           .from('projects')
-          .select('slug, title_es')
+          .select('slug, title_es, title_en')
           .eq('is_archived', false)
           .gt('order_index', data.order_index)
           .order('order_index', { ascending: true })
@@ -48,17 +58,17 @@ const ProjectDetail = () => {
           .single();
         
         if (nextData) {
-          setNextProject({ ...nextData, title: nextData.title_es });
+          setNextProjectRaw(nextData);
         } else {
           const { data: firstData } = await supabase
             .from('projects')
-            .select('slug, title_es')
+            .select('slug, title_es, title_en')
             .eq('is_archived', false)
             .order('order_index', { ascending: true })
             .limit(1)
             .single();
           if (firstData) {
-            setNextProject({ ...firstData, title: firstData.title_es });
+            setNextProjectRaw(firstData);
           }
         }
       }
@@ -67,6 +77,18 @@ const ProjectDetail = () => {
 
     fetchProject();
   }, [slug]);
+
+  const project = projectRaw ? {
+    ...projectRaw,
+    title: projectRaw[`title_${lang}`] || projectRaw.title_es,
+    category: projectRaw[`category_${lang}`] || projectRaw.category_es,
+    description: projectRaw[`description_${lang}`] || projectRaw.description_es,
+  } : null;
+
+  const nextProject = nextProjectRaw ? {
+    ...nextProjectRaw,
+    title: nextProjectRaw[`title_${lang}`] || nextProjectRaw.title_es,
+  } : null;
 
   if (loading) {
     return (
@@ -89,13 +111,15 @@ const ProjectDetail = () => {
             if (typeof window !== 'undefined' && window.history.length > 1) {
               router.back();
             } else {
-              router.push('/');
+              router.push(`/?lang=${lang}`);
             }
           }}
           className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-black transition-all duration-500"
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Back</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
+            {lang === 'es' ? 'Volver' : 'Back'}
+          </span>
         </button>
         
         {project.client && (
@@ -163,7 +187,9 @@ const ProjectDetail = () => {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-3xl md:text-4xl font-serif font-bold italic">The Story</h2>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold italic">
+              {lang === 'es' ? 'La Historia' : 'The Story'}
+            </h2>
             <p className="whitespace-pre-wrap text-xl md:text-2xl text-white/70 leading-relaxed font-light">
               {project.description}
             </p>
@@ -180,15 +206,21 @@ const ProjectDetail = () => {
             className="bg-white/5 rounded-3xl p-10 border border-white/10 space-y-10"
           >
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Client / Project</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">
+                {lang === 'es' ? 'Cliente / Proyecto' : 'Client / Project'}
+              </span>
               <p className="text-xl font-serif font-bold">{project.client || project.title}</p>
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Services</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">
+                {lang === 'es' ? 'Servicios' : 'Services'}
+              </span>
               <p className="text-lg">{project.category}</p>
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">Year</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">
+                {lang === 'es' ? 'Año' : 'Year'}
+              </span>
               <p className="text-lg">{project.year}</p>
             </div>
           </motion.div>
@@ -200,9 +232,11 @@ const ProjectDetail = () => {
         <section className="pb-24 lg:pb-40 px-6">
           <div className="max-w-7xl mx-auto space-y-12">
             <div className="flex justify-between items-end">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold italic">Visual Journey</h2>
+              <h2 className="text-3xl md:text-4xl font-serif font-bold italic">
+                {lang === 'es' ? 'Viaje Visual' : 'Visual Journey'}
+              </h2>
               <span className="text-white/30 text-xs uppercase tracking-widest font-bold">
-                {project.gallery.length} Images
+                {project.gallery.length} {lang === 'es' ? 'Imágenes' : 'Images'}
               </span>
             </div>
             
@@ -277,9 +311,11 @@ const ProjectDetail = () => {
       {/* Footer Mini */}
       {nextProject && (
         <footer className="py-20 border-t border-white/10 text-center space-y-8">
-          <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-bold">Next Project</p>
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-bold">
+            {lang === 'es' ? 'Siguiente Proyecto' : 'Next Project'}
+          </p>
           <Link 
-            href={`/projects/${nextProject.slug}`}
+            href={`/projects/${nextProject.slug}?lang=${lang}`}
             className="text-4xl md:text-6xl font-serif font-black hover:text-brand-green transition-colors"
           >
             {nextProject.title}
