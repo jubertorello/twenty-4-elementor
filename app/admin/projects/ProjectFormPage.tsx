@@ -48,7 +48,7 @@ const empty: Project = {
   meta_description_es: '', meta_description_en: '',
 };
 
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-green/40 focus:bg-white/8 transition-all placeholder:text-white/15 disabled:opacity-50 disabled:cursor-not-allowed";
+const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-almost-black/40 focus:bg-white/8 transition-all placeholder:text-white/15 disabled:opacity-50 disabled:cursor-not-allowed";
 const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-white/30 mb-2";
 
 const CharCount = ({ current, max }: { current: number; max: number }) => (
@@ -130,17 +130,17 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Volver
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-green">Admin</span>
+            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-almost-black">Admin</span>
             <span className="text-white/20">/</span>
             <span className="text-[9px] uppercase tracking-[0.4em] font-black text-white/60">{projectId ? 'Editar' : 'Nuevo'} Proyecto</span>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <button onClick={() => set('is_archived', !form.is_archived)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[9px] uppercase tracking-widest font-black transition-all border ${form.is_archived ? 'bg-orange-500/10 border-orange-500/20 text-orange-400' : 'bg-brand-green/10 border-brand-green/20 text-brand-green'}`}>
+          <button onClick={() => set('is_archived', !form.is_archived)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[9px] uppercase tracking-widest font-black transition-all border ${form.is_archived ? 'bg-orange-500/10 border-orange-500/20 text-orange-400' : 'bg-brand-almost-black/10 border-brand-almost-black/20 text-brand-almost-black'}`}>
             {form.is_archived ? <><EyeOff size={14} /> Archivado</> : <><Eye size={14} /> Activo en Web</>}
           </button>
-          <button onClick={handleSave} disabled={status === 'saving'} className={`flex items-center gap-2 px-8 py-2.5 rounded-xl text-[10px] uppercase tracking-widest font-black text-white transition-all min-w-[140px] justify-center bg-brand-green hover:opacity-80`}>
+          <button onClick={handleSave} disabled={status === 'saving'} className={`flex items-center gap-2 px-8 py-2.5 rounded-xl text-[10px] uppercase tracking-widest font-black text-white transition-all min-w-[140px] justify-center bg-brand-almost-black hover:opacity-80`}>
             {status === 'saving' ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} 
             {status === 'saving' ? 'Guardando...' : 'Guardar'}
           </button>
@@ -167,7 +167,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
           {/* 1. IDENTIDAD Y DESCRIPCIÓN CORTA */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-brand-green/20 flex items-center justify-center"><Type size={16} className="text-brand-green" /></div>
+              <div className="w-8 h-8 rounded-xl bg-brand-almost-black/20 flex items-center justify-center"><Type size={16} className="text-brand-almost-black" /></div>
               <h2 className="text-lg font-black uppercase tracking-widest text-white/80">01 · Identidad y Textos Home</h2>
             </div>
             
@@ -240,11 +240,11 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
                 {/* Estado del vídeo y botón para desactivar */}
                 <div className={`p-4 rounded-2xl border flex items-center justify-between transition-all ${
                   form.video_url 
-                    ? 'bg-brand-green/5 border-brand-green/20' 
+                    ? 'bg-brand-almost-black/5 border-brand-almost-black/20' 
                     : 'bg-white/3 border-white/8'
                 }`}>
                   <div className="flex items-center gap-3">
-                    <div className={`w-2.5 h-2.5 rounded-full ${form.video_url ? 'bg-brand-green animate-pulse' : 'bg-white/20'}`} />
+                    <div className={`w-2.5 h-2.5 rounded-full ${form.video_url ? 'bg-brand-almost-black animate-pulse' : 'bg-white/20'}`} />
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-widest text-white">
                         {form.video_url ? 'Vídeo Activo' : 'Vídeo Inactivo (Sólo Foto)'}
@@ -310,7 +310,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
 
           {/* ACTIVAR CASE STUDY TOGGLE */}
           <section className="pt-8 border-t border-white/10">
-            <div className="flex items-center justify-between p-8 rounded-3xl bg-brand-green/5 border border-brand-green/20">
+            <div className="flex items-center justify-between p-8 rounded-3xl bg-brand-almost-black/5 border border-brand-almost-black/20">
               <div className="space-y-2">
                 <h2 className="text-xl font-serif font-bold text-white">¿Crear Case Study?</h2>
                 <p className="text-white/40 text-sm max-w-md">
@@ -319,7 +319,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
               </div>
               <button 
                 onClick={() => set('has_case_study', !form.has_case_study)}
-                className={`relative w-16 h-8 rounded-full transition-colors ${form.has_case_study ? 'bg-brand-green' : 'bg-white/10'}`}
+                className={`relative w-16 h-8 rounded-full transition-colors ${form.has_case_study ? 'bg-brand-almost-black' : 'bg-white/10'}`}
               >
                 <motion.div 
                   layout
@@ -365,7 +365,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
                 {/* 4. DESCRIPCIÓN LARGA (CASE STUDY) */}
                 <section className="space-y-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-brand-green/20 flex items-center justify-center"><Globe size={16} className="text-brand-green" /></div>
+                    <div className="w-8 h-8 rounded-xl bg-brand-almost-black/20 flex items-center justify-center"><Globe size={16} className="text-brand-almost-black" /></div>
                     <h2 className="text-lg font-black uppercase tracking-widest text-white/80">04 · Historia (Case Study)</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 rounded-3xl bg-white/3 border border-white/8">
@@ -393,7 +393,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
                           <img src={url} className="w-full h-full object-cover transition-all group-hover:scale-105" />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-3 backdrop-blur-[2px]">
                             <div className="relative">
-                               <div className="p-2.5 rounded-lg bg-brand-green text-white hover:scale-110 transition-transform shadow-lg cursor-pointer">
+                               <div className="p-2.5 rounded-lg bg-brand-almost-black text-white hover:scale-110 transition-transform shadow-lg cursor-pointer">
                                   <Edit3 size={14} />
                                </div>
                                <CloudinaryUploader
@@ -473,7 +473,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
                     </div>
                     <button 
                       onClick={() => setIsEditingSEO(!isEditingSEO)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-black transition-all border ${isEditingSEO ? 'bg-brand-green/20 border-brand-green/40 text-brand-green' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-black transition-all border ${isEditingSEO ? 'bg-brand-almost-black/20 border-brand-almost-black/40 text-brand-almost-black' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}
                     >
                       {isEditingSEO ? <><Unlock size={14} /> Editando Manual</> : <><Pencil size={14} /> Personalizar SEO</>}
                     </button>

@@ -62,12 +62,12 @@ export const SeoSection = ({
 
   const set = (key: string, val: string) => setData(prev => ({ ...prev, [key]: val }));
 
-  const inputCls = "w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-brand-green transition-all placeholder:text-white/20 text-sm";
+  const inputCls = "w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-brand-almost-black transition-all placeholder:text-white/20 text-sm";
   const labelCls = "text-[10px] uppercase tracking-widest font-black text-white/30 ml-1 block mb-3";
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-40 space-y-4">
-      <div className="w-12 h-12 border-4 border-brand-green/20 border-t-brand-green rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-brand-almost-black/20 border-t-brand-almost-black rounded-full animate-spin" />
       <p className="text-white/20 font-black uppercase tracking-[0.3em] animate-pulse text-[10px]">Cargando...</p>
     </div>
   );
@@ -78,7 +78,7 @@ export const SeoSection = ({
       {/* SEO */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-10">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <Globe size={24} />
           </div>
           <div>
@@ -120,7 +120,7 @@ export const SeoSection = ({
                 value={data.meta_title}
                 onChange={e => set('meta_title', e.target.value)}
                 className={inputCls}
-                placeholder="Ej: TWENTY4 STUDIOS | Sports & Fashion"
+                placeholder="Ej: TWENTY4 STUDIOS | Sports & Brands"
               />
               <p className="text-[9px] text-white/20 mt-2 ml-1">Si está vacío se usa el Nombre del Sitio.</p>
             </div>

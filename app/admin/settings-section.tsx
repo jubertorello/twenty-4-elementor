@@ -52,12 +52,12 @@ export const SettingsSection = ({
     }
   };
 
-  const inputCls = "w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-brand-green transition-all placeholder:text-white/20 text-sm";
+  const inputCls = "w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-brand-almost-black transition-all placeholder:text-white/20 text-sm";
   const labelCls = "text-[10px] uppercase tracking-widest font-black text-white/30 ml-1 block mb-3";
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-40 space-y-4">
-      <div className="w-12 h-12 border-4 border-brand-green/20 border-t-brand-green rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-brand-almost-black/20 border-t-brand-almost-black rounded-full animate-spin" />
       <p className="text-white/20 font-black uppercase tracking-[0.3em] animate-pulse text-[10px]">Cargando Ajustes...</p>
     </div>
   );

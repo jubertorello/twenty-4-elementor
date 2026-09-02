@@ -104,7 +104,7 @@ export const MediaLibrary = ({
       {/* Header */}
       <div className={`p-8 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6 ${!isFullPage ? 'pr-24' : ''}`}>
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <ImageIcon size={24} />
           </div>
           <div>
@@ -121,7 +121,7 @@ export const MediaLibrary = ({
               placeholder="Buscar por nombre..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-6 py-3.5 text-sm text-white focus:border-brand-green outline-none transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-6 py-3.5 text-sm text-white focus:border-brand-almost-black outline-none transition-all"
             />
           </div>
           <button 
@@ -141,7 +141,7 @@ export const MediaLibrary = ({
       >
         {loading ? (
           <div className="h-full flex flex-col items-center justify-center space-y-4 py-20">
-            <Loader2 className="w-12 h-12 text-brand-green animate-spin" />
+            <Loader2 className="w-12 h-12 text-brand-almost-black animate-spin" />
             <p className="text-white/20 font-black uppercase tracking-[0.3em] text-[10px]">Cargando Galería...</p>
           </div>
         ) : filteredResources.length === 0 ? (
@@ -158,7 +158,7 @@ export const MediaLibrary = ({
               return (
                 <div 
                   key={resource.public_id}
-                  className="group relative aspect-square bg-black/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer hover:border-brand-green/50 transition-all"
+                  className="group relative aspect-square bg-black/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer hover:border-brand-almost-black/50 transition-all"
                 >
                   <div className="absolute inset-0">
                     {isVideo ? (
@@ -190,7 +190,7 @@ export const MediaLibrary = ({
 
                   <div className="absolute top-3 left-3 flex flex-col gap-2 pointer-events-none">
                     {isUsed && (
-                      <div className="px-2 py-1 rounded-md bg-brand-green text-white text-[8px] font-black uppercase tracking-widest shadow-lg">
+                      <div className="px-2 py-1 rounded-md bg-brand-almost-black text-white text-[8px] font-black uppercase tracking-widest shadow-lg">
                         EN USO
                       </div>
                     )}
@@ -205,7 +205,7 @@ export const MediaLibrary = ({
                      {onSelect && (
                        <button 
                          onClick={() => onSelect(resource.secure_url, resource.resource_type as 'image' | 'video')}
-                         className="p-3 rounded-xl bg-brand-green text-white hover:scale-110 transition-transform shadow-xl"
+                         className="p-3 rounded-xl bg-brand-almost-black text-white hover:scale-110 transition-transform shadow-xl"
                        >
                          <Check size={18} />
                        </button>

@@ -39,8 +39,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden font-sans">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-green/10 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-green/5 rounded-full blur-[120px]" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-almost-black/10 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-almost-black/5 rounded-full blur-[120px]" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 Email Address
               </label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-brand-green transition-colors z-10" size={18} />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-brand-almost-black transition-colors z-10" size={18} />
                 <input
                   id="login-email"
                   type="email"
@@ -93,7 +93,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@twenty4studios.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white text-sm outline-none focus:border-brand-green/50 focus:bg-white/10 transition-all placeholder:text-white/10"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white text-sm outline-none focus:border-brand-almost-black/50 focus:bg-white/10 transition-all placeholder:text-white/10"
                 />
               </div>
             </div>
@@ -103,7 +103,7 @@ export default function LoginPage() {
                 Password
               </label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-brand-green transition-colors z-10" size={18} />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-brand-almost-black transition-colors z-10" size={18} />
                 <input
                   id="login-password"
                   type={showPassword ? 'text' : 'password'}
@@ -112,12 +112,12 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white text-sm outline-none focus:border-brand-green/50 focus:bg-white/10 transition-all placeholder:text-white/10"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white text-sm outline-none focus:border-brand-almost-black/50 focus:bg-white/10 transition-all placeholder:text-white/10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-brand-green transition-colors z-20"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-brand-almost-black transition-colors z-20"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -127,7 +127,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-brand-green hover:bg-brand-green/90 text-white font-black uppercase tracking-[0.2em] text-[11px] py-4 rounded-xl shadow-lg shadow-brand-green/20 transition-all flex items-center justify-center gap-3 group disabled:opacity-70"
+              className="w-full bg-brand-almost-black hover:bg-brand-almost-black/90 text-white font-black uppercase tracking-[0.2em] text-[11px] py-4 rounded-xl shadow-lg shadow-brand-almost-black/20 transition-all flex items-center justify-center gap-3 group disabled:opacity-70"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">

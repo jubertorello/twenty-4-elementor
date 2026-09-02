@@ -29,7 +29,7 @@ export default function EditTalentPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-brand-green animate-spin" />
+        <Loader2 className="w-8 h-8 text-brand-almost-black animate-spin" />
       </div>
     );
   }

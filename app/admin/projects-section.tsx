@@ -122,7 +122,7 @@ export const ProjectsAdminSection = ({
       {/* 1. TÍTULO DE LA SECCIÓN */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <Briefcase size={24} />
           </div>
           <div>
@@ -146,7 +146,7 @@ export const ProjectsAdminSection = ({
             <h2 className="text-2xl font-black uppercase tracking-tighter text-white mb-2">Proyectos</h2>
             <div className="flex items-center gap-3">
               <div className={`flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10`}>
-                <div className={`w-1.5 h-1.5 rounded-full ${activeCount >= 6 ? 'bg-orange-500' : 'bg-brand-green'}`} />
+                <div className={`w-1.5 h-1.5 rounded-full ${activeCount >= 6 ? 'bg-orange-500' : 'bg-brand-almost-black'}`} />
                 <span className="text-[10px] uppercase tracking-widest font-bold text-white/40">
                   {activeCount}/6 Activos en Web
                 </span>
@@ -165,7 +165,7 @@ export const ProjectsAdminSection = ({
               router.push('/admin/projects/new');
             }}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[9px] uppercase tracking-widest font-black transition-all ${
-              totalCount >= 10 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-brand-green text-white hover:opacity-80'
+              totalCount >= 10 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-brand-almost-black text-white hover:opacity-80'
             }`}
           >
             <Plus size={15} /> Nuevo Proyecto
@@ -195,7 +195,7 @@ export const ProjectsAdminSection = ({
                 className={`group relative flex items-center gap-4 p-4 rounded-2xl border transition-all ${
                   project.is_archived
                     ? 'bg-black/40 border-white/5 opacity-60'
-                    : 'bg-white/5 border-white/10 hover:border-brand-green/30'
+                    : 'bg-white/5 border-white/10 hover:border-brand-almost-black/30'
                 }`}
               >
                 <div className="cursor-grab active:cursor-grabbing text-white/10 group-hover:text-white/30 transition-colors shrink-0">
@@ -227,7 +227,7 @@ export const ProjectsAdminSection = ({
                     className={`p-2.5 rounded-xl transition-all ${
                       project.is_archived
                         ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500 hover:text-white'
-                        : 'bg-white/5 text-white/40 hover:bg-brand-green/20 hover:text-brand-green'
+                        : 'bg-white/5 text-white/40 hover:bg-brand-almost-black/20 hover:text-brand-almost-black'
                     }`}
                   >
                     {project.is_archived ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -235,7 +235,7 @@ export const ProjectsAdminSection = ({
                   <button
                     onClick={(e) => { e.stopPropagation(); router.push(`/admin/projects/${project.id}/edit`); }}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-green transition-all"
+                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-almost-black transition-all"
                   >
                     <Edit3 size={16} />
                   </button>

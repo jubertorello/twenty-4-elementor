@@ -92,8 +92,8 @@ const ProjectDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-12 h-12 border-2 border-brand-green border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-brand-almost-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-brand-almost-black border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -103,7 +103,7 @@ const ProjectDetail = () => {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white font-sans selection:bg-brand-green selection:text-white">
+    <main className="min-h-screen bg-brand-almost-black text-white font-sans selection:bg-brand-almost-black selection:text-white">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center pointer-events-none">
         <button 
@@ -114,7 +114,7 @@ const ProjectDetail = () => {
               router.push(`/?lang=${lang}`);
             }
           }}
-          className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-black transition-all duration-500"
+          className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-brand-almost-black transition-all duration-500"
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
           <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
@@ -145,7 +145,7 @@ const ProjectDetail = () => {
             priority
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-almost-black/20 via-transparent to-brand-almost-black" />
         </motion.div>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
@@ -155,7 +155,7 @@ const ProjectDetail = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="space-y-4"
           >
-            <span className="text-brand-sand uppercase tracking-[0.4em] text-xs font-bold block">
+            <span className="text-brand-warm-lux uppercase tracking-[0.4em] text-xs font-bold block">
               {project.category} — {project.year}
             </span>
             <h1 className="text-4xl md:text-6xl lg:text-[7rem] font-serif font-black leading-none tracking-tighter break-words hyphens-auto max-w-full">
@@ -169,7 +169,7 @@ const ProjectDetail = () => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 1, type: "spring", stiffness: 200 }}
               onClick={() => setIsPlaying(true)}
-              className="mt-12 w-20 h-20 md:w-24 md:h-24 rounded-full bg-brand-green flex items-center justify-center hover:scale-110 transition-transform duration-500 group"
+              className="mt-12 w-20 h-20 md:w-24 md:h-24 rounded-full bg-brand-almost-black flex items-center justify-center hover:scale-110 transition-transform duration-500 group"
             >
               <Play fill="white" size={32} className="ml-1 group-hover:scale-110 transition-transform" />
             </motion.button>
@@ -272,7 +272,7 @@ const ProjectDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4 md:p-12"
+            className="fixed inset-0 z-[100] bg-brand-almost-black flex items-center justify-center p-4 md:p-12"
           >
             <button 
               onClick={() => setIsPlaying(false)}
@@ -316,7 +316,7 @@ const ProjectDetail = () => {
           </p>
           <Link 
             href={`/projects/${nextProject.slug}?lang=${lang}`}
-            className="text-4xl md:text-6xl font-serif font-black hover:text-brand-green transition-colors"
+            className="text-4xl md:text-6xl font-serif font-black hover:text-brand-crimson transition-colors"
           >
             {nextProject.title}
           </Link>

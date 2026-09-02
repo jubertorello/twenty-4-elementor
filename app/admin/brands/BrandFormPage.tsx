@@ -18,7 +18,7 @@ interface BrandItem {
   is_archived: boolean;
 }
 
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-green/40 focus:bg-white/8 transition-all placeholder:text-white/15 disabled:opacity-50 disabled:cursor-not-allowed";
+const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-almost-black/40 focus:bg-white/8 transition-all placeholder:text-white/15 disabled:opacity-50 disabled:cursor-not-allowed";
 const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-white/30 mb-2";
 
 export default function BrandFormPage() {
@@ -126,7 +126,7 @@ export default function BrandFormPage() {
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0A0A0A] space-y-4">
-      <div className="w-12 h-12 border-4 border-brand-green/20 border-t-brand-green rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-brand-almost-black/20 border-t-brand-almost-black rounded-full animate-spin" />
       <p className="text-white/20 font-black uppercase tracking-[0.3em] animate-pulse text-[10px]">Cargando...</p>
     </div>
   );
@@ -143,7 +143,7 @@ export default function BrandFormPage() {
             <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Volver
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-green">Admin</span>
+            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-almost-black">Admin</span>
             <span className="text-white/20">/</span>
             <span className="text-[9px] uppercase tracking-[0.4em] font-black text-white/60">{isNew ? 'Nueva' : 'Editar'} Marca</span>
           </div>
@@ -153,7 +153,7 @@ export default function BrandFormPage() {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-2 px-8 py-2.5 rounded-xl bg-brand-green text-white font-black uppercase tracking-widest text-[10px] hover:opacity-80 transition-all disabled:opacity-50 min-w-[140px] justify-center"
+            className="flex items-center gap-2 px-8 py-2.5 rounded-xl bg-brand-almost-black text-white font-black uppercase tracking-widest text-[10px] hover:opacity-80 transition-all disabled:opacity-50 min-w-[140px] justify-center"
           >
             {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
             {isSaving ? 'Guardando...' : isNew ? 'Crear Marca' : 'Guardar Cambios'}
@@ -178,7 +178,7 @@ export default function BrandFormPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-brand-green/20 flex items-center justify-center"><Tag size={16} className="text-brand-green" /></div>
+              <div className="w-8 h-8 rounded-xl bg-brand-almost-black/20 flex items-center justify-center"><Tag size={16} className="text-brand-almost-black" /></div>
               <h2 className="text-lg font-black uppercase tracking-widest text-white/80">Identidad de la Marca</h2>
             </div>
 
@@ -231,9 +231,9 @@ export default function BrandFormPage() {
                   onClick={() => setForm(f => ({ ...f, is_archived: !f.is_archived }))}
                   className="flex items-center gap-4 group"
                >
-                  <div className={`w-14 h-8 rounded-full transition-all relative ${form.is_archived ? 'bg-red-500/20' : 'bg-brand-green/20'}`}>
+                  <div className={`w-14 h-8 rounded-full transition-all relative ${form.is_archived ? 'bg-red-500/20' : 'bg-brand-almost-black/20'}`}>
                      <div className={`absolute top-1 w-6 h-6 rounded-full transition-all ${
-                        form.is_archived ? 'left-7 bg-red-500' : 'left-1 bg-brand-green'
+                        form.is_archived ? 'left-7 bg-red-500' : 'left-1 bg-brand-almost-black'
                      }`} />
                   </div>
                   <div className="text-left">

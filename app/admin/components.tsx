@@ -42,10 +42,10 @@ export const TranslationField = ({ label, value, onChange, type = 'text', maxLen
           </div>
           {type === 'text' ? (
             <input type="text" maxLength={maxLength} value={value[lang]} onChange={(e) => onChange({ ...value, [lang]: e.target.value })}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:border-brand-green outline-none transition-colors placeholder:text-white/20" />
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:border-brand-almost-black outline-none transition-colors placeholder:text-white/20" />
           ) : (
             <textarea maxLength={maxLength} value={value[lang]} onChange={(e) => onChange({ ...value, [lang]: e.target.value })} rows={stacked ? 4 : 3}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:border-brand-green outline-none transition-colors resize-none placeholder:text-white/20" />
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:border-brand-almost-black outline-none transition-colors resize-none placeholder:text-white/20" />
           )}
         </div>
       ))}
@@ -94,7 +94,7 @@ export const ImageEditor = ({
                 <CloudinaryUploader
                   accept="image"
                   onUpload={onUpload}
-                  className="p-4 rounded-2xl bg-brand-green text-white hover:scale-110 transition-transform shadow-xl cursor-pointer"
+                  className="p-4 rounded-2xl bg-brand-almost-black text-white hover:scale-110 transition-transform shadow-xl cursor-pointer"
                 >
                   <Edit3 size={20} />
                 </CloudinaryUploader>
@@ -120,8 +120,8 @@ export const ImageEditor = ({
           </>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-8 group/empty z-10">
-            <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover/empty:bg-brand-green/20 group-hover/empty:border-brand-green/30 transition-all">
-              <ImageIcon size={20} className="text-white/10 group-hover/empty:text-brand-green transition-colors" />
+            <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover/empty:bg-brand-almost-black/20 group-hover/empty:border-brand-almost-black/30 transition-all">
+              <ImageIcon size={20} className="text-white/10 group-hover/empty:text-brand-almost-black transition-colors" />
             </div>
             
             <div className="flex flex-col items-center gap-2">
@@ -220,7 +220,7 @@ export const HeroSection = ({ saveTrigger, onSaveComplete }: AdminSectionProps) 
       {/* TÍTULO DE SECCIÓN */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <Star size={24} />
           </div>
           <div>
@@ -361,7 +361,7 @@ export const PresentationSection = ({ saveTrigger, onSaveComplete }: AdminSectio
       {/* FRASE ANIMADA */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <ImageIcon size={24} />
           </div>
           <div>
@@ -429,7 +429,7 @@ export const PresentationSection = ({ saveTrigger, onSaveComplete }: AdminSectio
               <img src={url} className="w-full h-full object-cover transition-all group-hover:scale-105" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-all backdrop-blur-[2px]">
                 <div className="relative">
-                   <div className="p-2.5 rounded-lg bg-brand-green text-white hover:scale-110 transition-transform shadow-lg cursor-pointer">
+                   <div className="p-2.5 rounded-lg bg-brand-almost-black text-white hover:scale-110 transition-transform shadow-lg cursor-pointer">
                       <Edit3 size={14} />
                    </div>
                    <CloudinaryUploader

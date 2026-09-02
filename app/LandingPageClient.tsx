@@ -26,7 +26,7 @@ const LoadingScreen = ({ logoUrl }: { logoUrl: string }) => {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[9999] bg-brand-almost-black flex items-center justify-center overflow-hidden"
     >
       <div className="relative w-64 h-24 md:w-96 md:h-32">
         <motion.div
@@ -52,7 +52,7 @@ const LoadingScreen = ({ logoUrl }: { logoUrl: string }) => {
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 0.2, scale: 1.5 }}
         transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-        className="absolute w-[500px] h-[500px] bg-brand-green/20 rounded-full blur-[120px] pointer-events-none"
+        className="absolute w-[500px] h-[500px] bg-brand-almost-black/20 rounded-full blur-[120px] pointer-events-none"
       />
     </motion.div>
   );
@@ -134,7 +134,7 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
           </div>
           <a
             href="#contact"
-            className="hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 bg-white text-brand-green hover:bg-brand-sand"
+            className="hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 bg-white text-brand-almost-black hover:bg-brand-warm-lux"
           >
             {language === 'ES' ? 'Contáctanos' : "Let's work"}
           </a>
@@ -153,7 +153,7 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="absolute top-full left-0 w-full mt-4 bg-black/95 backdrop-blur-xl rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/10"
+              className="absolute top-full left-0 w-full mt-4 bg-brand-almost-black/95 backdrop-blur-xl rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/10"
             >
               {navLinks.map((link) => (
                 <a
@@ -169,7 +169,7 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
                 <a
                   href="#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="bg-white text-brand-green px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg hover:bg-brand-sand transition-colors"
+                  className="bg-white text-brand-almost-black px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg hover:bg-brand-warm-lux transition-colors"
                 >
                   {language === 'ES' ? 'Contáctanos' : "Let's work"}
                 </a>
@@ -271,10 +271,10 @@ const Hero = ({ heroData }: { heroData: any }) => {
   };
 
   return (
-    <section id="hero" ref={sectionRef} className="relative h-[100vh] w-full p-3 bg-brand-green">
+    <section id="hero" ref={sectionRef} className="relative h-[100vh] w-full p-3 bg-brand-almost-black">
       <motion.div
         style={{ scale, opacity, y }}
-        className="relative h-full w-full overflow-hidden rounded-[1.125rem] shadow-2xl bg-brand-green"
+        className="relative h-full w-full overflow-hidden rounded-[1.125rem] shadow-2xl bg-brand-almost-black"
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
           {heroData?.type === 'image' ? (
@@ -324,14 +324,14 @@ const Hero = ({ heroData }: { heroData: any }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 text-brand-sand/30 flex flex-col items-center gap-3"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 text-brand-warm-lux/30 flex flex-col items-center gap-3"
         >
           <span className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] font-bold">{language === 'ES' ? 'Descubre Más' : 'Discover More'}</span>
-          <div className="w-[1px] h-16 bg-gradient-to-b from-brand-sand/30 to-transparent" />
+          <div className="w-[1px] h-16 bg-gradient-to-b from-brand-warm-lux/30 to-transparent" />
         </motion.div>
       </motion.div>
 
-      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-black to-transparent pointer-events-none z-40" />
+      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-brand-almost-black to-transparent pointer-events-none z-40" />
     </section>
   );
 };
@@ -424,7 +424,7 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
           >
             {[...topRow, ...topRow].map((src, i) => (
               <div key={`top-${i}`} className={`flex-shrink-0 ${i % 2 === 0 ? 'translate-y-4 lg:translate-y-8' : '-translate-y-4 lg:-translate-y-8'}`}>
-                <motion.div variants={imageVariants} className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500">
+                <motion.div variants={imageVariants} className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-almost-black/5 grayscale hover:grayscale-0 transition-all duration-500">
                   {src && <Image src={src} alt="Showcase" fill className="object-cover" referrerPolicy="no-referrer" />}
                 </motion.div>
               </div>
@@ -455,7 +455,7 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
           >
             {[...bottomRow, ...bottomRow].map((src, i) => (
               <div key={`bottom-${i}`} className={`flex-shrink-0 ${i % 2 === 0 ? '-translate-y-4 lg:-translate-y-8' : 'translate-y-4 lg:translate-y-8'}`}>
-                <motion.div variants={imageVariants} className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-green/5 grayscale hover:grayscale-0 transition-all duration-500">
+                <motion.div variants={imageVariants} className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-almost-black/5 grayscale hover:grayscale-0 transition-all duration-500">
                   {src && <Image src={src} alt="Showcase" fill className="object-cover" referrerPolicy="no-referrer" />}
                 </motion.div>
               </div>
@@ -508,7 +508,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
   if (projectsList.length === 0) return null;
 
   return (
-    <section id="projects" className="relative pt-8 pb-20 lg:py-32 px-6 lg:px-12 bg-black overflow-hidden">
+    <section id="projects" className="relative pt-8 pb-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
           <motion.span
@@ -547,7 +547,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  <div className="relative aspect-[4/5] lg:aspect-[16/10] overflow-hidden rounded-[1.125rem] group bg-black">
+                  <div className="relative aspect-[4/5] lg:aspect-[16/10] overflow-hidden rounded-[1.125rem] group bg-brand-almost-black">
                     {project.img && (
                       <Image
                         src={project.img}
@@ -582,7 +582,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
                       </div>
                     )}
 
-                    <div className={`absolute inset-0 bg-black/10 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-0' : 'opacity-100'}`} />
+                    <div className={`absolute inset-0 bg-brand-almost-black/10 transition-opacity duration-500 ${hoveredIndex === i ? 'opacity-0' : 'opacity-100'}`} />
                   </div>
                 </div>
 
@@ -658,7 +658,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
   };
 
   return (
-    <section id="talents" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-black text-white overflow-hidden w-full">
+    <section id="talents" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black text-white overflow-hidden w-full">
       <div className="max-w-7xl mx-auto">
         <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
           <motion.span
@@ -725,7 +725,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                             referrerPolicy="no-referrer"
                           />
                         )}
-                        <div className={`absolute inset-0 bg-gradient-to-t from-black via-brand-green/20 to-transparent transition-opacity duration-500 ${hoveredIndex === flatIdx ? 'opacity-100' : 'opacity-40'}`} />
+                        <div className={`absolute inset-0 bg-gradient-to-t from-brand-almost-black via-brand-almost-black/20 to-transparent transition-opacity duration-500 ${hoveredIndex === flatIdx ? 'opacity-100' : 'opacity-40'}`} />
                         <div className="absolute inset-0 p-8 flex flex-col justify-end">
                           <div className={`space-y-4 transition-all duration-500 ${hoveredIndex === flatIdx ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                             <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
@@ -767,7 +767,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                   referrerPolicy="no-referrer"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-almost-black via-brand-almost-black/20 to-transparent opacity-60" />
               <div className="absolute inset-0 p-6 flex flex-col justify-end">
                 <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-2">
                   {talent[`category_${currentLang}`] || talent.category_es}
@@ -780,7 +780,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
 
         {/* Brand Ticker */}
         {brands.length > 0 && (
-          <div className="relative pt-4 lg:py-16 overflow-hidden -mx-6 lg:-mx-12 bg-black">
+          <div className="relative pt-4 lg:py-16 overflow-hidden -mx-6 lg:-mx-12 bg-brand-almost-black">
             <div className="flex whitespace-nowrap">
               <motion.div
                 animate={{ x: ["0%", "-100%"] }}
@@ -789,7 +789,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
               >
                 {brands.map((brand, i) => (
                   <div key={i} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">[</span>
+                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
                     {brand.logo ? (
                       <div className="relative w-32 md:w-48 h-8 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-500">
                         <Image src={brand.logo} alt={brand.name} fill className="object-contain brightness-0 invert" referrerPolicy="no-referrer" />
@@ -797,7 +797,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     ) : (
                       <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
                     )}
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">]</span>
+                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">]</span>
                   </div>
                 ))}
               </motion.div>
@@ -808,7 +808,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
               >
                 {brands.map((brand, i) => (
                   <div key={i + 10} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">[</span>
+                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
                     {brand.logo ? (
                       <div className="relative w-32 md:w-48 h-8 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-500">
                         <Image src={brand.logo} alt={brand.name} fill className="object-contain brightness-0 invert" referrerPolicy="no-referrer" />
@@ -816,7 +816,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     ) : (
                       <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
                     )}
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-green">]</span>
+                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">]</span>
                   </div>
                 ))}
               </motion.div>
@@ -894,7 +894,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
   };
 
   return (
-    <section id="team" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-black overflow-hidden min-h-[800px]">
+    <section id="team" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black overflow-hidden min-h-[800px]">
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="mb-20 lg:mb-32 text-left flex flex-col items-start">
           <motion.span
@@ -973,7 +973,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
                   rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
                   default: { duration: 0.8, ease: "easeOut" }
                 }}
-                className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 w-24 h-24 md:w-32 md:h-32 bg-brand-green backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center p-0"
+                className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 w-24 h-24 md:w-32 md:h-32 bg-brand-almost-black backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center p-0"
               >
                 <img src={sectionLogo} alt="Section Icon" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </motion.div>
@@ -996,7 +996,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
                       (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop";
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-almost-black/90 via-brand-almost-black/20 to-transparent" />
                   <div className="absolute bottom-8 left-8 right-8">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -1098,7 +1098,7 @@ const ContactForm = () => {
       <div className="space-y-2">
         <label htmlFor="contact-subject" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.subject}</label>
         <select id="contact-subject" name="subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
-          {t.subjects.map((s) => <option key={s} className="bg-black">{s}</option>)}
+          {t.subjects.map((s) => <option key={s} className="bg-brand-almost-black">{s}</option>)}
         </select>
       </div>
       <div className="space-y-2">
@@ -1109,15 +1109,15 @@ const ContactForm = () => {
         <label className="flex items-center gap-3 cursor-pointer group">
           <div className="relative shrink-0">
             <input type="checkbox" required checked={acceptedPolicies} onChange={(e) => setAcceptedPolicies(e.target.checked)} className="peer sr-only" />
-            <div className="w-5 h-5 border border-white/20 rounded bg-white/5 transition-all peer-checked:bg-brand-green peer-checked:border-brand-green flex items-center justify-center">
-              <Check size={12} className="text-black opacity-0 peer-checked:opacity-100 transition-opacity" />
+            <div className="w-5 h-5 border border-white/20 rounded bg-white/5 transition-all peer-checked:bg-brand-crimson peer-checked:border-brand-crimson flex items-center justify-center">
+              <Check size={12} className="text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
             </div>
           </div>
           <span className="text-xs text-white/40 group-hover:text-white/60 transition-colors leading-snug">
             {language === 'ES' ? (
-              <>He leído y acepto la <Link href="/politica-de-privacidad?lang=es" className="underline hover:text-brand-green transition-colors">política de privacidad</Link> y el tratamiento de mis datos.</>
+              <>He leído y acepto la <Link href="/politica-de-privacidad?lang=es" className="underline hover:text-brand-crimson transition-colors">política de privacidad</Link> y el tratamiento de mis datos.</>
             ) : (
-              <>I have read and accept the <Link href="/politica-de-privacidad?lang=en" className="underline hover:text-brand-green transition-colors">privacy policy</Link> and the processing of my data.</>
+              <>I have read and accept the <Link href="/politica-de-privacidad?lang=en" className="underline hover:text-brand-crimson transition-colors">privacy policy</Link> and the processing of my data.</>
             )}
           </span>
         </label>
@@ -1127,7 +1127,7 @@ const ContactForm = () => {
         disabled={isSubmitting || isSuccess || !acceptedPolicies}
         whileHover={acceptedPolicies ? { scale: 1.02 } : {}}
         whileTap={acceptedPolicies ? { scale: 0.98 } : {}}
-        className={`w-full py-4 rounded-lg uppercase tracking-widest text-xs font-bold transition-all ${isSuccess ? 'bg-brand-green text-white' : (acceptedPolicies ? 'bg-white text-brand-green' : 'bg-white/20 text-white/40 cursor-not-allowed')}`}
+        className={`w-full py-4 rounded-lg uppercase tracking-widest text-xs font-bold transition-all ${isSuccess ? 'bg-brand-almost-black text-white' : (acceptedPolicies ? 'bg-white text-brand-almost-black' : 'bg-white/20 text-white/40 cursor-not-allowed')}`}
       >
         {isSubmitting ? t.sending : isSuccess ? t.sent : t.submit}
       </motion.button>
@@ -1157,11 +1157,11 @@ const Contact = ({ generalSettings }: { generalSettings: any }) => {
   };
 
   return (
-    <section id="contact" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-black text-white overflow-hidden">
+    <section id="contact" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black text-white overflow-hidden brand-grain">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 opacity-40">
           <Image
-            src="https://res.cloudinary.com/djqtkbyez/image/upload/v1774860454/654596267_17956035960117098_3415009189650686711_n_v0xekc.jpg"
+            src="/brand/contact-bg-from-content-to-culture.jpg"
             alt="Contact Background"
             fill
             className="object-cover blur-2xl scale-110"
@@ -1169,12 +1169,12 @@ const Contact = ({ generalSettings }: { generalSettings: any }) => {
           />
         </div>
       </div>
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent pointer-events-none z-10" />
-      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-brand-green to-transparent pointer-events-none z-10" />
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-almost-black to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-brand-almost-black to-transparent pointer-events-none z-10" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-20">
         <div>
-          <span className="text-brand-sand/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
+          <span className="text-brand-warm-lux/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
             05 / {language === 'ES' ? 'Contacto' : 'Contact'}
           </span>
           <motion.h2
@@ -1182,20 +1182,20 @@ const Contact = ({ generalSettings }: { generalSettings: any }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-sand leading-tight mb-8 flex flex-wrap gap-x-[0.3em]"
+            className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-warm-lux leading-tight mb-8 flex flex-wrap gap-x-[0.3em]"
           >
             {words.map((word: string, i: number) => (
               <motion.span key={i} variants={wordVariants}>{word}</motion.span>
             ))}
           </motion.h2>
-          <p className="text-brand-sand/60 text-lg mb-12 max-w-md">
+          <p className="text-brand-warm-lux/60 text-lg mb-12 max-w-md">
             {language === 'ES'
               ? 'Ponte en contacto, escríbenos o simplemente saluda — estamos aquí para conectar, crear y convertir ideas audaces en realidad.'
               : "Reach out, drop a line, or just say hey — we're here to connect, create, and turn bold ideas into reality."}
           </p>
           <div className="space-y-4">
-            <p className="text-brand-sand font-serif text-2xl md:text-3xl">{email}</p>
-            <p className="text-brand-sand/60 uppercase tracking-widest text-xs md:text-sm font-bold">{phone}</p>
+            <p className="text-brand-warm-lux font-serif text-2xl md:text-3xl">{email}</p>
+            <p className="text-brand-warm-lux/60 uppercase tracking-widest text-xs md:text-sm font-bold">{phone}</p>
           </div>
         </div>
 
@@ -1225,12 +1225,12 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
     if (!hasManualBold) {
       const words = text.split(" ");
       const lastWord = words.pop() || "";
-      return <>{words.join(" ")} <span className="text-brand-green font-serif font-black">{lastWord}</span></>;
+      return <>{words.join(" ")} <span className="text-brand-almost-black font-serif font-black">{lastWord}</span></>;
     }
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <span key={i} className="text-brand-green font-serif font-black">{part.slice(2, -2)}</span>;
+        return <span key={i} className="text-brand-almost-black font-serif font-black">{part.slice(2, -2)}</span>;
       }
       return part;
     });
@@ -1240,8 +1240,8 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
   const linkedin = generalSettings?.linkedin_url || "#";
 
   return (
-    <footer ref={footerRef} className="bg-brand-green p-3 pt-20 lg:pt-32 min-h-[600px] flex flex-col">
-      <div className="bg-brand-sand rounded-[1.125rem] flex-grow flex flex-col p-8 lg:p-16 relative overflow-hidden">
+    <footer ref={footerRef} className="relative overflow-hidden bg-brand-almost-black p-3 pt-20 lg:pt-32 min-h-[600px] flex flex-col brand-grain">
+      <div className="bg-brand-warm-lux rounded-[1.125rem] flex-grow flex flex-col p-8 lg:p-16 relative z-40 overflow-hidden">
         <div className="flex-grow flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/2 flex flex-col">
             <div className="relative h-[15vh] md:h-[20vh] lg:h-[25vh] w-full mb-12 lg:mb-0">
@@ -1254,33 +1254,33 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
               />
             </div>
             <div className="mt-auto">
-              <p className="text-brand-green text-xl md:text-1xl lg:text-2xl font-serif leading-relaxed">
+              <p className="text-brand-almost-black text-xl md:text-1xl lg:text-2xl font-serif leading-relaxed">
                 {renderFormattedText(footerText)}
               </p>
             </div>
           </div>
 
-          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-green/5">
+          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-almost-black/5">
             <div className="mt-auto space-y-12">
-              <div className="flex space-x-8 text-brand-green">
-                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">Instagram</a>
-                <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">LinkedIn</a>
+              <div className="flex space-x-8 text-brand-almost-black">
+                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">Instagram</a>
+                <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">LinkedIn</a>
               </div>
               <div className="grid grid-cols-2 gap-8 lg:justify-items-start">
                 <div>
-                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Navigation</h5>
-                  <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
-                    <li><a href="#hero" className="hover:opacity-50 transition-opacity">Studio</a></li>
-                    <li><a href="#projects" className="hover:opacity-50 transition-opacity">Projects</a></li>
-                    <li><a href="#talents" className="hover:opacity-50 transition-opacity">Talents</a></li>
-                    <li><a href="#contact" className="hover:opacity-50 transition-opacity">Contact</a></li>
+                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-almost-black/40">Navigation</h5>
+                  <ul className="space-y-4 text-sm text-brand-almost-black font-bold uppercase tracking-wider">
+                    <li><a href="#hero" className="hover:text-brand-crimson transition-colors">Studio</a></li>
+                    <li><a href="#projects" className="hover:text-brand-crimson transition-colors">Projects</a></li>
+                    <li><a href="#talents" className="hover:text-brand-crimson transition-colors">Talents</a></li>
+                    <li><a href="#contact" className="hover:text-brand-crimson transition-colors">Contact</a></li>
                   </ul>
                 </div>
                 <div>
-                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-green/40">Legal</h5>
-                  <ul className="space-y-4 text-sm text-brand-green font-bold uppercase tracking-wider">
-                    <li><Link href={`/politica-de-privacidad?lang=${language.toLowerCase()}`} className="hover:opacity-50 transition-opacity">{language === 'ES' ? 'Privacidad' : 'Privacy'}</Link></li>
-                    <li><Link href={`/aviso-legal?lang=${language.toLowerCase()}`} className="hover:opacity-50 transition-opacity">{language === 'ES' ? 'Aviso Legal' : 'Legal Notice'}</Link></li>
+                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-almost-black/40">Legal</h5>
+                  <ul className="space-y-4 text-sm text-brand-almost-black font-bold uppercase tracking-wider">
+                    <li><Link href={`/politica-de-privacidad?lang=${language.toLowerCase()}`} className="hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Privacidad' : 'Privacy'}</Link></li>
+                    <li><Link href={`/aviso-legal?lang=${language.toLowerCase()}`} className="hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Aviso Legal' : 'Legal Notice'}</Link></li>
                   </ul>
                 </div>
               </div>
@@ -1288,7 +1288,7 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
           </div>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-brand-green/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-green/30">
+        <div className="mt-20 pt-10 border-t border-brand-crimson/30 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-almost-black/30">
           <p>© {new Date().getFullYear()} {generalSettings?.site_name || 'Twenty4 Studios'}. All rights reserved.</p>
           <p>Built for Icons.</p>
         </div>
@@ -1318,15 +1318,15 @@ const CustomCursor = () => {
   return (
     <>
       <motion.div
-        className="hidden lg:block fixed top-0 left-0 w-3 h-3 bg-brand-green rounded-full pointer-events-none z-[9998] mix-blend-difference"
-        animate={{ x: position.x - 6, y: position.y - 6, scale: isHovering ? 0 : 1 }}
-        transition={{ type: "spring", stiffness: 500, damping: 28 }}
-      />
-      <motion.div
-        className="hidden lg:block fixed top-0 left-0 w-8 h-8 border border-brand-green rounded-full pointer-events-none z-[9997]"
-        animate={{ x: position.x - 16, y: position.y - 16, scale: isHovering ? 1.5 : 1, opacity: isHovering ? 0.5 : 0.3 }}
-        transition={{ type: "spring", stiffness: 150, damping: 20 }}
-      />
+        className="hidden lg:flex items-center justify-center fixed top-0 left-0 w-9 h-9 text-brand-crimson pointer-events-none z-[9998]"
+        animate={{ x: position.x - 18, y: position.y - 18, scale: isHovering ? 1.5 : 1, rotate: isHovering ? 20 : 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      >
+        <svg viewBox="0 0 938.16 448.99" width="34" height="16" fill="currentColor" aria-hidden="true">
+          <polygon points="606.43 115.41 420.52 115.41 466.72 0 308.48 115.41 123.92 115.41 216.18 183.79 0 340.62 269.74 242.99 328.95 340.53 395.59 199.47 606.43 115.41" />
+          <polygon points="752.24 223.79 798.44 108.37 640.21 223.79 455.64 223.79 547.91 292.16 331.73 448.99 601.46 351.36 660.67 448.9 727.32 307.84 938.16 223.79 752.24 223.79" />
+        </svg>
+      </motion.div>
     </>
   );
 };
@@ -1450,7 +1450,7 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className="relative min-h-screen bg-black bg-fixed"
+            className="relative min-h-screen bg-brand-almost-black bg-fixed"
           >
             <Navbar hide={isFooterVisible} logoUrl={navLogoUrl} />
             <Hero heroData={settings.hero || {}} />

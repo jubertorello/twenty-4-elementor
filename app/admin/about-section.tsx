@@ -115,7 +115,7 @@ export const AboutAdminSection = ({
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-40 space-y-4">
-      <div className="w-12 h-12 border-4 border-brand-green/20 border-t-brand-green rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-brand-almost-black/20 border-t-brand-almost-black rounded-full animate-spin" />
       <p className="text-white/20 font-black uppercase tracking-[0.3em] animate-pulse text-[10px]">Cargando...</p>
     </div>
   );
@@ -141,7 +141,7 @@ export const AboutAdminSection = ({
         <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+              <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
                 <Briefcase size={24} />
               </div>
               <div>
@@ -205,7 +205,7 @@ export const AboutAdminSection = ({
       {/* 1. TÍTULO DE LA SECCIÓN */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <Briefcase size={24} />
           </div>
           <div>
@@ -263,7 +263,7 @@ export const AboutAdminSection = ({
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+            <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
               <Briefcase size={24} />
             </div>
             <div>
@@ -276,7 +276,7 @@ export const AboutAdminSection = ({
           <button
             onClick={addService}
             disabled={data.services.length >= 4}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl text-[9px] uppercase tracking-widest font-black bg-brand-green text-white hover:opacity-80 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl text-[9px] uppercase tracking-widest font-black bg-brand-almost-black text-white hover:opacity-80 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <Plus size={15} /> Añadir Servicio
           </button>
@@ -300,7 +300,7 @@ export const AboutAdminSection = ({
                 className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all ${
                   service.is_hidden
                     ? 'bg-black/40 border-white/5 opacity-60'
-                    : 'bg-white/5 border-white/10 hover:border-brand-green/30'
+                    : 'bg-white/5 border-white/10 hover:border-brand-almost-black/30'
                 }`}
               >
                 {/* Drag handle */}
@@ -347,7 +347,7 @@ export const AboutAdminSection = ({
                     className={`p-2.5 rounded-xl transition-all ${
                       service.is_hidden
                         ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500 hover:text-white'
-                        : 'bg-white/5 text-white/40 hover:bg-brand-green/20 hover:text-brand-green'
+                        : 'bg-white/5 text-white/40 hover:bg-brand-almost-black/20 hover:text-brand-almost-black'
                     }`}
                   >
                     {service.is_hidden ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -357,7 +357,7 @@ export const AboutAdminSection = ({
                       e.stopPropagation();
                       setActiveServiceIndex(i);
                     }}
-                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-green transition-all"
+                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-almost-black transition-all"
                   >
                     <Edit3 size={16} />
                   </button>

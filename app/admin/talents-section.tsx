@@ -177,7 +177,7 @@ export const TalentsAdminSection = ({
       {/* 1. TÍTULO DE LA SECCIÓN */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <UserIcon size={24} />
           </div>
           <div>
@@ -203,7 +203,7 @@ export const TalentsAdminSection = ({
           </div>
           <button
             onClick={() => router.push('/admin/talents/new')}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl text-[9px] uppercase tracking-widest font-black bg-brand-green text-white hover:opacity-80 transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl text-[9px] uppercase tracking-widest font-black bg-brand-almost-black text-white hover:opacity-80 transition-all"
           >
             <Plus size={15} /> Nuevo Talento
           </button>
@@ -225,7 +225,7 @@ export const TalentsAdminSection = ({
                 value={talent}
                 className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all ${talent.is_archived
                     ? 'bg-black/40 border-white/5 opacity-60'
-                    : 'bg-white/5 border-white/10 hover:border-brand-green/30'
+                    : 'bg-white/5 border-white/10 hover:border-brand-almost-black/30'
                   }`}
               >
                 <div className="cursor-grab active:cursor-grabbing text-white/10 group-hover:text-white/30 transition-colors shrink-0">
@@ -253,7 +253,7 @@ export const TalentsAdminSection = ({
                     title={talent.is_archived ? 'Activar en web' : 'Archivar'}
                     className={`p-2.5 rounded-xl transition-all ${talent.is_archived
                         ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500 hover:text-white'
-                        : 'bg-white/5 text-white/40 hover:bg-brand-green/20 hover:text-brand-green'
+                        : 'bg-white/5 text-white/40 hover:bg-brand-almost-black/20 hover:text-brand-almost-black'
                       }`}
                   >
                     {talent.is_archived ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -261,7 +261,7 @@ export const TalentsAdminSection = ({
                   <button
                     onClick={(e) => { e.stopPropagation(); router.push(`/admin/talents/${talent.id}/edit`); }}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-green transition-all"
+                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-almost-black transition-all"
                   >
                     <Edit3 size={16} />
                   </button>
@@ -283,7 +283,7 @@ export const TalentsAdminSection = ({
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+            <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
               <ImageIcon size={24} />
             </div>
             <div>
@@ -303,7 +303,7 @@ export const TalentsAdminSection = ({
             }}
             disabled={brands.length >= 20}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[9px] uppercase tracking-widest font-black transition-all ${
-              brands.length >= 20 ? 'bg-white/10 text-white/20 cursor-not-allowed' : 'bg-brand-green text-white hover:opacity-80'
+              brands.length >= 20 ? 'bg-white/10 text-white/20 cursor-not-allowed' : 'bg-brand-almost-black text-white hover:opacity-80'
             }`}
           >
             <Plus size={15} /> Añadir Marca
@@ -322,7 +322,7 @@ export const TalentsAdminSection = ({
                 value={brand}
                 className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all ${brand.is_archived
                     ? 'bg-black/40 border-white/5 opacity-50'
-                    : 'bg-white/5 border-white/10 hover:border-brand-green/30'
+                    : 'bg-white/5 border-white/10 hover:border-brand-almost-black/30'
                   }`}
               >
                 <div className="cursor-grab active:cursor-grabbing text-white/10 group-hover:text-white/30 transition-colors shrink-0">
@@ -349,7 +349,7 @@ export const TalentsAdminSection = ({
                     title={brand.is_archived ? 'Mostrar en web' : 'Ocultar de la web'}
                     className={`p-2.5 rounded-xl transition-all ${brand.is_archived
                         ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500 hover:text-white'
-                        : 'bg-white/5 text-white/40 hover:bg-brand-green/20 hover:text-brand-green'
+                        : 'bg-white/5 text-white/40 hover:bg-brand-almost-black/20 hover:text-brand-almost-black'
                       }`}
                   >
                     {brand.is_archived ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -357,7 +357,7 @@ export const TalentsAdminSection = ({
                   <button
                     onClick={(e) => { e.stopPropagation(); router.push(`/admin/brands/${brand.uid}`); }}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-green transition-all"
+                    className="p-2.5 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-brand-almost-black transition-all"
                   >
                     <Edit3 size={16} />
                   </button>
@@ -378,7 +378,7 @@ export const TalentsAdminSection = ({
       {/* 4. EXPERIENCIA (PUNTOS 1, 2, 3) */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-12">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+          <div className="w-12 h-12 rounded-2xl bg-brand-almost-black/20 flex items-center justify-center text-brand-almost-black">
             <Edit3 size={24} />
           </div>
           <div>
@@ -390,7 +390,7 @@ export const TalentsAdminSection = ({
         <div className="grid grid-cols-1 gap-12">
           {experience.map((item, index) => (
             <div key={index} className="space-y-6 p-8 rounded-3xl bg-white/5 border border-white/10 relative">
-              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-brand-green text-white flex items-center justify-center font-black text-sm shadow-xl">
+              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-brand-almost-black text-white flex items-center justify-center font-black text-sm shadow-xl">
                 0{index + 1}
               </div>
               <div className="grid grid-cols-1 gap-8">

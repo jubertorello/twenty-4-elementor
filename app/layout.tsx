@@ -33,9 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: siteDesc,
     icons: {
-      icon: settings.favicon_url || '/favicon.ico',
-      shortcut: settings.favicon_url || '/favicon.ico',
-      apple: settings.favicon_url || '/favicon.ico',
+      icon: settings.favicon_url || '/favicon.svg',
+      shortcut: settings.favicon_url || '/favicon.svg',
+      apple: settings.favicon_url || '/favicon.svg',
     },
     alternates: {
       canonical: BASE_URL,
@@ -90,7 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
       </head>
-      <body suppressHydrationWarning className="bg-[#e2dbd0] text-[#22330D] antialiased">
+      <body suppressHydrationWarning className="bg-brand-almost-black text-brand-warm-lux antialiased">
         {children}
       </body>
     </html>

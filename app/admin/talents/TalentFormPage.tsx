@@ -89,7 +89,7 @@ export default function TalentFormPage({ initialData, talentId }: TalentFormProp
     router.push('/admin?tab=talents&saved=true');
   };
 
-  const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-green/40 focus:bg-white/8 transition-all placeholder:text-white/15 disabled:opacity-50 disabled:cursor-not-allowed";
+  const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-almost-black/40 focus:bg-white/8 transition-all placeholder:text-white/15 disabled:opacity-50 disabled:cursor-not-allowed";
 const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-white/30 mb-2";
 
   return (
@@ -104,7 +104,7 @@ const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-w
             <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Volver
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-green">Admin</span>
+            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-almost-black">Admin</span>
             <span className="text-white/20">/</span>
             <span className="text-[9px] uppercase tracking-[0.4em] font-black text-white/60">{talentId === 'new' ? 'Nuevo' : 'Editar'} Talento</span>
           </div>
@@ -112,7 +112,7 @@ const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-w
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="flex items-center gap-2 px-8 py-2.5 rounded-xl text-[10px] uppercase tracking-widest font-black text-white transition-all min-w-[140px] justify-center bg-brand-green hover:opacity-80 disabled:opacity-50"
+          className="flex items-center gap-2 px-8 py-2.5 rounded-xl text-[10px] uppercase tracking-widest font-black text-white transition-all min-w-[140px] justify-center bg-brand-almost-black hover:opacity-80 disabled:opacity-50"
         >
           {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
           {isSaving ? 'Guardando...' : 'Guardar'}
@@ -134,7 +134,7 @@ const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-w
           {/* 1. IDENTIDAD */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-brand-green/20 flex items-center justify-center"><UserIcon size={16} className="text-brand-green" /></div>
+              <div className="w-8 h-8 rounded-xl bg-brand-almost-black/20 flex items-center justify-center"><UserIcon size={16} className="text-brand-almost-black" /></div>
               <h2 className="text-lg font-black uppercase tracking-widest text-white/80">01 · Perfil</h2>
             </div>
             <div className="p-8 rounded-3xl bg-white/3 border border-white/8 space-y-8">
@@ -174,7 +174,7 @@ const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-w
           {/* 2. TRADUCCIONES */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-brand-green/20 flex items-center justify-center"><Languages size={16} className="text-brand-green" /></div>
+              <div className="w-8 h-8 rounded-xl bg-brand-almost-black/20 flex items-center justify-center"><Languages size={16} className="text-brand-almost-black" /></div>
               <h2 className="text-lg font-black uppercase tracking-widest text-white/80">02 · Categoría</h2>
             </div>
             <div className="space-y-8">
@@ -198,7 +198,7 @@ const labelCls = "block text-[9px] uppercase tracking-[0.25em] font-black text-w
               onClick={() => set('is_archived', !form.is_archived)}
               className={`px-10 py-4 rounded-2xl text-[11px] uppercase tracking-[0.2em] font-black transition-all border-2 ${form.is_archived
                   ? 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20'
-                  : 'bg-brand-green/20 text-brand-green border-brand-green/30 hover:bg-brand-green/30'
+                  : 'bg-brand-almost-black/20 text-brand-almost-black border-brand-almost-black/30 hover:bg-brand-almost-black/30'
                 }`}
             >
               {form.is_archived ? '✖ Oculto / Archivado' : '✔ Activo en Web'}

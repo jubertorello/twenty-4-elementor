@@ -145,7 +145,7 @@ export const CloudinaryUploader = ({
             <img src={currentUrl} alt="Preview" className={`w-full h-full ${imageClassName}`} />
           )}
           <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2">
-            {isVideoPreview ? <Video size={12} className="text-blue-400" /> : <ImageIcon size={12} className="text-brand-green" />}
+            {isVideoPreview ? <Video size={12} className="text-blue-400" /> : <ImageIcon size={12} className="text-brand-almost-black" />}
             <span className="text-[9px] font-bold text-white/70 uppercase tracking-widest">Listo</span>
           </div>
         </div>
@@ -154,11 +154,11 @@ export const CloudinaryUploader = ({
       <button
         type="button"
         onClick={openWidget}
-        className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl border-2 border-dashed border-white/10 hover:border-brand-green/50 hover:bg-brand-green/5 transition-all group"
+        className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl border-2 border-dashed border-white/10 hover:border-brand-almost-black/50 hover:bg-brand-almost-black/5 transition-all group"
       >
-        <Upload size={18} className="text-white/20 group-hover:text-brand-green transition-colors" />
+        <Upload size={18} className="text-white/20 group-hover:text-brand-almost-black transition-colors" />
         <div className="text-left">
-          <p className="text-[10px] uppercase tracking-widest font-black text-white/30 group-hover:text-brand-green transition-colors">
+          <p className="text-[10px] uppercase tracking-widest font-black text-white/30 group-hover:text-brand-almost-black transition-colors">
             {currentUrl ? 'Cambiar archivo' : label}
           </p>
           <p className="text-[8px] text-white/10 mt-0.5 uppercase tracking-widest font-bold">

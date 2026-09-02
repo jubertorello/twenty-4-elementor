@@ -15,7 +15,7 @@ const PROSE_CLASSES = `
   [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-1
   [&_strong]:text-white [&_strong]:font-bold
   [&_em]:italic [&_em]:text-white/70
-  [&_a]:text-brand-green [&_a]:underline [&_a]:hover:opacity-70
+  [&_a]:text-brand-crimson [&_a]:underline [&_a]:hover:opacity-70
   [&_hr]:border-white/10 [&_hr]:my-8
 `;
 
@@ -67,8 +67,8 @@ export default function LegalPageClient({ data, lang, type }: LegalPageClientPro
   };
 
   return (
-    <main className="min-h-screen bg-black text-white font-sans selection:bg-brand-green selection:text-black">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
+    <main className="min-h-screen bg-brand-almost-black text-white font-sans selection:bg-brand-crimson selection:text-white">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-brand-almost-black/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 h-20 flex items-center">
           <button
             onClick={() => router.back()}
@@ -89,7 +89,7 @@ export default function LegalPageClient({ data, lang, type }: LegalPageClientPro
             className="space-y-16"
           >
             <div className="space-y-4">
-              <span className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-green">{t.label}</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-crimson">{t.label}</span>
               <h1 className="text-5xl md:text-7xl font-serif font-black leading-tight">{t.title}</h1>
             </div>
 
@@ -99,7 +99,7 @@ export default function LegalPageClient({ data, lang, type }: LegalPageClientPro
                 {data.company_name && <p><span className="text-white/40 mr-2 font-bold">{t.company}</span><span className="text-white">{data.company_name}</span></p>}
                 {data.company_cif && <p><span className="text-white/40 mr-2 font-bold">CIF/NIF:</span><span className="text-white">{data.company_cif}</span></p>}
                 {data.company_address && <p><span className="text-white/40 mr-2 font-bold">{t.address}</span><span className="text-white">{data.company_address}</span></p>}
-                {data.company_email && <p><span className="text-white/40 mr-2 font-bold">Email:</span><a href={`mailto:${data.company_email}`} className="text-brand-green hover:underline">{data.company_email}</a></p>}
+                {data.company_email && <p><span className="text-white/40 mr-2 font-bold">Email:</span><a href={`mailto:${data.company_email}`} className="text-brand-crimson hover:underline">{data.company_email}</a></p>}
               </div>
             </div>
 
@@ -122,7 +122,7 @@ export default function LegalPageClient({ data, lang, type }: LegalPageClientPro
         </article>
       </div>
 
-      <footer className="border-t border-white/5 py-12 bg-black">
+      <footer className="border-t border-white/5 py-12 bg-brand-almost-black">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-white/20 text-xs uppercase tracking-widest">
             © {new Date().getFullYear()} {data.company_name || 'Twenty4 Studios'}. All rights reserved.

@@ -65,7 +65,7 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
   }, []);
 
   const kpis = [
-    { label: 'Leads Totales', value: stats.totalLeads.toString(), change: `+${stats.newLeads} nuevos`, up: true, icon: Mail, color: 'from-brand-green/20 to-brand-green/5', accent: 'text-brand-green' },
+    { label: 'Leads Totales', value: stats.totalLeads.toString(), change: `+${stats.newLeads} nuevos`, up: true, icon: Mail, color: 'from-brand-almost-black/20 to-brand-almost-black/5', accent: 'text-brand-almost-black' },
     { label: 'Proyectos', value: stats.projects.toString(), change: 'En la web', up: true, icon: Briefcase, color: 'from-blue-500/10 to-blue-500/5', accent: 'text-blue-400' },
     { label: 'Talentos', value: stats.talents.toString(), change: 'Activos', up: true, icon: Star, color: 'from-amber-500/10 to-amber-500/5', accent: 'text-amber-400' },
     { label: 'Marcas', value: stats.brands.toString(), change: 'Colaboraciones', up: true, icon: Users, color: 'from-purple-500/10 to-purple-500/5', accent: 'text-purple-400' },
@@ -122,7 +122,7 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
             <h3 className="text-[10px] uppercase tracking-widest font-bold text-white/40">Vista en Google</h3>
             <button
               onClick={() => setActiveSection('settings')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-brand-green/20 border border-white/10 hover:border-brand-green/30 text-[10px] uppercase tracking-widest font-bold text-white/40 hover:text-brand-green transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-brand-almost-black/20 border border-white/10 hover:border-brand-almost-black/30 text-[10px] uppercase tracking-widest font-bold text-white/40 hover:text-brand-almost-black transition-all"
             >
               <Settings size={11} /> Editar SEO
             </button>
@@ -189,10 +189,10 @@ export const DashboardSection = ({ setActiveSection }: { setActiveSection: (s: s
               { label: 'Añadir Marca', id: 'talents', icon: Users },
             ].map(a => (
               <button key={a.label} onClick={() => setActiveSection(a.id)}
-                className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-brand-green/20 border border-white/10 hover:border-brand-green/30 rounded-xl transition-all group">
-                <a.icon size={15} className="text-white/40 group-hover:text-brand-green transition-colors" />
+                className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-brand-almost-black/20 border border-white/10 hover:border-brand-almost-black/30 rounded-xl transition-all group">
+                <a.icon size={15} className="text-white/40 group-hover:text-brand-almost-black transition-colors" />
                 <span className="text-sm font-bold text-white/60 group-hover:text-white transition-colors">{a.label}</span>
-                <ArrowUpRight size={13} className="ml-auto text-white/20 group-hover:text-brand-green transition-colors" />
+                <ArrowUpRight size={13} className="ml-auto text-white/20 group-hover:text-brand-almost-black transition-colors" />
               </button>
             ))}
           </div>
@@ -218,7 +218,7 @@ interface Lead {
 }
 
 const statusConfig: Record<LeadStatus, { label: string; icon: typeof CheckCircle; cls: string }> = {
-  new: { label: 'Nuevo', icon: AlertCircle, cls: 'text-brand-green bg-brand-green/10 border-brand-green/30' },
+  new: { label: 'Nuevo', icon: AlertCircle, cls: 'text-brand-almost-black bg-brand-almost-black/10 border-brand-almost-black/30' },
   following: { label: 'En seguimiento', icon: Clock, cls: 'text-amber-400 bg-amber-400/10 border-amber-400/30' },
   closed: { label: 'Cerrado', icon: XCircle, cls: 'text-white/30 bg-white/5 border-white/10' },
 };
@@ -278,9 +278,9 @@ export const LeadsSection = () => {
           <p className="text-[10px] uppercase tracking-widest font-bold text-white/30 mb-2">Formulario de contacto</p>
           <h2 className="text-3xl font-bold text-white">Leads</h2>
         </div>
-        <div className="flex items-center gap-2 bg-brand-green/10 border border-brand-green/30 rounded-xl px-4 py-2.5">
-          <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
-          <span className="text-[10px] uppercase tracking-widest font-bold text-brand-green">
+        <div className="flex items-center gap-2 bg-brand-almost-black/10 border border-brand-almost-black/30 rounded-xl px-4 py-2.5">
+          <div className="w-2 h-2 rounded-full bg-brand-almost-black animate-pulse" />
+          <span className="text-[10px] uppercase tracking-widest font-bold text-brand-almost-black">
             {leads.filter(l => l.status === 'new').length} nuevos
           </span>
         </div>
@@ -306,11 +306,11 @@ export const LeadsSection = () => {
         <div className="flex-1 relative">
           <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white outline-none focus:border-brand-green/50 placeholder:text-white/20"
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white outline-none focus:border-brand-almost-black/50 placeholder:text-white/20"
             placeholder="Buscar por nombre o email..." />
         </div>
         <button onClick={() => setFilter('all')}
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-[10px] uppercase tracking-widest font-bold transition-all ${filter === 'all' ? 'bg-brand-green text-white border-brand-green' : 'bg-white/5 border-white/10 text-white/40 hover:border-white/20'}`}>
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-[10px] uppercase tracking-widest font-bold transition-all ${filter === 'all' ? 'bg-brand-almost-black text-white border-brand-almost-black' : 'bg-white/5 border-white/10 text-white/40 hover:border-white/20'}`}>
           <Filter size={13} /> Todos
         </button>
       </div>
@@ -370,11 +370,11 @@ export const LeadsSection = () => {
 
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm text-white/60">
-                  <Mail size={14} className="text-brand-green shrink-0" />
+                  <Mail size={14} className="text-brand-almost-black shrink-0" />
                   <a href={`mailto:${selected.email}`} className="hover:text-white transition-colors">{selected.email}</a>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-white/60">
-                  <Calendar size={14} className="text-brand-green shrink-0" />
+                  <Calendar size={14} className="text-brand-almost-black shrink-0" />
                   <span>{new Date(selected.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
                 </div>
               </div>

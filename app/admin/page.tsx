@@ -85,14 +85,14 @@ const AdminSidebar = ({
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[11px] uppercase tracking-widest font-bold transition-all relative ${active
-                      ? 'bg-brand-green text-white shadow-lg shadow-brand-green/20'
+                      ? 'bg-brand-almost-black text-white shadow-lg shadow-brand-almost-black/20'
                       : 'text-white/30 hover:text-white hover:bg-white/5'
                     }`}
                 >
                   <item.icon size={15} className={active ? 'text-white' : ''} />
                   <span className="flex-1 text-left">{item.label}</span>
                   {'badge' in item && item.badge && !active && (
-                    <span className="w-5 h-5 rounded-full bg-brand-green text-white text-[9px] font-black flex items-center justify-center">
+                    <span className="w-5 h-5 rounded-full bg-brand-almost-black text-white text-[9px] font-black flex items-center justify-center">
                       {item.badge}
                     </span>
                   )}
@@ -208,7 +208,7 @@ export default function AdminPage() {
             initial={{ opacity: 0, y: -50, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: -50, x: '-50%' }}
-            className="fixed top-10 left-[calc(50%+9rem)] z-[100] flex items-center gap-3 px-6 py-3 bg-brand-green text-black rounded-full font-bold uppercase tracking-widest text-xs shadow-2xl shadow-brand-green/20 border border-brand-green/50"
+            className="fixed top-10 left-[calc(50%+9rem)] z-[100] flex items-center gap-3 px-6 py-3 bg-brand-almost-black text-black rounded-full font-bold uppercase tracking-widest text-xs shadow-2xl shadow-brand-almost-black/20 border border-brand-almost-black/50"
           >
             <CheckCircle size={16} /> {toastMsg}
           </motion.div>
@@ -219,7 +219,7 @@ export default function AdminPage() {
         {/* Sticky Header */}
         <div className="sticky top-0 z-30 bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5 px-10 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-green">Admin</span>
+            <span className="text-[9px] uppercase tracking-[0.4em] font-black text-brand-almost-black">Admin</span>
             <span className="text-white/20">/</span>
             <span className="text-[9px] uppercase tracking-[0.4em] font-black text-white/40">
               {sectionLabels[activeSection] ?? activeSection}
@@ -241,7 +241,7 @@ export default function AdminPage() {
                 disabled={isSaving}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] uppercase tracking-widest font-black transition-all min-w-[140px] justify-center ${saved
                     ? 'bg-emerald-500 text-white'
-                    : 'bg-brand-green text-white hover:opacity-80'
+                    : 'bg-brand-almost-black text-white hover:opacity-80'
                   } disabled:opacity-50`}
               >
                 {isSaving ? (

@@ -121,7 +121,7 @@ const RichTextEditor = ({
           [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1 [&_ol]:mb-3 [&_ol]:text-white/60
           [&_strong]:text-white [&_strong]:font-bold
           [&_em]:italic [&_em]:text-white/70
-          [&_a]:text-brand-green [&_a]:underline [&_a]:hover:opacity-70
+          [&_a]:text-brand-almost-black [&_a]:underline [&_a]:hover:opacity-70
           [&_hr]:border-white/10 [&_hr]:my-4
           empty:before:content-[attr(data-placeholder)] empty:before:text-white/20 empty:before:pointer-events-none
         `}
@@ -180,7 +180,7 @@ export const LegalSection = ({ saveTrigger, onSaveComplete }: AdminSectionProps)
     { id: 'legal',    label: 'Aviso Legal' },
   ] as const;
 
-  const fieldCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-brand-green outline-none transition-colors placeholder:text-white/20";
+  const fieldCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-brand-almost-black outline-none transition-colors placeholder:text-white/20";
   const labelCls = "block text-[10px] uppercase tracking-widest font-bold text-white/40 mb-2";
 
   if (loading) return <div className="text-white/30 text-sm py-20 text-center">Cargando...</div>;
@@ -200,7 +200,7 @@ export const LegalSection = ({ saveTrigger, onSaveComplete }: AdminSectionProps)
             onClick={() => setActiveTab(tab.id)}
             className={`px-5 py-2.5 text-[11px] uppercase tracking-widest font-bold rounded-t-lg transition-all border-b-2 -mb-px ${
               activeTab === tab.id
-                ? 'text-white border-brand-green bg-white/5'
+                ? 'text-white border-brand-almost-black bg-white/5'
                 : 'text-white/30 border-transparent hover:text-white/60'
             }`}
           >
