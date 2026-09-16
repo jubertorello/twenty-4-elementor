@@ -157,6 +157,7 @@ export const SettingsSection = ({
 
         <TranslationField
           label="Frase de Despedida"
+          scriptHint
           type="textarea"
           maxLength={200}
           required={true}

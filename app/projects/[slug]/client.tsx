@@ -18,6 +18,21 @@ const ProjectDetail = () => {
   const [nextProjectRaw, setNextProjectRaw] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState<'es' | 'en'>('es');
+  // Barra superior (Volver + cliente): se oculta al bajar para no tapar el
+  // texto del caso y reaparece al subir o al volver arriba del todo.
+  const [showTopBar, setShowTopBar] = useState(true);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 80) setShowTopBar(true);
+      else if (Math.abs(y - lastY) > 8) setShowTopBar(y < lastY);
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Detect language on mount / query changes
   useEffect(() => {
@@ -105,7 +120,7 @@ const ProjectDetail = () => {
   return (
     <main className="min-h-screen bg-brand-almost-black text-white font-sans selection:bg-brand-almost-black selection:text-white">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center pointer-events-none">
+      <nav className={`fixed top-0 left-0 w-full z-50 px-6 py-6 md:py-8 flex justify-between items-center pointer-events-none transition-transform duration-500 ${showTopBar ? 'translate-y-0' : '-translate-y-full'}`}>
         <button 
           onClick={() => {
             if (typeof window !== 'undefined' && window.history.length > 1) {
@@ -114,16 +129,17 @@ const ProjectDetail = () => {
               router.push(`/?lang=${lang}`);
             }
           }}
-          className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-brand-almost-black transition-all duration-500"
+          aria-label={lang === 'es' ? 'Volver' : 'Back'}
+          className="pointer-events-auto group flex items-center justify-center gap-3 bg-brand-almost-black/85 backdrop-blur-md border border-white/10 w-11 h-11 md:w-auto md:h-auto md:px-6 md:py-3 rounded-none hover:bg-white hover:text-brand-almost-black transition-all duration-500"
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
+          <span className="hidden md:inline text-[11px] uppercase tracking-[0.2em] font-bold">
             {lang === 'es' ? 'Volver' : 'Back'}
           </span>
         </button>
         
         {project.client && (
-          <div className="pointer-events-auto hidden md:flex items-center bg-white/10 backdrop-blur-md border border-white/10 px-8 py-3 rounded-full">
+          <div className="pointer-events-auto hidden md:flex items-center bg-white/10 backdrop-blur-md border border-white/10 px-8 py-3 rounded-none">
             <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/70">{project.client}</span>
           </div>
         )}
@@ -139,7 +155,7 @@ const ProjectDetail = () => {
         >
           <Image
             src={project.image_url || ''}
-            alt={project.title_es || 'Project Image'}
+            alt={project.title || project.title_es || ''}
             fill
             className="object-cover opacity-60"
             priority
@@ -155,10 +171,10 @@ const ProjectDetail = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="space-y-4"
           >
-            <span className="text-brand-warm-lux uppercase tracking-[0.4em] text-xs font-bold block">
-              {project.category} — {project.year}
+            <span className="inline-block bg-brand-crimson text-brand-warm-lux uppercase tracking-[0.3em] text-[11px] font-bold px-3 py-1.5">
+              {[project.category, project.year].filter(Boolean).join(' — ')}
             </span>
-            <h1 className="text-4xl md:text-6xl lg:text-[7rem] font-serif font-black leading-none tracking-tighter break-words hyphens-auto max-w-full">
+            <h1 className="text-4xl md:text-6xl lg:text-[5.5rem] font-display font-black uppercase leading-[0.98] tracking-tight break-words hyphens-auto max-w-full">
               {project.title}
             </h1>
           </motion.div>
@@ -187,8 +203,8 @@ const ProjectDetail = () => {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-3xl md:text-4xl font-serif font-bold italic">
-              {lang === 'es' ? 'La Historia' : 'The Story'}
+            <h2 className="font-script font-normal tracking-normal text-6xl md:text-7xl leading-[1.1]">
+              {lang === 'es' ? 'La historia' : 'The story'}
             </h2>
             <p className="whitespace-pre-wrap text-xl md:text-2xl text-white/70 leading-relaxed font-light">
               {project.description}
@@ -203,22 +219,22 @@ const ProjectDetail = () => {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-white/5 rounded-3xl p-10 border border-white/10 space-y-10"
+            className="bg-white/5 rounded-none p-10 border border-white/10 space-y-10"
           >
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">
+              <span className="text-[11px] uppercase tracking-widest font-bold text-brand-crimson">
                 {lang === 'es' ? 'Cliente / Proyecto' : 'Client / Project'}
               </span>
-              <p className="text-xl font-serif font-bold">{project.client || project.title}</p>
+              <p className="text-xl font-display font-bold">{project.client || project.title}</p>
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">
+              <span className="text-[11px] uppercase tracking-widest font-bold text-brand-crimson">
                 {lang === 'es' ? 'Servicios' : 'Services'}
               </span>
               <p className="text-lg">{project.category}</p>
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold text-white/30">
+              <span className="text-[11px] uppercase tracking-widest font-bold text-brand-crimson">
                 {lang === 'es' ? 'Año' : 'Year'}
               </span>
               <p className="text-lg">{project.year}</p>
@@ -232,8 +248,8 @@ const ProjectDetail = () => {
         <section className="pb-24 lg:pb-40 px-6">
           <div className="max-w-7xl mx-auto space-y-12">
             <div className="flex justify-between items-end">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold italic">
-                {lang === 'es' ? 'Viaje Visual' : 'Visual Journey'}
+              <h2 className="font-script font-normal tracking-normal text-6xl md:text-7xl leading-[1.1]">
+                {lang === 'es' ? 'Viaje visual' : 'Visual journey'}
               </h2>
               <span className="text-white/30 text-xs uppercase tracking-widest font-bold">
                 {project.gallery.length} {lang === 'es' ? 'Imágenes' : 'Images'}
@@ -248,11 +264,11 @@ const ProjectDetail = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="relative rounded-2xl overflow-hidden border border-white/5 group"
+                  className="relative rounded-none overflow-hidden border border-white/5 group"
                 >
                   <Image
                     src={img}
-                    alt={`${project.title} gallery ${i}`}
+                    alt={`${project.title} — ${lang === 'es' ? 'galería' : 'gallery'} ${i + 1}`}
                     width={800}
                     height={1000}
                     className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
@@ -285,7 +301,7 @@ const ProjectDetail = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-6xl aspect-video rounded-3xl overflow-hidden shadow-2xl bg-white/5"
+              className="relative w-full max-w-6xl aspect-video rounded-none overflow-hidden shadow-2xl bg-white/5"
             >
               {project.is_video_embed ? (
                 <iframe
@@ -310,13 +326,13 @@ const ProjectDetail = () => {
 
       {/* Footer Mini */}
       {nextProject && (
-        <footer className="py-20 border-t border-white/10 text-center space-y-8">
-          <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-bold">
+        <footer className="py-20 px-6 border-t border-white/10 text-center space-y-8">
+          <p className="text-brand-crimson text-[11px] uppercase tracking-[0.3em] font-bold">
             {lang === 'es' ? 'Siguiente Proyecto' : 'Next Project'}
           </p>
           <Link 
             href={`/projects/${nextProject.slug}?lang=${lang}`}
-            className="text-4xl md:text-6xl font-serif font-black hover:text-brand-crimson transition-colors"
+            className="inline-block text-3xl md:text-6xl font-display font-black uppercase leading-[0.95] tracking-tight hover:text-brand-crimson transition-colors"
           >
             {nextProject.title}
           </Link>

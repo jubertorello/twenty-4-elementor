@@ -60,7 +60,7 @@ export default function LoginPage() {
               />
             </div>
           </Link>
-          <h1 className="text-2xl font-serif font-black uppercase tracking-[0.2em] text-white">
+          <h1 className="text-2xl font-display font-black uppercase tracking-[0.2em] text-white">
             Admin Access
           </h1>
           <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold mt-3">

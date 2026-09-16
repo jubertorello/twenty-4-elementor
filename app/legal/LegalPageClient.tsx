@@ -90,10 +90,10 @@ export default function LegalPageClient({ data, lang, type }: LegalPageClientPro
           >
             <div className="space-y-4">
               <span className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-crimson">{t.label}</span>
-              <h1 className="text-5xl md:text-7xl font-serif font-black leading-tight">{t.title}</h1>
+              <h1 className="text-5xl md:text-7xl font-display font-black leading-tight">{t.title}</h1>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-3">
+            <div className="bg-white/5 border border-white/10 rounded-none p-6 space-y-3">
               <h2 className="text-[10px] uppercase tracking-widest font-black text-white/30">{t.ownerLabel}</h2>
               <div className="space-y-1.5 text-sm">
                 {data.company_name && <p><span className="text-white/40 mr-2 font-bold">{t.company}</span><span className="text-white">{data.company_name}</span></p>}

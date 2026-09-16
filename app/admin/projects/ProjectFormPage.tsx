@@ -312,7 +312,7 @@ export default function ProjectFormPage({ initialData, projectId }: ProjectFormP
           <section className="pt-8 border-t border-white/10">
             <div className="flex items-center justify-between p-8 rounded-3xl bg-brand-almost-black/5 border border-brand-almost-black/20">
               <div className="space-y-2">
-                <h2 className="text-xl font-serif font-bold text-white">¿Crear Case Study?</h2>
+                <h2 className="text-xl font-display font-bold text-white">¿Crear Case Study?</h2>
                 <p className="text-white/40 text-sm max-w-md">
                   Activa esta opción si quieres crear una página dedicada para este proyecto con historia detallada, galería de fotos y optimización SEO.
                 </p>

@@ -5,6 +5,11 @@ import { motion, useScroll, useTransform, AnimatePresence, Variants } from 'moti
 import { Menu, X, ArrowUpRight, ChevronRight, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { externalUrl } from '@/lib/utils';
+import EditorialFrame from '@/components/brand/EditorialFrame';
+import Stars from '@/components/brand/Stars';
+import { Highlight, highlightWords, SCRIPT_CLASS } from '@/components/brand/ScriptHighlight';
+import { slotStyle, splitGallery } from '@/lib/gallery-layout';
 
 // --- Context ---
 export type Language = 'ES' | 'EN';
@@ -28,24 +33,36 @@ const LoadingScreen = ({ logoUrl }: { logoUrl: string }) => {
       transition={{ duration: 0.8, ease: "easeInOut" }}
       className="fixed inset-0 z-[9999] bg-brand-almost-black flex items-center justify-center overflow-hidden"
     >
-      <div className="relative w-64 h-24 md:w-96 md:h-32">
+      <div className="relative z-10 flex flex-col items-center gap-8 md:gap-10">
+        {/* El isotipo entra primero; el wordmark se revela detrás. */}
         <motion.div
-          initial={{ scale: 0.1, opacity: 0, filter: "blur(20px)" }}
-          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-          transition={{
-            duration: 2,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="relative w-full h-full"
+          initial={{ opacity: 0, y: 16, scale: 0.85 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Image
-            src={logoUrl}
-            alt="Twenty4 Studios Logo"
-            fill
-            className="object-contain"
-            priority
-          />
+          <Stars className="w-20 md:w-28 text-brand-warm-lux" />
         </motion.div>
+
+        <div className="relative w-64 h-24 md:w-96 md:h-32">
+          <motion.div
+            initial={{ scale: 0.1, opacity: 0, filter: "blur(20px)" }}
+            animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+            transition={{
+              duration: 2,
+              delay: 0.25,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="relative w-full h-full"
+          >
+            <Image
+              src={logoUrl}
+              alt="Twenty4 Studios"
+              fill
+              className="object-contain"
+              priority
+            />
+          </motion.div>
+        </div>
       </div>
 
       <motion.div
@@ -58,24 +75,48 @@ const LoadingScreen = ({ logoUrl }: { logoUrl: string }) => {
   );
 };
 
-const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
+const Navbar = ({ hide, logoUrl, instagramUrl, linkedinUrl }: { hide?: boolean; logoUrl: string; instagramUrl?: string | null; linkedinUrl?: string | null }) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isOverCrimson, setIsOverCrimson] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      // ¿El navbar (≈ primeros 100px de pantalla) está sobre la sección de contacto roja?
+      const contact = document.getElementById('contact');
+      if (contact) {
+        const r = contact.getBoundingClientRect();
+        setIsOverCrimson(r.top < 100 && r.bottom > 0);
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Menú móvil abierto: la página de fondo no se desplaza y Escape lo cierra.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    // En html y body: Safari de iOS ignora overflow:hidden si solo va en body.
+    const previousOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsMobileMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = language === 'ES'
     ? [
       { name: 'Talentos & Marcas', href: '#talents' },
       { name: 'Proyectos', href: '#projects' },
-      { name: 'Quiénes Somos', href: '#team' },
+      { name: 'Sobre Nosotros', href: '#team' },
     ]
     : [
       { name: 'Talents & Brands', href: '#talents' },
@@ -89,15 +130,15 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-[1.125rem] flex items-center justify-between px-4 lg:px-10 py-3 lg:py-4 border shadow-sm ${isScrolled
-          ? 'bg-white/10 backdrop-blur-md border-white/20 shadow-xl'
-          : 'bg-white/10 backdrop-blur-sm border-white/20'
+        className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-none flex items-center justify-between px-4 lg:px-10 py-3 lg:py-4 border shadow-sm ${isScrolled
+          ? 'bg-brand-almost-black/80 backdrop-blur-md border-brand-warm-lux/15 shadow-xl'
+          : 'bg-brand-almost-black/60 backdrop-blur-sm border-brand-warm-lux/10'
           }`}
       >
         <a href="#hero" className="relative h-8 w-40 lg:h-10 lg:w-48 transition-opacity duration-500 hover:opacity-80">
           <Image
             src={logoUrl}
-            alt="Twenty4 Studios Logo"
+            alt="Twenty4 Studios"
             fill
             className="object-contain object-left"
             referrerPolicy="no-referrer"
@@ -134,14 +175,18 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
           </div>
           <a
             href="#contact"
-            className="hidden lg:inline-flex px-6 py-2.5 rounded-lg text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 bg-white text-brand-almost-black hover:bg-brand-warm-lux"
+            className={`hidden lg:inline-flex px-6 py-2.5 rounded-none text-[0.75rem] uppercase tracking-[0.2em] font-bold transition-all duration-500 ${isOverCrimson ? 'bg-brand-warm-lux text-brand-almost-black hover:bg-white' : 'bg-brand-crimson text-brand-warm-lux hover:bg-brand-warm-lux hover:text-brand-almost-black'}`}
           >
             {language === 'ES' ? 'Contáctanos' : "Let's work"}
           </a>
 
           <button
-            className="lg:hidden transition-colors duration-500 text-white p-0"
+            type="button"
+            className="lg:hidden transition-colors duration-500 text-white p-2.5 -mr-2.5"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? (language === 'ES' ? 'Cerrar menú' : 'Close menu') : (language === 'ES' ? 'Abrir menú' : 'Open menu')}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -153,7 +198,8 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="absolute top-full left-0 w-full mt-4 bg-brand-almost-black/95 backdrop-blur-xl rounded-[1.125rem] p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/10"
+              id="mobile-menu"
+              className="absolute top-full left-0 w-full mt-4 bg-brand-almost-black rounded-none p-8 shadow-2xl flex flex-col space-y-6 lg:hidden border border-white/10"
             >
               {navLinks.map((link) => (
                 <a
@@ -169,7 +215,7 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
                 <a
                   href="#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="bg-white text-brand-almost-black px-8 py-4 rounded-lg text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg hover:bg-brand-warm-lux transition-colors"
+                  className="bg-brand-crimson text-brand-warm-lux px-8 py-4 rounded-none text-center text-[1rem] uppercase tracking-[0.2em] font-bold shadow-lg hover:bg-brand-warm-lux hover:text-brand-almost-black transition-colors"
                 >
                   {language === 'ES' ? 'Contáctanos' : "Let's work"}
                 </a>
@@ -188,24 +234,30 @@ const Navbar = ({ hide, logoUrl }: { hide?: boolean; logoUrl: string }) => {
                     EN
                   </button>
                 </div>
-                <div className="flex gap-8 items-center justify-center pt-4 border-t border-white/10">
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[0.75rem] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-white transition-colors"
-                  >
-                    Instagram
-                  </a>
-                  <a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[0.75rem] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-white transition-colors"
-                  >
-                    Linkedin
-                  </a>
-                </div>
+                {(instagramUrl || linkedinUrl) && (
+                  <div className="flex gap-8 items-center justify-center pt-4 border-t border-white/10">
+                    {instagramUrl && (
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 text-[0.75rem] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-white transition-colors"
+                      >
+                        Instagram
+                      </a>
+                    )}
+                    {linkedinUrl && (
+                      <a
+                        href={linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 text-[0.75rem] uppercase tracking-[0.2em] font-bold text-white/60 hover:text-white transition-colors"
+                      >
+                        LinkedIn
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
@@ -274,13 +326,14 @@ const Hero = ({ heroData }: { heroData: any }) => {
     <section id="hero" ref={sectionRef} className="relative h-[100vh] w-full p-3 bg-brand-almost-black">
       <motion.div
         style={{ scale, opacity, y }}
-        className="relative h-full w-full overflow-hidden rounded-[1.125rem] shadow-2xl bg-brand-almost-black"
+        className="relative h-full w-full overflow-hidden rounded-none shadow-2xl bg-brand-almost-black"
       >
+        <EditorialFrame tone="media" className="z-30" coords={null} inset="inset-x-0 top-24 bottom-0" />
         <div className="absolute inset-0 z-0 overflow-hidden">
           {heroData?.type === 'image' ? (
             <Image
               src={heroData.imageUrl}
-              alt="Hero Background"
+              alt=""
               fill
               className="object-cover opacity-70"
               priority
@@ -304,14 +357,14 @@ const Hero = ({ heroData }: { heroData: any }) => {
               variants={container}
               initial="hidden"
               animate="visible"
-              className="text-white text-4xl md:text-7xl lg:text-[6rem] font-serif font-black leading-[0.85] mb-10 text-balance tracking-tighter"
+              className="text-white text-4xl md:text-7xl lg:text-[6rem] font-display font-black uppercase leading-[0.92] mb-10 text-balance tracking-tight"
             >
-              <div className="flex flex-wrap justify-center gap-x-[0.2em]">
+              <div className="flex flex-wrap justify-center gap-x-[0.2em] gap-y-[0.12em]">
                 {line1.map((word: string, i: number) => (
                   <motion.span key={i} variants={wordVariants} className="inline-block">{word}</motion.span>
                 ))}
               </div>
-              <div className="flex flex-wrap justify-center gap-x-[0.2em]">
+              <div className="flex flex-wrap justify-center gap-x-[0.2em] gap-y-[0.12em]">
                 {line2.map((word: string, i: number) => (
                   <motion.span key={i} variants={wordVariants} className="inline-block">{word}</motion.span>
                 ))}
@@ -326,13 +379,53 @@ const Hero = ({ heroData }: { heroData: any }) => {
           transition={{ delay: 1.5 }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 text-brand-warm-lux/30 flex flex-col items-center gap-3"
         >
-          <span className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] font-bold">{language === 'ES' ? 'Descubre Más' : 'Discover More'}</span>
+          <span className="text-[11px] uppercase tracking-[0.3em] font-bold">{language === 'ES' ? 'Descubre Más' : 'Discover More'}</span>
           <div className="w-[1px] h-16 bg-gradient-to-b from-brand-warm-lux/30 to-transparent" />
         </motion.div>
       </motion.div>
 
       <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-brand-almost-black to-transparent pointer-events-none z-40" />
     </section>
+  );
+};
+
+/**
+ * Foto de la galería de presentación, en marco polaroid como la lámina de
+ * "Estilo fotográfico" del brandbook: borde Warm Lux más grueso abajo, tamaños
+ * alternos y dos tratamientos — duotono Crimson o blanco y negro. Al pasar el
+ * ratón se ve la foto original en color.
+ *
+ * La forma y el tono salen del índice dentro de la fila original (no del de la
+ * lista duplicada del marquee), para que el bucle infinito empalme sin salto.
+ * La secuencia vive en lib/gallery-layout.ts y el admin la usa como referencia.
+ */
+const PolaroidCard = ({ src, index, row, variants }: { src: string; index: number; row: 'top' | 'bottom'; variants: Variants }) => {
+  const { language } = useLanguage();
+  // Forma y tono compartidos con el admin (lib/gallery-layout.ts)
+  const { shape, tone } = slotStyle(index, row);
+
+  return (
+    <motion.div
+      variants={variants}
+      className="group flex-shrink-0 bg-brand-warm-lux p-1.5 pb-6 lg:p-3 lg:pb-12 shadow-2xl"
+    >
+      <div className={`relative overflow-hidden bg-brand-almost-black ${shape.className}`}>
+        {src && (
+          <Image
+            src={src}
+            alt={language === 'ES' ? 'Galería de Twenty4 Studios' : 'Twenty4 Studios gallery'}
+            fill
+            sizes={shape.sizes}
+            className="object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 transition-[filter] duration-700"
+            referrerPolicy="no-referrer"
+          />
+        )}
+        {tone === 'red' && (
+          // Multiply sobre la foto en grises: los blancos pasan a Crimson y las sombras quedan negras.
+          <div className="absolute inset-0 bg-brand-crimson mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0" />
+        )}
+      </div>
+    </motion.div>
   );
 };
 
@@ -365,14 +458,14 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
   const gallery = presentationData?.gallery && presentationData.gallery.length > 0
     ? presentationData.gallery
     : [...defaultTopRow, ...defaultBottomRow];
-  const half = Math.ceil(gallery.length / 2);
-  const topRow = gallery.slice(0, half);
-  const bottomRow = gallery.slice(half);
+  const { top: topRow, bottom: bottomRow } = splitGallery<string>(gallery);
 
   const { language } = useLanguage();
   const currentLang = language.toLowerCase();
-  const textRaw = presentationData?.[`text_${currentLang}`] || presentationData?.text_es || "Where Athletes Become Icons";
-  const words = textRaw.split(" ").filter(Boolean);
+  const textRaw = presentationData?.[`text_${currentLang}`] || presentationData?.text_es || "Where Athletes Become **Icons**";
+
+  // **palabra** en el CMS → Herr Von Muellerhoff (ver components/brand/ScriptHighlight)
+  const words = highlightWords(textRaw);
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -406,7 +499,7 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
   };
 
   return (
-    <section ref={sectionRef} className="relative pt-20 pb-8 lg:py-32 overflow-hidden bg-transparent min-h-screen flex flex-col justify-center gap-6 lg:gap-12">
+    <section ref={sectionRef} className="relative py-16 lg:py-24 overflow-hidden bg-transparent flex flex-col gap-6 lg:gap-12">
       <motion.div
         style={{ opacity, y }}
         initial="hidden"
@@ -420,14 +513,10 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
             variants={rowVariants}
             animate={{ x: ["0%", "-50%"] }}
             transition={{ x: { duration: 40, repeat: Infinity, ease: "linear" }, default: { duration: 1 } }}
-            className="flex gap-4 lg:gap-8 px-4 w-max"
+            className="flex items-center gap-3 lg:gap-6 px-4 w-max"
           >
             {[...topRow, ...topRow].map((src, i) => (
-              <div key={`top-${i}`} className={`flex-shrink-0 ${i % 2 === 0 ? 'translate-y-4 lg:translate-y-8' : '-translate-y-4 lg:-translate-y-8'}`}>
-                <motion.div variants={imageVariants} className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-almost-black/5 grayscale hover:grayscale-0 transition-all duration-500">
-                  {src && <Image src={src} alt="Showcase" fill className="object-cover" referrerPolicy="no-referrer" />}
-                </motion.div>
-              </div>
+              <PolaroidCard key={`top-${i}`} src={src} index={i % topRow.length} row="top" variants={imageVariants} />
             ))}
           </motion.div>
         </div>
@@ -438,10 +527,20 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="text-2xl md:text-4xl lg:text-[3.125rem] font-serif font-bold text-white leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
+            className="text-2xl md:text-4xl lg:text-[3.125rem] font-display font-bold text-white leading-[0.95] tracking-tighter flex flex-wrap justify-center gap-x-[0.3em]"
           >
-            {words.map((word: string, i: number) => (
-              <motion.span key={i} variants={wordVariants} className="inline-block">{word}</motion.span>
+            {words.map((word, i) => (
+              <motion.span
+                key={i}
+                variants={wordVariants}
+                className={
+                  word.script
+                    ? `inline-block ${SCRIPT_CLASS}`
+                    : "inline-block"
+                }
+              >
+                {word.text}
+              </motion.span>
             ))}
           </motion.h2>
         </div>
@@ -451,14 +550,10 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
             variants={rowVariants}
             animate={{ x: ["-50%", "0%"] }}
             transition={{ x: { duration: 40, repeat: Infinity, ease: "linear" }, default: { duration: 1 } }}
-            className="flex gap-4 lg:gap-8 px-4 w-max"
+            className="flex items-center gap-3 lg:gap-6 px-4 w-max"
           >
             {[...bottomRow, ...bottomRow].map((src, i) => (
-              <div key={`bottom-${i}`} className={`flex-shrink-0 ${i % 2 === 0 ? '-translate-y-4 lg:-translate-y-8' : 'translate-y-4 lg:translate-y-8'}`}>
-                <motion.div variants={imageVariants} className="relative w-44 h-32 lg:w-80 lg:h-56 rounded-[1.125rem] overflow-hidden shadow-2xl border border-brand-almost-black/5 grayscale hover:grayscale-0 transition-all duration-500">
-                  {src && <Image src={src} alt="Showcase" fill className="object-cover" referrerPolicy="no-referrer" />}
-                </motion.div>
-              </div>
+              <PolaroidCard key={`bottom-${i}`} src={src} index={i % bottomRow.length} row="bottom" variants={imageVariants} />
             ))}
           </motion.div>
         </div>
@@ -508,23 +603,24 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
   if (projectsList.length === 0) return null;
 
   return (
-    <section id="projects" className="relative pt-8 pb-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black overflow-hidden">
+    <section id="projects" className="relative py-16 lg:py-24 px-6 lg:px-12 bg-brand-almost-black overflow-hidden">
+      <EditorialFrame />
       <div className="max-w-7xl mx-auto">
-        <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
+        <div className="mb-12 lg:mb-20 text-left flex flex-col items-start">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+            className="text-brand-crimson uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
-            03 / PROJECTS
+            03 / {language === 'ES' ? 'PROYECTOS' : 'PROJECTS'}
           </motion.span>
           <motion.h2
             variants={titleContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter flex flex-wrap gap-x-[0.3em]"
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-display font-black uppercase text-white leading-[0.92] tracking-tight flex flex-wrap gap-x-[0.3em] gap-y-[0.12em]"
           >
             {words.map((word: string, i: number) => (
               <motion.span key={i} variants={wordVariants} className="inline-block">{word}</motion.span>
@@ -532,7 +628,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
           </motion.h2>
         </div>
 
-        <div className="space-y-32 lg:space-y-64">
+        <div className="space-y-20 lg:space-y-28">
           {projectsList.map((project, i) => (
             <div key={i} className="flex flex-col gap-12">
               <motion.div
@@ -547,7 +643,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  <div className="relative aspect-[4/5] lg:aspect-[16/10] overflow-hidden rounded-[1.125rem] group bg-brand-almost-black">
+                  <div className="relative aspect-[4/5] lg:aspect-[16/10] overflow-hidden rounded-none group bg-brand-almost-black">
                     {project.img && (
                       <Image
                         src={project.img}
@@ -589,7 +685,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
                 <div className="w-full lg:w-2/5 space-y-6 lg:space-y-8">
                   <div className="space-y-2">
                     <p className="text-xs md:text-sm uppercase tracking-widest font-bold text-white/40">{project.category}</p>
-                    <h3 className="text-4xl md:text-5xl lg:text-[3.125rem] font-serif font-black text-white leading-tight">{project.title}</h3>
+                    <h3 className="text-3xl md:text-5xl lg:text-[3.125rem] font-display font-black uppercase text-white leading-none tracking-tight">{project.title}</h3>
                   </div>
 
                   <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-md">{project.description}</p>
@@ -600,7 +696,7 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
                       className="group flex items-center gap-4 text-white font-bold uppercase tracking-widest text-xs md:text-sm pt-4"
                     >
                       <span>{language === 'ES' ? 'Ver Caso de Estudio' : 'View Case Study'}</span>
-                      <div className="w-10 h-[1px] bg-white/30 group-hover:w-16 transition-all duration-500" />
+                      <div className="w-10 h-[1px] bg-brand-crimson group-hover:w-16 transition-all duration-500" />
                       <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </Link>
                   )}
@@ -658,23 +754,24 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
   };
 
   return (
-    <section id="talents" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black text-white overflow-hidden w-full">
+    <section id="talents" className="relative py-16 lg:py-24 px-6 lg:px-12 bg-brand-almost-black text-white overflow-hidden w-full">
+      <EditorialFrame />
       <div className="max-w-7xl mx-auto">
-        <div className="mb-32 lg:mb-48 text-left flex flex-col items-start">
+        <div className="mb-12 lg:mb-20 text-left flex flex-col items-start">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+            className="text-brand-crimson uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
-            02 / TALENTS
+            02 / {language === 'ES' ? 'TALENTOS' : 'TALENTS'}
           </motion.span>
           <motion.h2
             variants={titleContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter flex flex-wrap gap-x-[0.3em]"
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-display font-black uppercase text-white leading-[0.92] tracking-tight flex flex-wrap gap-x-[0.3em] gap-y-[0.12em]"
           >
             {words.map((word: string, i: number) => (
               <motion.span key={i} variants={wordVariantsTitle} className="inline-block">{word}</motion.span>
@@ -688,7 +785,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={sectionVariants}
-        className="w-full space-y-20"
+        className="w-full space-y-20 lg:space-y-28"
       >
         {/* Desktop: filas de máx. 7, accordion independiente por fila */}
         {(() => {
@@ -702,7 +799,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
           }, []);
           const rowHeight = 'h-[650px]';
           return (
-            <div className="hidden lg:flex flex-col gap-3 mb-32 max-w-7xl mx-auto">
+            <div className="hidden lg:flex flex-col gap-3 max-w-7xl mx-auto">
               {talentRows.map((row, rowIdx) => (
                 <div key={rowIdx} className={`flex gap-3 ${rowHeight}`}>
                   {row.map((talent, colIdx) => {
@@ -710,7 +807,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     return (
                       <motion.div
                         key={talent.id}
-                        className={`relative overflow-hidden rounded-[0.5rem] cursor-pointer h-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                        className={`relative overflow-hidden rounded-none cursor-pointer h-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                           hoveredIndex === flatIdx ? 'flex-[3]' : 'flex-[1]'
                         }`}
                         onMouseEnter={() => setHoveredIndex(flatIdx)}
@@ -728,7 +825,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                         <div className={`absolute inset-0 bg-gradient-to-t from-brand-almost-black via-brand-almost-black/20 to-transparent transition-opacity duration-500 ${hoveredIndex === flatIdx ? 'opacity-100' : 'opacity-40'}`} />
                         <div className="absolute inset-0 p-8 flex flex-col justify-end">
                           <div className={`space-y-4 transition-all duration-500 ${hoveredIndex === flatIdx ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
+                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-display font-black text-white uppercase leading-[0.95] tracking-tight">{talent.name}</h3>
                             <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
                               {talent[`category_${currentLang}`] || talent.category_es}
                             </p>
@@ -750,37 +847,52 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
           );
         })()}
 
-        {/* Mobile: 1 columna, listado vertical */}
-        <div className="lg:hidden flex flex-col gap-3 mb-32 max-w-7xl mx-auto">
-          {talentsData.map((talent) => (
-            <motion.div
-              key={talent.id}
-              variants={itemVariants}
-              className="relative overflow-hidden rounded-[0.5rem] h-[400px]"
-            >
-              {talent.image_url && (
-                <Image
-                  src={talent.image_url}
-                  alt={talent.name}
-                  fill
-                  className="object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-almost-black via-brand-almost-black/20 to-transparent opacity-60" />
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-2">
-                  {talent[`category_${currentLang}`] || talent.category_es}
-                </p>
-                <h3 className="text-2xl font-serif text-white uppercase leading-tight">{talent.name}</h3>
-              </div>
-            </motion.div>
-          ))}
+        {/* Mobile: cuadrícula de 2 columnas (antes una ficha a todo el ancho por atleta, ~5 pantallas) */}
+        <div className="lg:hidden grid grid-cols-2 gap-3 max-w-7xl mx-auto">
+          {talentsData.map((talent) => {
+            const instagram = externalUrl(talent.instagram_url);
+            const card = (
+              <>
+                {talent.image_url && (
+                  <Image
+                    src={talent.image_url}
+                    alt={talent.name}
+                    fill
+                    sizes="50vw"
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-almost-black via-brand-almost-black/30 to-transparent" />
+                {instagram && (
+                  <ArrowUpRight className="absolute top-3 right-3 w-4 h-4 text-white/80" aria-hidden="true" />
+                )}
+                <div className="absolute inset-0 p-3 flex flex-col justify-end">
+                  <h3 className="text-base font-display font-black text-white uppercase leading-[1.05]">{talent.name}</h3>
+                </div>
+              </>
+            );
+            return (
+              <motion.div key={talent.id} variants={itemVariants} className="relative overflow-hidden rounded-none aspect-[3/4]">
+                {instagram ? (
+                  <a
+                    href={instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${talent.name} — ${language === 'ES' ? 'ver en Instagram' : 'view on Instagram'}`}
+                    className="absolute inset-0 block"
+                  >
+                    {card}
+                  </a>
+                ) : card}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Brand Ticker */}
         {brands.length > 0 && (
-          <div className="relative pt-4 lg:py-16 overflow-hidden -mx-6 lg:-mx-12 bg-brand-almost-black">
+          <div className="relative overflow-hidden -mx-6 lg:-mx-12 bg-brand-almost-black">
             <div className="flex whitespace-nowrap">
               <motion.div
                 animate={{ x: ["0%", "-100%"] }}
@@ -789,7 +901,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
               >
                 {brands.map((brand, i) => (
                   <div key={i} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
+                    <span className="text-brand-crimson/60 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
                     {brand.logo ? (
                       <div className="relative w-32 md:w-48 h-8 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-500">
                         <Image src={brand.logo} alt={brand.name} fill className="object-contain brightness-0 invert" referrerPolicy="no-referrer" />
@@ -797,7 +909,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     ) : (
                       <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
                     )}
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">]</span>
+                    <span className="text-brand-crimson/60 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">]</span>
                   </div>
                 ))}
               </motion.div>
@@ -808,7 +920,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
               >
                 {brands.map((brand, i) => (
                   <div key={i + 10} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
+                    <span className="text-brand-crimson/60 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
                     {brand.logo ? (
                       <div className="relative w-32 md:w-48 h-8 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-500">
                         <Image src={brand.logo} alt={brand.name} fill className="object-contain brightness-0 invert" referrerPolicy="no-referrer" />
@@ -816,7 +928,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     ) : (
                       <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
                     )}
-                    <span className="text-white/10 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">]</span>
+                    <span className="text-brand-crimson/60 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">]</span>
                   </div>
                 ))}
               </motion.div>
@@ -827,7 +939,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
         {/* Experience Section */}
         {talentsSettings?.experience && talentsSettings.experience.some((e: any) => e.title_es || e.title_en) && (
           <motion.div
-            className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3"
+            className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-y-14 md:gap-x-10 lg:gap-x-14"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
@@ -844,10 +956,12 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     hidden: { opacity: 0, y: 30 },
                     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as any } }
                   }}
-                  className="px-10 pt-10 pb-4 lg:p-14 space-y-5"
+                  className="space-y-5"
                 >
-                  <span className="text-white font-black text-5xl lg:text-6xl leading-none">0{i + 1}</span>
-                  <h3 className="text-xl lg:text-2xl font-black uppercase tracking-tight text-white">{expTitle}</h3>
+                  <span className="text-brand-crimson font-black text-5xl lg:text-6xl leading-none">0{i + 1}</span>
+                  <h3 className="font-script font-normal tracking-normal text-5xl lg:text-6xl leading-[0.85] py-1 text-white">
+                    {expTitle.charAt(0).toLocaleUpperCase('es') + expTitle.slice(1).toLocaleLowerCase('es')}
+                  </h3>
                   <p className="text-lg md:text-xl text-white/70 leading-relaxed font-light">{expDesc}</p>
                 </motion.div>
               );
@@ -859,25 +973,61 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
   );
 };
 
+/**
+ * Tarjeta de servicio de About Us. Es un componente aparte porque necesita
+ * estado propio: si la imagen del CMS no carga (hay URLs de Cloudinary que
+ * devuelven 404), cae al bloque Terra con el isotipo en lugar de dejar el
+ * icono de imagen rota.
+ */
+const ServiceCard = ({ index, title, description, image }: { index: number; title: string; description: string; image?: string }) => {
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = Boolean(image) && !imageFailed;
+
+  return (
+    <article className="group flex flex-col">
+      <div className="relative aspect-[4/3] overflow-hidden bg-brand-terra">
+        {showImage ? (
+          <Image
+            src={image as string}
+            alt={title}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+            referrerPolicy="no-referrer"
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Stars className="w-24 text-brand-warm-lux/10" />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6 flex items-start gap-5">
+        <span className="text-brand-crimson font-black text-xs md:text-sm tracking-[0.2em] pt-1.5 shrink-0">
+          0{index + 1}
+        </span>
+        <div className="space-y-3">
+          <h3 className="text-2xl md:text-3xl lg:text-[2.25rem] font-display font-black uppercase tracking-tight text-brand-almost-black leading-[0.95]">
+            {title}
+          </h3>
+          <p className="text-brand-almost-black/70 text-base md:text-lg leading-relaxed max-w-md">
+            {description}
+          </p>
+        </div>
+      </div>
+    </article>
+  );
+};
+
 const AboutUs = ({ aboutData }: { aboutData: any }) => {
   const { language } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    if (isPaused || !aboutData?.services?.length) return;
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % aboutData.services.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isPaused, aboutData]);
 
   if (!aboutData) return null;
 
   const title = (language === 'ES' ? aboutData.title_es : aboutData.title_en) || '';
   const statement = (language === 'ES' ? aboutData.statement_es : aboutData.statement_en) || '';
   const services = (aboutData.services || []).filter((s: any) => !s.is_hidden);
-  const sectionLogo = aboutData.section_logo || "https://res.cloudinary.com/djqtkbyez/image/upload/v1773912109/Twenty4_Short_White_qhrgmr.svg";
   const wordsTitle = title.split(" ").filter(Boolean);
 
   const titleContainer: Variants = {
@@ -886,31 +1036,42 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
   };
 
   const wordVariantsTitle: Variants = {
-    hidden: { opacity: 0, y: 10, filter: "blur(8px)", color: "rgba(255, 255, 255, 0)" },
+    hidden: { opacity: 0, y: 10, filter: "blur(8px)", color: "rgba(22, 22, 22, 0)" },
     visible: {
-      opacity: 1, y: 0, filter: "blur(0px)", color: "rgba(255, 255, 255, 1)",
+      opacity: 1, y: 0, filter: "blur(0px)", color: "rgba(22, 22, 22, 1)",
       transition: { duration: 0.6, ease: "easeOut" }
     },
   };
 
+  const gridVariants: Variants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.12 } },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 32 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as any } },
+  };
+
   return (
-    <section id="team" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black overflow-hidden min-h-[800px]">
+    <section id="team" className="relative py-16 lg:py-24 px-6 lg:px-12 bg-brand-warm-lux overflow-hidden">
+      <EditorialFrame tone="light" />
       <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="mb-20 lg:mb-32 text-left flex flex-col items-start">
+        <div className="mb-12 lg:mb-20 text-left flex flex-col items-start">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-white/40 uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
+            className="text-brand-crimson uppercase tracking-[0.3em] text-xs md:text-sm mb-6 block font-bold"
           >
-            04 / ABOUT US
+            04 / {language === 'ES' ? 'SOBRE NOSOTROS' : 'ABOUT US'}
           </motion.span>
           <motion.h2
             variants={titleContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-white leading-[0.8] tracking-tighter flex flex-wrap justify-start gap-x-[0.3em]"
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-display font-black uppercase text-brand-almost-black leading-[0.92] tracking-tight flex flex-wrap justify-start gap-x-[0.3em] gap-y-[0.12em]"
           >
             {wordsTitle.map((word: string, i: number) => (
               <motion.span key={i} variants={wordVariantsTitle} className="inline-block">{word}</motion.span>
@@ -918,7 +1079,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
           </motion.h2>
         </div>
 
-        <div className="mb-32 max-w-5xl mx-auto">
+        <div className="mb-20 lg:mb-28 max-w-3xl">
           <motion.p
             initial="hidden"
             whileInView="visible"
@@ -927,7 +1088,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
               hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { staggerChildren: 0.04, delayChildren: 0.2 } },
             }}
-            className="text-white/70 text-lg md:text-2xl leading-relaxed text-white tracking-tight italic font-serif flex flex-wrap justify-center gap-x-[0.3em]"
+            className="text-brand-almost-black/80 text-lg md:text-2xl leading-relaxed tracking-tight italic font-display flex flex-wrap justify-start gap-x-[0.3em]"
           >
             {statement.split(" ").filter(Boolean).map((word: string, i: number) => (
               <motion.span
@@ -944,78 +1105,29 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
           </motion.p>
         </div>
 
+        {/*
+          Rejilla editorial: los cuatro servicios visibles a la vez, cada uno con
+          su imagen y su descripción. Sustituye al carrusel auto-rotativo, que
+          mostraba uno de cuatro y escondía los textos sobre la foto.
+        */}
         {services.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div
-              className="space-y-12 order-2 lg:order-1"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-              <div className="flex flex-col gap-8">
-                {services.map((service: any, i: number) => (
-                  <button key={i} onMouseEnter={() => setActiveIndex(i)} onClick={() => setActiveIndex(i)} className="text-left group">
-                    <h3 className={`text-4xl md:text-5xl lg:text-[3.125rem] font-serif transition-all duration-500 ${activeIndex === i ? 'text-white' : 'text-white/20 hover:text-white/40'}`}>
-                      {language === 'ES' ? service.title_es : service.title_en}
-                    </h3>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative order-1 lg:order-2">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                viewport={{ once: true }}
-                animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
-                transition={{
-                  y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                  rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-                  default: { duration: 0.8, ease: "easeOut" }
-                }}
-                className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 w-24 h-24 md:w-32 md:h-32 bg-brand-almost-black backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center p-0"
-              >
-                <img src={sectionLogo} alt="Section Icon" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              </motion.div>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className="relative aspect-square rounded-[2rem] overflow-hidden group shadow-2xl bg-white/5"
-                >
-                  <img
-                    src={services[activeIndex]?.image || "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop"}
-                    alt="Service"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop";
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-almost-black/90 via-brand-almost-black/20 to-transparent" />
-                  <div className="absolute bottom-8 left-8 right-8">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      className="space-y-2"
-                    >
-                      <h4 className="text-2xl font-serif font-bold text-white">
-                        {language === 'ES' ? services[activeIndex]?.title_es : services[activeIndex]?.title_en}
-                      </h4>
-                      <p className="text-white/70 text-sm max-w-sm leading-relaxed">
-                        {language === 'ES' ? services[activeIndex]?.description_es : services[activeIndex]?.description_en}
-                      </p>
-                    </motion.div>
-                  </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={gridVariants}
+            className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-x-16 lg:gap-y-20"
+          >
+            {services.map((service: any, i: number) => {
+              const serviceTitle = (language === 'ES' ? service.title_es : service.title_en) || service.title_es || '';
+              const serviceDesc = (language === 'ES' ? service.description_es : service.description_en) || service.description_es || '';
+              return (
+                <motion.div key={i} variants={cardVariants}>
+                  <ServiceCard index={i} title={serviceTitle} description={serviceDesc} image={service.image} />
                 </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
+              );
+            })}
+          </motion.div>
         )}
       </div>
     </section>
@@ -1087,29 +1199,29 @@ const ContactForm = () => {
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-2">
-          <label htmlFor="contact-name" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.name}</label>
+          <label htmlFor="contact-name" className="text-[11px] md:text-[12px] uppercase tracking-widest font-bold text-white/50">{t.name}</label>
           <input id="contact-name" name="name" type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
         </div>
         <div className="space-y-2">
-          <label htmlFor="contact-email" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.email}</label>
+          <label htmlFor="contact-email" className="text-[11px] md:text-[12px] uppercase tracking-widest font-bold text-white/50">{t.email}</label>
           <input id="contact-email" name="email" type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors" />
         </div>
       </div>
       <div className="space-y-2">
-        <label htmlFor="contact-subject" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.subject}</label>
+        <label htmlFor="contact-subject" className="text-[11px] md:text-[12px] uppercase tracking-widest font-bold text-white/50">{t.subject}</label>
         <select id="contact-subject" name="subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
           {t.subjects.map((s) => <option key={s} className="bg-brand-almost-black">{s}</option>)}
         </select>
       </div>
       <div className="space-y-2">
-        <label htmlFor="contact-message" className="text-[10px] md:text-[12px] uppercase tracking-widest font-bold text-white/40">{t.message}</label>
+        <label htmlFor="contact-message" className="text-[11px] md:text-[12px] uppercase tracking-widest font-bold text-white/50">{t.message}</label>
         <textarea id="contact-message" name="message" rows={4} required value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors resize-none" />
       </div>
       <div className="pt-2">
         <label className="flex items-center gap-3 cursor-pointer group">
           <div className="relative shrink-0">
             <input type="checkbox" required checked={acceptedPolicies} onChange={(e) => setAcceptedPolicies(e.target.checked)} className="peer sr-only" />
-            <div className="w-5 h-5 border border-white/20 rounded bg-white/5 transition-all peer-checked:bg-brand-crimson peer-checked:border-brand-crimson flex items-center justify-center">
+            <div className="w-5 h-5 border border-white/20 rounded-none bg-white/5 transition-all peer-checked:bg-brand-crimson peer-checked:border-brand-crimson flex items-center justify-center">
               <Check size={12} className="text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
             </div>
           </div>
@@ -1127,7 +1239,7 @@ const ContactForm = () => {
         disabled={isSubmitting || isSuccess || !acceptedPolicies}
         whileHover={acceptedPolicies ? { scale: 1.02 } : {}}
         whileTap={acceptedPolicies ? { scale: 0.98 } : {}}
-        className={`w-full py-4 rounded-lg uppercase tracking-widest text-xs font-bold transition-all ${isSuccess ? 'bg-brand-almost-black text-white' : (acceptedPolicies ? 'bg-white text-brand-almost-black' : 'bg-white/20 text-white/40 cursor-not-allowed')}`}
+        className={`w-full py-4 rounded-none uppercase tracking-widest text-xs font-bold transition-all ${isSuccess ? 'bg-brand-warm-lux text-brand-almost-black' : (acceptedPolicies ? 'bg-brand-crimson text-brand-warm-lux hover:bg-brand-warm-lux hover:text-brand-almost-black' : 'bg-white/20 text-white/40 cursor-not-allowed')}`}
       >
         {isSubmitting ? t.sending : isSuccess ? t.sent : t.submit}
       </motion.button>
@@ -1149,32 +1261,20 @@ const Contact = ({ generalSettings }: { generalSettings: any }) => {
   };
 
   const wordVariants: Variants = {
-    hidden: { opacity: 0, y: 10, filter: "blur(8px)", color: "rgba(255, 255, 255, 0)" },
+    hidden: { opacity: 0, y: 10, filter: "blur(8px)", color: "rgba(240, 237, 232, 0)" },
     visible: {
-      opacity: 1, y: 0, filter: "blur(0px)", color: "rgba(255, 255, 255, 1)",
+      opacity: 1, y: 0, filter: "blur(0px)", color: "rgba(240, 237, 232, 1)",
       transition: { duration: 0.6, ease: "easeOut" }
     },
   };
 
   return (
-    <section id="contact" className="relative py-20 lg:py-32 px-6 lg:px-12 bg-brand-almost-black text-white overflow-hidden brand-grain">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 opacity-40">
-          <Image
-            src="/brand/contact-bg-from-content-to-culture.jpg"
-            alt="Contact Background"
-            fill
-            className="object-cover blur-2xl scale-110"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-      </div>
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-almost-black to-transparent pointer-events-none z-10" />
-      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-brand-almost-black to-transparent pointer-events-none z-10" />
+    <section id="contact" className="relative py-16 lg:py-24 px-6 lg:px-12 bg-brand-crimson text-white overflow-hidden brand-grain">
+      <EditorialFrame tone="crimson" className="z-30" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-20">
         <div>
-          <span className="text-brand-warm-lux/40 uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
+          <span className="text-brand-almost-black uppercase tracking-widest text-xs md:text-sm mb-4 block font-bold">
             05 / {language === 'ES' ? 'Contacto' : 'Contact'}
           </span>
           <motion.h2
@@ -1182,20 +1282,20 @@ const Contact = ({ generalSettings }: { generalSettings: any }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-black text-brand-warm-lux leading-tight mb-8 flex flex-wrap gap-x-[0.3em]"
+            className="text-5xl md:text-6xl lg:text-[4.5rem] font-display font-black uppercase text-brand-warm-lux leading-[0.92] tracking-tight mb-8 flex flex-wrap gap-x-[0.3em] gap-y-[0.12em]"
           >
             {words.map((word: string, i: number) => (
               <motion.span key={i} variants={wordVariants}>{word}</motion.span>
             ))}
           </motion.h2>
-          <p className="text-brand-warm-lux/60 text-lg mb-12 max-w-md">
+          <p className="text-brand-warm-lux/85 text-lg mb-12 max-w-md">
             {language === 'ES'
               ? 'Ponte en contacto, escríbenos o simplemente saluda — estamos aquí para conectar, crear y convertir ideas audaces en realidad.'
               : "Reach out, drop a line, or just say hey — we're here to connect, create, and turn bold ideas into reality."}
           </p>
           <div className="space-y-4">
-            <p className="text-brand-warm-lux font-serif text-2xl md:text-3xl">{email}</p>
-            <p className="text-brand-warm-lux/60 uppercase tracking-widest text-xs md:text-sm font-bold">{phone}</p>
+            <a href={`mailto:${email}`} className="block text-brand-warm-lux font-display text-2xl md:text-3xl break-all hover:underline underline-offset-4">{email}</a>
+            <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="inline-block py-2 text-brand-warm-lux/75 uppercase tracking-widest text-xs md:text-sm font-bold hover:text-brand-warm-lux">{phone}</a>
           </div>
         </div>
 
@@ -1203,7 +1303,7 @@ const Contact = ({ generalSettings }: { generalSettings: any }) => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-white/5 backdrop-blur-md border border-white/10 p-8 lg:p-12 rounded-[1.125rem]"
+          className="bg-brand-almost-black p-8 lg:p-12 rounded-none shadow-2xl"
         >
           <ContactForm />
         </motion.div>
@@ -1216,71 +1316,56 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
   const { language } = useLanguage();
 
   const footerText = language === 'ES'
-    ? (generalSettings?.footer_text_es || "La creencia es mutua por eso es que funciona.")
-    : (generalSettings?.footer_text_en || "The belief is mutual, that's why it works.");
+    ? (generalSettings?.footer_text_es || "La creencia es mutua por eso es que **funciona**.")
+    : (generalSettings?.footer_text_en || "The belief is mutual, that's why it **works**.");
 
-  const renderFormattedText = (text: string) => {
-    if (!text) return null;
-    const hasManualBold = text.includes('**');
-    if (!hasManualBold) {
-      const words = text.split(" ");
-      const lastWord = words.pop() || "";
-      return <>{words.join(" ")} <span className="text-brand-almost-black font-serif font-black">{lastWord}</span></>;
-    }
-    const parts = text.split(/(\*\*.*?\*\*)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <span key={i} className="text-brand-almost-black font-serif font-black">{part.slice(2, -2)}</span>;
-      }
-      return part;
-    });
-  };
 
-  const instagram = generalSettings?.instagram_url || "#";
-  const linkedin = generalSettings?.linkedin_url || "#";
+  const instagram = externalUrl(generalSettings?.instagram_url);
+  const linkedin = externalUrl(generalSettings?.linkedin_url);
 
   return (
-    <footer ref={footerRef} className="relative overflow-hidden bg-brand-almost-black p-3 pt-20 lg:pt-32 min-h-[600px] flex flex-col brand-grain">
-      <div className="bg-brand-warm-lux rounded-[1.125rem] flex-grow flex flex-col p-8 lg:p-16 relative z-40 overflow-hidden">
+    <footer ref={footerRef} className="relative overflow-hidden bg-brand-almost-black min-h-[600px] flex flex-col brand-grain">
+      <div className="flex-grow flex flex-col px-6 py-16 lg:px-12 lg:py-24 max-w-7xl w-full mx-auto relative z-40">
         <div className="flex-grow flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/2 flex flex-col">
             <div className="relative h-[15vh] md:h-[20vh] lg:h-[25vh] w-full mb-12 lg:mb-0">
               <Image
                 src={generalSettings?.footer_logo_url || "https://res.cloudinary.com/djqtkbyez/image/upload/v1773912109/Twenty4_Long_Green_f4koxb.svg"}
-                alt="Twenty4 Studios Logo"
+                alt="Twenty4 Studios"
                 fill
-                className="object-contain object-left"
+                className="object-contain object-left brightness-0 invert opacity-95"
                 referrerPolicy="no-referrer"
               />
             </div>
             <div className="mt-auto">
-              <p className="text-brand-almost-black text-xl md:text-1xl lg:text-2xl font-serif leading-relaxed">
-                {renderFormattedText(footerText)}
+              <p className="text-brand-warm-lux text-xl lg:text-2xl font-display leading-relaxed">
+                <Highlight text={footerText} />
               </p>
             </div>
           </div>
 
-          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-almost-black/5">
+          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-warm-lux/10">
             <div className="mt-auto space-y-12">
-              <div className="flex space-x-8 text-brand-almost-black">
-                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">Instagram</a>
-                <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">LinkedIn</a>
+              <div className="flex space-x-8 text-brand-warm-lux">
+                {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" className="py-2 text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">Instagram</a>}
+                {linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer" className="py-2 text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">LinkedIn</a>}
               </div>
               <div className="grid grid-cols-2 gap-8 lg:justify-items-start">
                 <div>
-                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-almost-black/40">Navigation</h5>
-                  <ul className="space-y-4 text-sm text-brand-almost-black font-bold uppercase tracking-wider">
-                    <li><a href="#hero" className="hover:text-brand-crimson transition-colors">Studio</a></li>
-                    <li><a href="#projects" className="hover:text-brand-crimson transition-colors">Projects</a></li>
-                    <li><a href="#talents" className="hover:text-brand-crimson transition-colors">Talents</a></li>
-                    <li><a href="#contact" className="hover:text-brand-crimson transition-colors">Contact</a></li>
+                  <h5 className="text-[11px] uppercase tracking-widest font-bold mb-4 text-brand-warm-lux/40">{language === 'ES' ? 'Navegación' : 'Navigation'}</h5>
+                  <ul className="space-y-1 text-sm text-brand-warm-lux font-bold uppercase tracking-wider">
+                    <li><a href="#hero" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Estudio' : 'Studio'}</a></li>
+                    <li><a href="#talents" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Talentos' : 'Talents'}</a></li>
+                    <li><a href="#projects" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Proyectos' : 'Projects'}</a></li>
+                    <li><a href="#team" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Sobre Nosotros' : 'About Us'}</a></li>
+                    <li><a href="#contact" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Contacto' : 'Contact'}</a></li>
                   </ul>
                 </div>
                 <div>
-                  <h5 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-brand-almost-black/40">Legal</h5>
-                  <ul className="space-y-4 text-sm text-brand-almost-black font-bold uppercase tracking-wider">
-                    <li><Link href={`/politica-de-privacidad?lang=${language.toLowerCase()}`} className="hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Privacidad' : 'Privacy'}</Link></li>
-                    <li><Link href={`/aviso-legal?lang=${language.toLowerCase()}`} className="hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Aviso Legal' : 'Legal Notice'}</Link></li>
+                  <h5 className="text-[11px] uppercase tracking-widest font-bold mb-4 text-brand-warm-lux/40">Legal</h5>
+                  <ul className="space-y-1 text-sm text-brand-warm-lux font-bold uppercase tracking-wider">
+                    <li><Link href={`/politica-de-privacidad?lang=${language.toLowerCase()}`} className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Privacidad' : 'Privacy'}</Link></li>
+                    <li><Link href={`/aviso-legal?lang=${language.toLowerCase()}`} className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Aviso Legal' : 'Legal Notice'}</Link></li>
                   </ul>
                 </div>
               </div>
@@ -1288,9 +1373,9 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
           </div>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-brand-crimson/30 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-almost-black/30">
-          <p>© {new Date().getFullYear()} {generalSettings?.site_name || 'Twenty4 Studios'}. All rights reserved.</p>
-          <p>Built for Icons.</p>
+        <div className="mt-20 pt-10 border-t border-brand-warm-lux/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[11px] uppercase tracking-[0.2em] font-bold text-brand-warm-lux/40">
+          <p>© {new Date().getFullYear()} {generalSettings?.site_name || 'Twenty4 Studios'}. {language === 'ES' ? 'Todos los derechos reservados.' : 'All rights reserved.'}</p>
+          <p>{language === 'ES' ? 'Hecho para iconos.' : 'Built for Icons.'}</p>
         </div>
       </div>
     </footer>
@@ -1322,10 +1407,7 @@ const CustomCursor = () => {
         animate={{ x: position.x - 18, y: position.y - 18, scale: isHovering ? 1.5 : 1, rotate: isHovering ? 20 : 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 25 }}
       >
-        <svg viewBox="0 0 938.16 448.99" width="34" height="16" fill="currentColor" aria-hidden="true">
-          <polygon points="606.43 115.41 420.52 115.41 466.72 0 308.48 115.41 123.92 115.41 216.18 183.79 0 340.62 269.74 242.99 328.95 340.53 395.59 199.47 606.43 115.41" />
-          <polygon points="752.24 223.79 798.44 108.37 640.21 223.79 455.64 223.79 547.91 292.16 331.73 448.99 601.46 351.36 660.67 448.9 727.32 307.84 938.16 223.79 752.24 223.79" />
-        </svg>
+        <Stars className="w-[34px]" />
       </motion.div>
     </>
   );
@@ -1452,7 +1534,7 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
             transition={{ duration: 0.8 }}
             className="relative min-h-screen bg-brand-almost-black bg-fixed"
           >
-            <Navbar hide={isFooterVisible} logoUrl={navLogoUrl} />
+            <Navbar hide={isFooterVisible} logoUrl={navLogoUrl} instagramUrl={externalUrl(generalSettings.instagram_url)} linkedinUrl={externalUrl(generalSettings.linkedin_url)} />
             <Hero heroData={settings.hero || {}} />
 
             <div className="relative z-30">

@@ -83,7 +83,7 @@
   --color-brand-terra: #2f2524;
 
   --font-sans: "Public Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-serif: "Public Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Public Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-script: "Herr Von Muellerhoff", cursive;
 }
 
@@ -93,7 +93,7 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+    @apply font-display;
   }
 }
 

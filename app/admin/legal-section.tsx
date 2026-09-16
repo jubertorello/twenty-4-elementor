@@ -188,7 +188,7 @@ export const LegalSection = ({ saveTrigger, onSaveComplete }: AdminSectionProps)
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-serif font-black text-white mb-1">Páginas Legales</h2>
+        <h2 className="text-2xl font-display font-black text-white mb-1">Páginas Legales</h2>
         <p className="text-white/30 text-sm">Edita el contenido de las páginas de Política de Privacidad y Aviso Legal.</p>
       </div>
 

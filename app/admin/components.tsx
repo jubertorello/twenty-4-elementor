@@ -7,6 +7,7 @@ import { CloudinaryUploader } from '@/components/CloudinaryUploader';
 import { deleteCloudinaryAsset } from '@/lib/cloudinary';
 import { supabase } from '@/lib/supabase';
 import { MediaLibraryModal, PhotosSection } from './MediaLibraryModal';
+import { gallerySlot } from '@/lib/gallery-layout';
 export { PhotosSection, MediaLibraryModal };
 
 // --- Types ---
@@ -20,9 +21,11 @@ export interface TranslatedText { en: string; es: string; }
 
 // --- Shared Components ---
 
-export const TranslationField = ({ label, value, onChange, type = 'text', maxLength, required = false, stacked = false }: {
+export const TranslationField = ({ label, value, onChange, type = 'text', maxLength, required = false, stacked = false, scriptHint = false }: {
   label: string; value: TranslatedText; onChange: (v: TranslatedText) => void; type?: 'text' | 'textarea'; maxLength?: number;
   required?: boolean; stacked?: boolean;
+  /** Muestra la ayuda de **palabra** → tipografía de resalte. */
+  scriptHint?: boolean;
 }) => (
   <div className="space-y-4 p-5 bg-white/5 rounded-2xl border border-white/10">
     <div className="flex items-center justify-between">
@@ -30,6 +33,12 @@ export const TranslationField = ({ label, value, onChange, type = 'text', maxLen
         {label} {!required && <span className="opacity-50 lowercase font-normal italic">(Opcional)</span>}
       </label>
     </div>
+    {scriptHint && (
+      <p className="text-[11px] leading-relaxed text-white/50">
+        Escribí una palabra entre <code className="px-1 py-0.5 bg-white/10 text-white">**dobles asteriscos**</code> para
+        componerla con la tipografía de resalte (Herr Von Muellerhoff). Ej.: <code className="px-1 py-0.5 bg-white/10 text-white">se convierten en **iconos**</code>
+      </p>
+    )}
     <div className={`grid gap-4 ${stacked ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
       {(['es', 'en'] as const).map((lang) => (
         <div key={lang} className="space-y-2">
@@ -371,6 +380,7 @@ export const PresentationSection = ({ saveTrigger, onSaveComplete }: AdminSectio
         </div>
         <TranslationField
           label="Frase Intro"
+          scriptHint
           type="textarea"
           maxLength={46}
           required={true}
@@ -391,6 +401,11 @@ export const PresentationSection = ({ saveTrigger, onSaveComplete }: AdminSectio
               <h2 className="text-2xl font-black uppercase tracking-tighter text-white">Galería</h2>
               <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">
                 {(data.gallery || []).length}/14 fotos
+              </p>
+              <p className="mt-2 max-w-xl text-[11px] leading-relaxed text-white/50">
+                Cada posición tiene una forma fija en la web. Las miniaturas muestran el recorte real:
+                subí fotos con la orientación indicada (vertical, horizontal…) para que no se corten.
+                La primera mitad va en la fila de arriba y el resto en la de abajo.
               </p>
             </div>
           </div>
@@ -423,9 +438,13 @@ export const PresentationSection = ({ saveTrigger, onSaveComplete }: AdminSectio
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {(data.gallery || []).map((url, i) => (
-            <div key={i} className="aspect-[4/5] bg-black/50 rounded-2xl overflow-hidden group relative border border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-start">
+          {(data.gallery || []).map((url, i) => {
+            const slot = gallerySlot(i, (data.gallery || []).length);
+            return (
+            <div key={i} className="space-y-2">
+            <div className="flex items-center justify-center h-44 bg-black/30 rounded-2xl border border-white/5 p-3">
+            <div style={{ aspectRatio: slot.shape.aspect }} className={`${slot.shape.aspect >= 1 ? 'w-full' : 'h-full'} max-w-full max-h-full bg-black/50 overflow-hidden group relative border border-white/10`}>
               <img src={url} className="w-full h-full object-cover transition-all group-hover:scale-105" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-all backdrop-blur-[2px]">
                 <div className="relative">
@@ -463,7 +482,17 @@ export const PresentationSection = ({ saveTrigger, onSaveComplete }: AdminSectio
                 </button>
               </div>
             </div>
-          ))}
+            </div>
+            <div className="flex items-center justify-between gap-2 px-1 text-[9px] uppercase tracking-widest font-bold">
+              <span className="text-white/70">{slot.shape.label} · {slot.shape.ratio}</span>
+              <span className="flex items-center gap-1.5 text-white/40">
+                <span className={`inline-block w-2 h-2 rounded-full ${slot.tone === 'red' ? 'bg-brand-crimson' : 'bg-white/60'}`} />
+                {slot.tone === 'red' ? 'Rojo' : 'B/N'} · {slot.row === 'top' ? 'Fila 1' : 'Fila 2'}
+              </span>
+            </div>
+            </div>
+            );
+          })}
         </div>
       </section>
     </div>
