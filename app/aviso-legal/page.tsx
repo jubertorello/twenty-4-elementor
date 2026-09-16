@@ -14,6 +14,7 @@ export async function generateMetadata({
   return {
     title: isEn ? 'Legal Notice' : 'Aviso Legal',
     description: isEn ? 'Legal notice and terms of use.' : 'Aviso legal y condiciones de uso.',
+    alternates: { canonical: '/aviso-legal' },
   };
 }
 

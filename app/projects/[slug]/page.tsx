@@ -1,57 +1,68 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase-server';
+import { SITE_NAME, stripSiteSuffix } from '@/lib/site';
 import ProjectDetailClient from './client';
 
 // ISR: revalidate project pages every hour
 export const revalidate = 3600;
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const resolvedParams = await params;
-  
-  // 1. Obtener datos del proyecto
-  const { data: project } = await supabaseServer
+async function getProject(slug: string) {
+  const { data } = await supabaseServer
     .from('projects')
     .select('*')
-    .eq('slug', resolvedParams.slug)
+    .eq('slug', slug)
     .single();
+  return data;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProject(slug);
 
   if (!project) {
-    return { title: 'Project Not Found | Twenty4' };
+    return { title: 'Proyecto no encontrado', robots: { index: false } };
   }
 
-  // 2. Obtener la metadata global por si acaso falta algo
   const { data: settingsData } = await supabaseServer
     .from('site_settings')
     .select('data')
     .eq('id', 'general')
     .single();
-    
-  const globalSettings = settingsData?.data || {};
-  const globalTitle = globalSettings.meta_title || 'TWENTY4 STUDIOS';
 
-  // Usar los campos específicos del proyecto si existen, si no, fallback
-  const title = project.meta_title_es || project.title_es || 'Project';
+  const globalSettings = settingsData?.data || {};
+  const siteTitle = globalSettings.meta_title || globalSettings.site_name || SITE_NAME;
+
+  // El admin guarda el meta título con " | Twenty4 Studios" al final y la
+  // plantilla del layout lo vuelve a añadir: se quita aquí para que salga una vez.
+  const title = stripSiteSuffix(project.meta_title_es || project.title_es || 'Proyecto', siteTitle);
   const description = project.meta_description_es || project.mini_description_es || project.description_es || '';
   const ogImage = project.image_url || globalSettings.og_image || '';
+  const url = `/projects/${slug}`;
 
   return {
-    title: `${title} | ${globalTitle}`,
-    description: description,
+    title,
+    description,
+    alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${globalTitle}`,
-      description: description,
+      title: `${title} | ${siteTitle}`,
+      description,
+      url,
       images: ogImage ? [ogImage] : [],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | ${globalTitle}`,
-      description: description,
+      title: `${title} | ${siteTitle}`,
+      description,
       images: ogImage ? [ogImage] : [],
-    }
+    },
   };
 }
 
-export default function ProjectPage() {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  // Slug inexistente → 404 real (antes respondía 200 con "Project Not Found").
+  if (!(await getProject(slug))) notFound();
   return <ProjectDetailClient />;
 }

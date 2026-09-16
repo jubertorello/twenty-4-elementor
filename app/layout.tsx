@@ -1,8 +1,14 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { supabaseServer } from '@/lib/supabase-server';
+import { SITE_URL, SITE_NAME, BRAND } from '@/lib/site';
+import { externalUrl } from '@/lib/utils';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://twenty4studios.com';
+const BASE_URL = SITE_URL;
+
+export const viewport: Viewport = {
+  themeColor: BRAND.almostBlack,
+};
 
 // Shared fetch so generateMetadata and RootLayout don't double-fetch
 async function getSiteSettings() {
@@ -21,9 +27,10 @@ async function getSiteSettings() {
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 
-  const siteTitle = settings.site_name || 'TWENTY4 STUDIOS';
+  // El campo "Meta título" del admin (SEO & Redes) manda; si está vacío, el nombre del sitio.
+  const siteTitle = settings.meta_title || settings.site_name || SITE_NAME;
   const siteDesc = settings.site_description_es || 'Editorial, premium, fashion-tech studio connecting brands and athletes.';
-  const ogImage = settings.og_image || `${BASE_URL}/og-default.jpg`;
+  const ogImage = settings.og_image || `${BASE_URL}/api/og`;
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -35,21 +42,18 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: {
       icon: settings.favicon_url || '/favicon.svg',
       shortcut: settings.favicon_url || '/favicon.svg',
-      apple: settings.favicon_url || '/favicon.svg',
+      apple: settings.favicon_url || '/api/icon?size=180',
     },
-    alternates: {
-      canonical: BASE_URL,
-      languages: {
-        'es': BASE_URL,
-        'en': `${BASE_URL}?lang=en`,
-      },
-    },
+    // Sin canonical aquí: cada página declara el suyo. Uno global lo heredaban
+    // todas las páginas y apuntaban a la home.
     openGraph: {
       title: siteTitle,
       description: siteDesc,
       images: [{ url: ogImage, width: 1200, height: 630, alt: siteTitle }],
       type: 'website',
       url: BASE_URL,
+      siteName: siteTitle,
+      locale: 'es_ES',
     },
     twitter: {
       card: 'summary_large_image',
@@ -66,14 +70,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: settings.site_name || 'TWENTY4 STUDIOS',
+    name: settings.site_name || SITE_NAME,
     url: BASE_URL,
-    logo: settings.header_logo_url || `${BASE_URL}/og-default.jpg`,
+    logo: settings.header_logo_url || `${BASE_URL}/api/icon?size=512`,
     description: settings.site_description_es || 'Editorial, premium, fashion-tech studio connecting brands and athletes.',
     email: settings.email || 'hello@twenty4studios.com',
     sameAs: [
-      settings.instagram_url,
-      settings.linkedin_url,
+      externalUrl(settings.instagram_url),
+      externalUrl(settings.linkedin_url),
     ].filter(Boolean),
     contactPoint: {
       '@type': 'ContactPoint',

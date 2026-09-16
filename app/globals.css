@@ -8,60 +8,25 @@
  * carguen siempre sin importar bloqueadores de red/privacidad del visitante.
  */
 
-/* Public Sans — texto y titulares */
+/*
+ * Public Sans — texto y titulares.
+ * Subset "latin" de Google Fonts. El archivo normal es variable (pesos
+ * 100–900 en un solo archivo). Los archivos anteriores eran el subset
+ * vietnamita, sin letras básicas: la web caía a Helvetica/Arial.
+ */
 @font-face {
   font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-300.woff2') format('woff2');
-  font-weight: 300;
+  src: url('/fonts/PublicSans-latin.woff2') format('woff2');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-400.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-400-italic.woff2') format('woff2');
+  src: url('/fonts/PublicSans-latin-italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-600.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-700.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Public Sans';
-  src: url('/fonts/PublicSans-900.woff2') format('woff2');
-  font-weight: 900;
-  font-style: normal;
   font-display: swap;
 }
 

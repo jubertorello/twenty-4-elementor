@@ -1,12 +1,14 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/'], // Bloquear acceso a rastreadores en la sección de administración
+      // Backoffice y endpoints internos. /api/og y /api/icon quedan accesibles.
+      disallow: ['/admin/', '/login', '/api/media/', '/api/cloudinary/'],
     },
-    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://twenty4studios.com'}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

@@ -65,7 +65,7 @@ const LoadingScreen = ({ logoUrl }: { logoUrl: string }) => {
   );
 };
 
-const Navbar = ({ hide, logoUrl, instagramUrl, linkedinUrl }: { hide?: boolean; logoUrl: string; instagramUrl?: string | null; linkedinUrl?: string | null }) => {
+const Navbar = ({ ready = true, hide, logoUrl, instagramUrl, linkedinUrl }: { ready?: boolean; hide?: boolean; logoUrl: string; instagramUrl?: string | null; linkedinUrl?: string | null }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOverCrimson, setIsOverCrimson] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -118,7 +118,7 @@ const Navbar = ({ hide, logoUrl, instagramUrl, linkedinUrl }: { hide?: boolean; 
     <div className={`fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4 lg:py-6 pointer-events-none transition-all duration-700 ${hide ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'}`}>
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        animate={ready ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={`max-w-7xl mx-auto w-full pointer-events-auto transition-all duration-500 rounded-none flex items-center justify-between px-4 lg:px-10 py-3 lg:py-4 border shadow-sm ${isScrolled
           ? 'bg-brand-almost-black/80 backdrop-blur-md border-brand-warm-lux/15 shadow-xl'
@@ -258,7 +258,7 @@ const Navbar = ({ hide, logoUrl, instagramUrl, linkedinUrl }: { hide?: boolean; 
   );
 };
 
-const Hero = ({ heroData }: { heroData: any }) => {
+const Hero = ({ heroData, ready = true }: { heroData: any; ready?: boolean }) => {
   const sectionRef = useRef(null);
   const [iframeReady, setIframeReady] = useState(false);
 
@@ -347,7 +347,7 @@ const Hero = ({ heroData }: { heroData: any }) => {
             <motion.h1
               variants={container}
               initial="hidden"
-              animate="visible"
+              animate={ready ? "visible" : "hidden"}
               className="text-white text-4xl md:text-7xl lg:text-[6rem] font-display font-black uppercase leading-[0.92] mb-10 text-balance tracking-tight"
             >
               <div className="flex flex-wrap justify-center gap-x-[0.2em] gap-y-[0.12em]">
@@ -366,8 +366,8 @@ const Hero = ({ heroData }: { heroData: any }) => {
 
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
+          animate={{ opacity: ready ? 1 : 0 }}
+          transition={{ delay: ready ? 1.5 : 0 }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 text-brand-warm-lux/30 flex flex-col items-center gap-3"
         >
           <span className="text-[11px] uppercase tracking-[0.3em] font-bold">{language === 'ES' ? 'Descubre Más' : 'Discover More'}</span>
@@ -1488,6 +1488,18 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
   }, []);
 
   useEffect(() => {
+    if (!isLoading) return;
+    const html = document.documentElement;
+    const previous = { html: html.style.overflow, body: document.body.style.overflow };
+    html.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = previous.html;
+      document.body.style.overflow = previous.body;
+    };
+  }, [isLoading]);
+
+  useEffect(() => {
     if (isLoading) return;
     const savedScroll = sessionStorage.getItem('homeScrollPos');
     if (!savedScroll) return;
@@ -1521,19 +1533,18 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <LoadingScreen key="loader" logoUrl={loadingLogoUrl} />
-        ) : (
-          <motion.main
-            key="main"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="relative min-h-screen bg-brand-almost-black bg-fixed"
-          >
-            <Navbar hide={isFooterVisible} logoUrl={navLogoUrl} instagramUrl={externalUrl(generalSettings.instagram_url)} linkedinUrl={externalUrl(generalSettings.linkedin_url)} />
-            <Hero heroData={settings.hero || {}} />
+      {/*
+        El contenido se renderiza siempre (llega en el HTML del servidor, lo lee
+        Google y cualquier vista previa de enlace). La pantalla de carga es una
+        capa fija encima que se desvanece; antes el <main> no existía hasta que
+        terminaba el loader y el HTML servido estaba vacío.
+      */}
+      <AnimatePresence>
+        {isLoading && <LoadingScreen key="loader" logoUrl={loadingLogoUrl} />}
+      </AnimatePresence>
+          <main className="relative min-h-screen bg-brand-almost-black bg-fixed">
+            <Navbar ready={!isLoading} hide={isFooterVisible} logoUrl={navLogoUrl} instagramUrl={externalUrl(generalSettings.instagram_url)} linkedinUrl={externalUrl(generalSettings.linkedin_url)} />
+            <Hero ready={!isLoading} heroData={settings.hero || {}} />
 
             <div className="relative z-30">
               <BrandShowcase presentationData={settings.presentation || {}} />
@@ -1545,9 +1556,7 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
             </div>
 
             <CustomCursor />
-          </motion.main>
-        )}
-      </AnimatePresence>
+          </main>
     </LanguageContext.Provider>
   );
 }

@@ -1,5 +1,13 @@
+import type { Metadata } from 'next';
 import { supabaseServer } from '@/lib/supabase-server';
 import LandingPageClient from './LandingPageClient';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+    languages: { es: '/', en: '/?lang=en' },
+  },
+};
 
 // ISR: revalidate every 60 seconds so CMS changes propagate within 1 minute
 export const revalidate = 60;

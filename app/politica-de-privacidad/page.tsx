@@ -14,6 +14,7 @@ export async function generateMetadata({
   return {
     title: isEn ? 'Privacy Policy' : 'Política de Privacidad',
     description: isEn ? 'Privacy policy and data processing.' : 'Política de privacidad y tratamiento de datos.',
+    alternates: { canonical: '/politica-de-privacidad' },
   };
 }
 
