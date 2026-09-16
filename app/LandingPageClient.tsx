@@ -33,23 +33,13 @@ const LoadingScreen = ({ logoUrl }: { logoUrl: string }) => {
       transition={{ duration: 0.8, ease: "easeInOut" }}
       className="fixed inset-0 z-[9999] bg-brand-almost-black flex items-center justify-center overflow-hidden"
     >
-      <div className="relative z-10 flex flex-col items-center gap-8 md:gap-10">
-        {/* El isotipo entra primero; el wordmark se revela detrás. */}
-        <motion.div
-          initial={{ opacity: 0, y: 16, scale: 0.85 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Stars className="w-20 md:w-28 text-brand-warm-lux" />
-        </motion.div>
-
+      <div className="relative z-10 flex flex-col items-center">
         <div className="relative w-64 h-24 md:w-96 md:h-32">
           <motion.div
             initial={{ scale: 0.1, opacity: 0, filter: "blur(20px)" }}
             animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
             transition={{
               duration: 2,
-              delay: 0.25,
               ease: [0.22, 1, 0.36, 1],
             }}
             className="relative w-full h-full"
@@ -903,8 +893,8 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                   <div key={i} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
                     <span className="text-brand-crimson/60 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
                     {brand.logo ? (
-                      <div className="relative w-32 md:w-48 h-8 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-500">
-                        <Image src={brand.logo} alt={brand.name} fill className="object-contain brightness-0 invert" referrerPolicy="no-referrer" />
+                      <div className="relative w-32 md:w-48 h-8 md:h-12">
+                        <Image src={brand.logo} alt={brand.name} fill className="object-contain" referrerPolicy="no-referrer" />
                       </div>
                     ) : (
                       <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
@@ -922,8 +912,8 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                   <div key={i + 10} className="flex items-center gap-6 md:gap-8 text-white/50 font-black text-3xl md:text-5xl tracking-tighter group">
                     <span className="text-brand-crimson/60 font-light text-4xl md:text-6xl transition-colors group-hover:text-brand-crimson">[</span>
                     {brand.logo ? (
-                      <div className="relative w-32 md:w-48 h-8 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-500">
-                        <Image src={brand.logo} alt={brand.name} fill className="object-contain brightness-0 invert" referrerPolicy="no-referrer" />
+                      <div className="relative w-32 md:w-48 h-8 md:h-12">
+                        <Image src={brand.logo} alt={brand.name} fill className="object-contain" referrerPolicy="no-referrer" />
                       </div>
                     ) : (
                       <span className="hover:text-white transition-all duration-500 cursor-default">{brand.name}</span>
@@ -980,8 +970,11 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
  * icono de imagen rota.
  */
 const ServiceCard = ({ index, title, description, image }: { index: number; title: string; description: string; image?: string }) => {
-  const [imageFailed, setImageFailed] = useState(false);
-  const showImage = Boolean(image) && !imageFailed;
+  // 'optimized' → la sirve Vercel optimizada; si falla (p. ej. un timeout en la
+  // primera carga), 'direct' la pide tal cual a Cloudinary; solo si también
+  // falla se muestra el bloque de ejemplo. Antes un único fallo lo dejaba fijo.
+  const [attempt, setAttempt] = useState<'optimized' | 'direct' | 'failed'>('optimized');
+  const showImage = Boolean(image) && attempt !== 'failed';
 
   return (
     <article className="group flex flex-col">
@@ -994,7 +987,8 @@ const ServiceCard = ({ index, title, description, image }: { index: number; titl
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
             referrerPolicy="no-referrer"
-            onError={() => setImageFailed(true)}
+            unoptimized={attempt === 'direct'}
+            onError={() => setAttempt((a) => (a === 'optimized' ? 'direct' : 'failed'))}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -1008,10 +1002,10 @@ const ServiceCard = ({ index, title, description, image }: { index: number; titl
           0{index + 1}
         </span>
         <div className="space-y-3">
-          <h3 className="text-2xl md:text-3xl lg:text-[2.25rem] font-display font-black uppercase tracking-tight text-brand-almost-black leading-[0.95]">
+          <h3 className="text-2xl md:text-3xl lg:text-[2.25rem] font-display font-black uppercase tracking-tight text-white leading-[0.95]">
             {title}
           </h3>
-          <p className="text-brand-almost-black/70 text-base md:text-lg leading-relaxed max-w-md">
+          <p className="text-white/70 text-base md:text-lg leading-relaxed max-w-md">
             {description}
           </p>
         </div>
@@ -1036,9 +1030,9 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
   };
 
   const wordVariantsTitle: Variants = {
-    hidden: { opacity: 0, y: 10, filter: "blur(8px)", color: "rgba(22, 22, 22, 0)" },
+    hidden: { opacity: 0, y: 10, filter: "blur(8px)", color: "rgba(255, 255, 255, 0)" },
     visible: {
-      opacity: 1, y: 0, filter: "blur(0px)", color: "rgba(22, 22, 22, 1)",
+      opacity: 1, y: 0, filter: "blur(0px)", color: "rgba(255, 255, 255, 1)",
       transition: { duration: 0.6, ease: "easeOut" }
     },
   };
@@ -1054,8 +1048,8 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
   };
 
   return (
-    <section id="team" className="relative py-16 lg:py-24 px-6 lg:px-12 bg-brand-warm-lux overflow-hidden">
-      <EditorialFrame tone="light" />
+    <section id="team" className="relative py-16 lg:py-24 px-6 lg:px-12 bg-brand-almost-black overflow-hidden">
+      <EditorialFrame />
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="mb-12 lg:mb-20 text-left flex flex-col items-start">
           <motion.span
@@ -1071,7 +1065,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-[4.5rem] font-display font-black uppercase text-brand-almost-black leading-[0.92] tracking-tight flex flex-wrap justify-start gap-x-[0.3em] gap-y-[0.12em]"
+            className="text-4xl md:text-6xl lg:text-[4.5rem] font-display font-black uppercase text-white leading-[0.92] tracking-tight flex flex-wrap justify-start gap-x-[0.3em] gap-y-[0.12em]"
           >
             {wordsTitle.map((word: string, i: number) => (
               <motion.span key={i} variants={wordVariantsTitle} className="inline-block">{word}</motion.span>
@@ -1088,7 +1082,7 @@ const AboutUs = ({ aboutData }: { aboutData: any }) => {
               hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { staggerChildren: 0.04, delayChildren: 0.2 } },
             }}
-            className="text-brand-almost-black/80 text-lg md:text-2xl leading-relaxed tracking-tight italic font-display flex flex-wrap justify-start gap-x-[0.3em]"
+            className="text-white/70 text-lg md:text-2xl leading-relaxed tracking-tight italic font-display flex flex-wrap justify-start gap-x-[0.3em]"
           >
             {statement.split(" ").filter(Boolean).map((word: string, i: number) => (
               <motion.span
@@ -1324,7 +1318,7 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
   const linkedin = externalUrl(generalSettings?.linkedin_url);
 
   return (
-    <footer ref={footerRef} className="relative overflow-hidden bg-brand-almost-black min-h-[600px] flex flex-col brand-grain">
+    <footer ref={footerRef} className="relative overflow-hidden bg-brand-warm-lux min-h-[600px] flex flex-col">
       <div className="flex-grow flex flex-col px-6 py-16 lg:px-12 lg:py-24 max-w-7xl w-full mx-auto relative z-40">
         <div className="flex-grow flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/2 flex flex-col">
@@ -1333,27 +1327,27 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
                 src={generalSettings?.footer_logo_url || "https://res.cloudinary.com/djqtkbyez/image/upload/v1773912109/Twenty4_Long_Green_f4koxb.svg"}
                 alt="Twenty4 Studios"
                 fill
-                className="object-contain object-left brightness-0 invert opacity-95"
+                className="object-contain object-left"
                 referrerPolicy="no-referrer"
               />
             </div>
             <div className="mt-auto">
-              <p className="text-brand-warm-lux text-xl lg:text-2xl font-display leading-relaxed">
+              <p className="text-brand-almost-black text-xl lg:text-2xl font-display leading-relaxed">
                 <Highlight text={footerText} />
               </p>
             </div>
           </div>
 
-          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-warm-lux/10">
+          <div className="lg:w-1/2 flex flex-col lg:pl-12 lg:border-l border-brand-almost-black/10">
             <div className="mt-auto space-y-12">
-              <div className="flex space-x-8 text-brand-warm-lux">
+              <div className="flex space-x-8 text-brand-almost-black">
                 {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" className="py-2 text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">Instagram</a>}
                 {linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer" className="py-2 text-sm font-bold uppercase tracking-widest hover:text-brand-crimson transition-colors">LinkedIn</a>}
               </div>
               <div className="grid grid-cols-2 gap-8 lg:justify-items-start">
                 <div>
-                  <h5 className="text-[11px] uppercase tracking-widest font-bold mb-4 text-brand-warm-lux/40">{language === 'ES' ? 'Navegación' : 'Navigation'}</h5>
-                  <ul className="space-y-1 text-sm text-brand-warm-lux font-bold uppercase tracking-wider">
+                  <h5 className="text-[11px] uppercase tracking-widest font-bold mb-4 text-brand-almost-black/50">{language === 'ES' ? 'Navegación' : 'Navigation'}</h5>
+                  <ul className="space-y-1 text-sm text-brand-almost-black font-bold uppercase tracking-wider">
                     <li><a href="#hero" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Estudio' : 'Studio'}</a></li>
                     <li><a href="#talents" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Talentos' : 'Talents'}</a></li>
                     <li><a href="#projects" className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Proyectos' : 'Projects'}</a></li>
@@ -1362,8 +1356,8 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
                   </ul>
                 </div>
                 <div>
-                  <h5 className="text-[11px] uppercase tracking-widest font-bold mb-4 text-brand-warm-lux/40">Legal</h5>
-                  <ul className="space-y-1 text-sm text-brand-warm-lux font-bold uppercase tracking-wider">
+                  <h5 className="text-[11px] uppercase tracking-widest font-bold mb-4 text-brand-almost-black/50">Legal</h5>
+                  <ul className="space-y-1 text-sm text-brand-almost-black font-bold uppercase tracking-wider">
                     <li><Link href={`/politica-de-privacidad?lang=${language.toLowerCase()}`} className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Privacidad' : 'Privacy'}</Link></li>
                     <li><Link href={`/aviso-legal?lang=${language.toLowerCase()}`} className="inline-block py-1.5 hover:text-brand-crimson transition-colors">{language === 'ES' ? 'Aviso Legal' : 'Legal Notice'}</Link></li>
                   </ul>
@@ -1373,7 +1367,7 @@ const Footer = ({ footerRef, generalSettings }: { footerRef: React.RefObject<HTM
           </div>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-brand-warm-lux/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[11px] uppercase tracking-[0.2em] font-bold text-brand-warm-lux/40">
+        <div className="mt-20 pt-10 border-t border-brand-almost-black/10 flex flex-col lg:flex-row justify-between items-center gap-6 text-[11px] uppercase tracking-[0.2em] font-bold text-brand-almost-black/50">
           <p>© {new Date().getFullYear()} {generalSettings?.site_name || 'Twenty4 Studios'}. {language === 'ES' ? 'Todos los derechos reservados.' : 'All rights reserved.'}</p>
           <p>{language === 'ES' ? 'Hecho para iconos.' : 'Built for Icons.'}</p>
         </div>

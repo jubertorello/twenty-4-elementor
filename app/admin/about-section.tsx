@@ -223,40 +223,27 @@ export const AboutAdminSection = ({
         />
       </section>
 
-      {/* 2. FRASE + LOGO */}
+      {/* 2. FRASE */}
       <section className="bg-white/3 border border-white/8 rounded-[2.5rem] p-10 space-y-8">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400">
             <Quote size={24} />
           </div>
           <div>
-            <h2 className="text-2xl font-black uppercase tracking-tighter text-white">Frase & Logo</h2>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Statement animado y logo decorativo de la sección</p>
+            <h2 className="text-2xl font-black uppercase tracking-tighter text-white">Frase</h2>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Statement animado de la sección</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[2.5fr_1fr] gap-8 items-start">
-          <TranslationField
-            label="Frase / Statement"
-            type="textarea"
-            maxLength={400}
-            required={true}
-            stacked={true}
-            value={{ es: data.statement_es, en: data.statement_en }}
-            onChange={(val) => setData(prev => ({ ...prev, statement_es: val.es, statement_en: val.en }))}
-          />
-
-          <div className="space-y-3">
-            <label className={labelCls}>Logo / Icono de Sección</label>
-            <ImageEditor
-              url={data.section_logo}
-              aspect="square"
-              label="Cambiar Logo"
-              onUpload={(url) => setData(prev => ({ ...prev, section_logo: url }))}
-              onDelete={() => setData(prev => ({ ...prev, section_logo: '' }))}
-            />
-          </div>
-        </div>
+        <TranslationField
+          label="Frase / Statement"
+          type="textarea"
+          maxLength={400}
+          required={true}
+          stacked={true}
+          value={{ es: data.statement_es, en: data.statement_en }}
+          onChange={(val) => setData(prev => ({ ...prev, statement_es: val.es, statement_en: val.en }))}
+        />
       </section>
 
       {/* 3. SERVICIOS */}

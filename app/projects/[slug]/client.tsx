@@ -8,6 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
+const DEFAULT_HEADER_LOGO = 'https://res.cloudinary.com/djqtkbyez/image/upload/v1773914212/Twenty4_Long_White-cropped_au6yl4.svg';
+
 const ProjectDetail = () => {
   const params = useParams();
   const router = useRouter();
@@ -21,6 +23,20 @@ const ProjectDetail = () => {
   // Barra superior (Volver + cliente): se oculta al bajar para no tapar el
   // texto del caso y reaparece al subir o al volver arriba del todo.
   const [showTopBar, setShowTopBar] = useState(true);
+  // Mismo logo que el menú de la home (Admin → Logos & Footer → logo del header).
+  const [logoUrl, setLogoUrl] = useState<string>(DEFAULT_HEADER_LOGO);
+
+  useEffect(() => {
+    supabase
+      .from('site_settings')
+      .select('data')
+      .eq('id', 'general')
+      .single()
+      .then(({ data }) => {
+        const url = (data?.data as Record<string, string> | undefined)?.header_logo_url;
+        if (url) setLogoUrl(url);
+      });
+  }, []);
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -138,6 +154,23 @@ const ProjectDetail = () => {
           </span>
         </button>
         
+        <Link
+          href={`/?lang=${lang}`}
+          aria-label="Twenty4 Studios — inicio"
+          className="pointer-events-auto absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity"
+        >
+          <span className="relative block h-8 w-36 md:h-10 md:w-44">
+            <Image
+              src={logoUrl}
+              alt="Twenty4 Studios"
+              fill
+              sizes="176px"
+              className="object-contain"
+              referrerPolicy="no-referrer"
+            />
+          </span>
+        </Link>
+
         {project.client && (
           <div className="pointer-events-auto hidden md:flex items-center bg-white/10 backdrop-blur-md border border-white/10 px-8 py-3 rounded-none">
             <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/70">{project.client}</span>
