@@ -248,6 +248,7 @@ const Navbar = ({ hide, logoUrl, instagramUrl, linkedinUrl }: { hide?: boolean; 
                     )}
                   </div>
                 )}
+                <Stars className="w-12 mx-auto text-brand-crimson" />
               </div>
             </motion.div>
           )}
@@ -700,6 +701,8 @@ const Projects = ({ projectsData, projectsSettings }: { projectsData: any[]; pro
   );
 };
 
+const EXPERIENCE_DEGREES = ['90°', '180°', '360°'];
+
 const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talentsSettings: any }) => {
   const { language } = useLanguage();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -948,7 +951,10 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                   }}
                   className="space-y-5"
                 >
-                  <span className="text-brand-crimson font-black text-5xl lg:text-6xl leading-none">0{i + 1}</span>
+                  <span className="block text-white font-black text-2xl lg:text-3xl leading-none tracking-tight">
+                    {/* Progresión 90° → 180° → 360°: del atleta a la marca a la visión completa. */}
+                    {EXPERIENCE_DEGREES[i] ?? `${(i + 1) * 90}°`}
+                  </span>
                   <h3 className="font-script font-normal tracking-normal text-5xl lg:text-6xl leading-[0.85] py-1 text-white">
                     {expTitle.charAt(0).toLocaleUpperCase('es') + expTitle.slice(1).toLocaleLowerCase('es')}
                   </h3>
@@ -998,9 +1004,7 @@ const ServiceCard = ({ index, title, description, image }: { index: number; titl
       </div>
 
       <div className="mt-6 flex items-start gap-5">
-        <span className="text-brand-crimson font-black text-xs md:text-sm tracking-[0.2em] pt-1.5 shrink-0">
-          0{index + 1}
-        </span>
+        <Stars className="w-7 md:w-9 shrink-0 mt-2 md:mt-2.5 text-brand-crimson" />
         <div className="space-y-3">
           <h3 className="text-2xl md:text-3xl lg:text-[2.25rem] font-display font-black uppercase tracking-tight text-white leading-[0.95]">
             {title}
