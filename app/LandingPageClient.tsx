@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, Variants } from 'motion/react';
-import { Menu, X, ArrowUpRight, ChevronRight, Check } from 'lucide-react';
+import { Menu, X, ArrowUpRight, ChevronRight, ChevronDown, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { externalUrl } from '@/lib/utils';
@@ -497,9 +497,9 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.05 }}
         variants={sectionVariants}
-        className="w-full flex flex-col gap-6 lg:gap-12"
+        className="w-full flex flex-col gap-3 lg:gap-4"
       >
-        <div className="w-full overflow-hidden py-8 lg:py-12">
+        <div className="w-full overflow-hidden py-4 lg:py-6">
           <motion.div
             variants={rowVariants}
             animate={{ x: ["0%", "-50%"] }}
@@ -536,7 +536,7 @@ const BrandShowcase = ({ presentationData }: { presentationData: any }) => {
           </motion.h2>
         </div>
 
-        <div className="w-full overflow-hidden py-8 lg:py-12">
+        <div className="w-full overflow-hidden py-4 lg:py-6">
           <motion.div
             variants={rowVariants}
             animate={{ x: ["-50%", "0%"] }}
@@ -955,7 +955,7 @@ const Talents = ({ talentsData, talentsSettings }: { talentsData: any[]; talents
                     {/* Progresión 90° → 180° → 360°: del atleta a la marca a la visión completa. */}
                     {EXPERIENCE_DEGREES[i] ?? `${(i + 1) * 90}°`}
                   </span>
-                  <h3 className="font-script font-normal tracking-normal text-5xl lg:text-6xl leading-[0.85] py-1 text-white">
+                  <h3 className="font-script font-normal tracking-normal text-4xl lg:text-5xl leading-[0.95] py-1 text-white">
                     {expTitle.charAt(0).toLocaleUpperCase('es') + expTitle.slice(1).toLocaleLowerCase('es')}
                   </h3>
                   <p className="text-lg md:text-xl text-white/70 leading-relaxed font-light">{expDesc}</p>
@@ -1139,7 +1139,7 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: 'New Project',
+    subject: '',
     message: ''
   });
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
@@ -1149,6 +1149,7 @@ const ContactForm = () => {
     name: 'Nombre',
     email: 'Email',
     subject: 'Asunto',
+    subjectPlaceholder: 'Elige un asunto',
     message: 'Mensaje',
     subjects: ['Nuevo Proyecto', 'Consulta de Talentos', 'Colaboración', 'Otro'],
     submit: 'Enviar Mensaje',
@@ -1158,14 +1159,13 @@ const ContactForm = () => {
     name: 'Name',
     email: 'Email',
     subject: 'Subject',
+    subjectPlaceholder: 'Choose a subject',
     message: 'Message',
     subjects: ['New Project', 'Talent Inquiry', 'Partnership', 'Other'],
     submit: 'Send Message',
     sending: 'Sending...',
     sent: 'Message Sent!',
   };
-
-  const defaultSubject = t.subjects[0];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -1176,7 +1176,7 @@ const ContactForm = () => {
     setIsSubmitting(false);
     if (result.success) {
       setIsSuccess(true);
-      setFormData({ name: '', email: '', subject: defaultSubject, message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setIsSuccess(false), 5000);
     } else {
       alert(language === 'ES' ? 'Error enviando el mensaje. Por favor intenta de nuevo.' : 'Error sending the message. Please try again.');
@@ -1207,9 +1207,14 @@ const ContactForm = () => {
       </div>
       <div className="space-y-2">
         <label htmlFor="contact-subject" className="text-[11px] md:text-[12px] uppercase tracking-widest font-bold text-white/50">{t.subject}</label>
-        <select id="contact-subject" name="subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className="w-full bg-transparent border-b border-white/20 py-2 focus:border-white outline-none transition-colors appearance-none">
-          {t.subjects.map((s) => <option key={s} className="bg-brand-almost-black">{s}</option>)}
-        </select>
+        {/* Vacío por defecto; la flecha indica que es un desplegable (appearance-none quita la nativa). */}
+        <div className="relative">
+          <select id="contact-subject" name="subject" required value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className={`w-full bg-transparent border-b border-white/20 py-2 pr-8 focus:border-white outline-none transition-colors appearance-none cursor-pointer ${formData.subject ? 'text-white' : 'text-white/40'}`}>
+            <option value="" disabled className="bg-brand-almost-black text-white/40">{t.subjectPlaceholder}</option>
+            {t.subjects.map((s) => <option key={s} value={s} className="bg-brand-almost-black text-white">{s}</option>)}
+          </select>
+          <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+        </div>
       </div>
       <div className="space-y-2">
         <label htmlFor="contact-message" className="text-[11px] md:text-[12px] uppercase tracking-widest font-bold text-white/50">{t.message}</label>
@@ -1413,8 +1418,38 @@ const CustomCursor = () => {
 
 // --- Main Client Component ---
 
+// useLayoutEffect en el cliente (corre antes de pintar); useEffect en el servidor.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+/*
+ * Claves de sessionStorage para volver a la home desde un caso de estudio:
+ * - homeScrollPos: altura exacta de la que saliste (se guarda al hacer clic en un enlace interno).
+ * - homeScrollTo:  id de sección a la que ir si entraste directo al caso (p. ej. "projects").
+ * - introSeen:     la pantalla de carga ya se mostró en esta visita.
+ */
+function isReturningHome() {
+  try {
+    return Boolean(
+      sessionStorage.getItem('homeScrollPos') ||
+      sessionStorage.getItem('homeScrollTo') ||
+      sessionStorage.getItem('introSeen')
+    );
+  } catch {
+    return false;
+  }
+}
+
 export default function LandingPageClient({ settings, projects, talents }: PageData) {
   const [isLoading, setIsLoading] = useState(true);
+  // Vuelta a la home dentro de la misma visita: sin pantalla de carga ni su fundido.
+  const [skipIntro, setSkipIntro] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    if (isReturningHome()) {
+      setSkipIntro(true);
+      setIsLoading(false);
+    }
+  }, []);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [language, setLanguage] = useState<Language>('ES');
   const footerRef = useRef<HTMLDivElement>(null);
@@ -1460,10 +1495,13 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
     const savedScroll = sessionStorage.getItem('homeScrollPos');
     let timer: NodeJS.Timeout | null = null;
 
-    if (savedScroll) {
+    if (isReturningHome()) {
       setIsLoading(false);
     } else {
-      timer = setTimeout(() => setIsLoading(false), 2200);
+      timer = setTimeout(() => {
+        setIsLoading(false);
+        try { sessionStorage.setItem('introSeen', '1'); } catch {}
+      }, 2200);
     }
 
     const handleLinkClick = (e: MouseEvent) => {
@@ -1501,6 +1539,19 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
 
   useEffect(() => {
     if (isLoading) return;
+    // Entraste directo a un caso de estudio y pulsaste "Volver": ir a esa sección.
+    const targetSection = sessionStorage.getItem('homeScrollTo');
+    if (targetSection) {
+      // Un instante después de montar, para medir la sección con la home ya pintada.
+      // La marca se borra al ejecutarse (no antes), para que la doble ejecución
+      // de efectos de React en desarrollo no la consuma y cancele el salto.
+      const t = setTimeout(() => {
+        sessionStorage.removeItem('homeScrollTo');
+        const el = document.getElementById(targetSection);
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: 'auto' });
+      }, 60);
+      return () => clearTimeout(t);
+    }
     const savedScroll = sessionStorage.getItem('homeScrollPos');
     if (!savedScroll) return;
     const targetY = parseInt(savedScroll, 10);
@@ -1539,9 +1590,11 @@ export default function LandingPageClient({ settings, projects, talents }: PageD
         capa fija encima que se desvanece; antes el <main> no existía hasta que
         terminaba el loader y el HTML servido estaba vacío.
       */}
-      <AnimatePresence>
-        {isLoading && <LoadingScreen key="loader" logoUrl={loadingLogoUrl} />}
-      </AnimatePresence>
+      {!skipIntro && (
+        <AnimatePresence>
+          {isLoading && <LoadingScreen key="loader" logoUrl={loadingLogoUrl} />}
+        </AnimatePresence>
+      )}
           <main className="relative min-h-screen bg-brand-almost-black bg-fixed">
             <Navbar ready={!isLoading} hide={isFooterVisible} logoUrl={navLogoUrl} instagramUrl={externalUrl(generalSettings.instagram_url)} linkedinUrl={externalUrl(generalSettings.linkedin_url)} />
             <Hero ready={!isLoading} heroData={settings.hero || {}} />

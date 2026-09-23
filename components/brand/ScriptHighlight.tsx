@@ -14,12 +14,12 @@
 import React from 'react';
 
 /**
- * Clases de la palabra resaltada. La script tiene la altura de x muy pequeña,
- * por eso va a casi el doble de cuerpo; y siempre en minúscula, porque en caja
- * alta es ilegible (el texto del CMS a veces viene en mayúsculas).
+ * Clases de la palabra resaltada. La script tiene la altura de x más pequeña
+ * que Public Sans, por eso va a más cuerpo; y siempre en minúscula, porque en
+ * caja alta es ilegible (el texto del CMS a veces viene en mayúsculas).
  */
 export const SCRIPT_CLASS =
-  'font-script font-normal tracking-normal text-[1.9em] leading-[0.55] lowercase';
+  'font-script font-normal tracking-normal text-[1.45em] leading-[0.75] lowercase';
 
 const MARKER = /(\*\*.+?\*\*)/g;
 

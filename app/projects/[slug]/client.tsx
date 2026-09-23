@@ -139,11 +139,16 @@ const ProjectDetail = () => {
       <nav className={`fixed top-0 left-0 w-full z-50 px-6 py-6 md:py-8 flex justify-between items-center pointer-events-none transition-transform duration-500 ${showTopBar ? 'translate-y-0' : '-translate-y-full'}`}>
         <button 
           onClick={() => {
-            if (typeof window !== 'undefined' && window.history.length > 1) {
-              router.back();
-            } else {
-              router.push(`/?lang=${lang}`);
-            }
+            // Siempre a la home de la web. Antes hacía router.back(): si habías
+            // entrado desde Instagram o Google te sacaba de la web, y después de
+            // "Siguiente proyecto" volvía al caso anterior en vez de a la home.
+            // Si venías de la home, esta restaura la altura guardada; si no,
+            // baja a la sección Proyectos.
+            try {
+              if (!sessionStorage.getItem('homeScrollPos')) sessionStorage.setItem('homeScrollTo', 'projects');
+            } catch {}
+            // scroll:false: la home decide la altura; si no, Next sube arriba del todo después.
+            router.push(`/?lang=${lang}`, { scroll: false });
           }}
           aria-label={lang === 'es' ? 'Volver' : 'Back'}
           className="pointer-events-auto group flex items-center justify-center gap-3 bg-brand-almost-black/85 backdrop-blur-md border border-white/10 w-11 h-11 md:w-auto md:h-auto md:px-6 md:py-3 rounded-none hover:bg-white hover:text-brand-almost-black transition-all duration-500"
@@ -157,6 +162,8 @@ const ProjectDetail = () => {
         <Link
           href={`/?lang=${lang}`}
           aria-label="Twenty4 Studios — inicio"
+          // El logo lleva al principio de la home, no a la altura guardada.
+          onClick={() => { try { sessionStorage.removeItem('homeScrollPos'); sessionStorage.setItem('introSeen', '1'); } catch {} }}
           className="pointer-events-auto absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity"
         >
           <span className="relative block h-8 w-36 md:h-10 md:w-44">
@@ -236,7 +243,7 @@ const ProjectDetail = () => {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="font-script font-normal tracking-normal text-6xl md:text-7xl leading-[1.1]">
+            <h2 className="font-script font-normal tracking-normal text-5xl md:text-6xl leading-[1.15]">
               {lang === 'es' ? 'La historia' : 'The story'}
             </h2>
             <p className="whitespace-pre-wrap text-xl md:text-2xl text-white/70 leading-relaxed font-light">
@@ -281,7 +288,7 @@ const ProjectDetail = () => {
         <section className="pb-24 lg:pb-40 px-6">
           <div className="max-w-7xl mx-auto space-y-12">
             <div className="flex justify-between items-end">
-              <h2 className="font-script font-normal tracking-normal text-6xl md:text-7xl leading-[1.1]">
+              <h2 className="font-script font-normal tracking-normal text-5xl md:text-6xl leading-[1.15]">
                 {lang === 'es' ? 'Viaje visual' : 'Visual journey'}
               </h2>
               <span className="text-white/30 text-xs uppercase tracking-widest font-bold">

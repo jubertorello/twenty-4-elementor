@@ -3,7 +3,7 @@
 /*
  * TW4 REBRANDING — tipografía del sitio.
  * Public Sans es la tipografía real y definitiva para textos y titulares.
- * Herr Von Muellerhoff es el resalte / script. Ambas están auto-hospedadas
+ * Mr Dafoe es el resalte / script. Ambas están auto-hospedadas
  * en /public/fonts (no dependen de Google Fonts en runtime), para que
  * carguen siempre sin importar bloqueadores de red/privacidad del visitante.
  */
@@ -30,10 +30,10 @@
   font-display: swap;
 }
 
-/* Herr Von Muellerhoff — resalte / script */
+/* Mr Dafoe — resalte / script */
 @font-face {
-  font-family: 'Herr Von Muellerhoff';
-  src: url('/fonts/HerrVonMuellerhoff-Regular.woff2') format('woff2');
+  font-family: 'Mr Dafoe';
+  src: url('/fonts/MrDafoe-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -49,7 +49,7 @@
 
   --font-sans: "Public Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: "Public Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-script: "Herr Von Muellerhoff", cursive;
+  --font-script: "Mr Dafoe", cursive;
 }
 
 @layer base {
